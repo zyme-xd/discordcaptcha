@@ -21,6 +21,10 @@ Additional Commands
 
 
 
+Make sure you've created a channel called verify
+
+Disable Read Messages on the role @everyone and activate it for the created user role.
+
 
 Ignore line 8,9,11,12,13.
 
