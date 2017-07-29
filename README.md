@@ -19,3 +19,5 @@ If you dont know how to get the ID, read this: https://www.reddit.com/r/discorda
 Enter the role id in the double quotes and the bot should work.
 
 This bot will be updated every 2nd week.
+
+!! Make sure that the bot role is the first in the list, otherwise the bot doesn't have enough permissions to give the user a role. http://i.imgur.com/HxcFys2.png !!
