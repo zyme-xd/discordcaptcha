@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 
-
+// Config
 var token = "";
 var clientID = "339840065104510977";
 var timex;
@@ -30,7 +30,7 @@ var userRoleID = "339841406409375754"; // The Role ID for the User Group
 
 
 
-
+// Do not modify
 client.on('message', (message) => {
 var time = new Date();
 var content = message.content;
