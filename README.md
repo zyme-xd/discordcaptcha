@@ -11,6 +11,17 @@ Node Download: https://nodejs.org/en/download/package-manager/
 Discord.js Download Command: npm install --save discord.js
 
 
+Additional Commands
+
+!block <USERID> -> User will get kicked after writing something. 
+
+!pop -> Removes the last blocked ID.
+
+!clear <int 1-100> -> Deletes x messages
+
+
+
+
 Ignore line 8,9,11,12,13.
 
 At line 10 you can edit the prefix, if there is an other bot with the same prefix. Notice that the prefix shouldn't be longer than 1 Char.
