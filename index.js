@@ -3,7 +3,7 @@ const client = new Discord.Client();
 
 
 
-
+var token = "";
 var clientID = "339840065104510977";
 var timex;
 var timexx;
@@ -120,4 +120,4 @@ if(message.channel.name == "verify"){
     message.delete();
 }
 });
-client.login();
+client.login(token);
