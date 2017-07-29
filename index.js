@@ -67,7 +67,7 @@ if(message.author.id != clientID){
 			}});
             queue.pop();
             console.log("[VerifyBot] " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "| " + message.author.tag + "(" + message.author.id + ") verified himself.");
-            message.member.addRole('339841406409375754').catch(error => console.log(error));
+            message.member.addRole(userRoleID).catch(error => console.log(error));
             timex = String(new Date().getSeconds()).charAt(1);
             timex -= timexx;
             if(timex < 5){
