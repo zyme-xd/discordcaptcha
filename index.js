@@ -120,4 +120,4 @@ if(message.channel.name == "verify"){
     message.delete();
 }
 });
-client.login("MzM5ODQwMDY1MTA0NTEwOTc3.DFp0PA.f3OvTMMdAqrcyN7TvOnERwQAOI4");
+client.login();
