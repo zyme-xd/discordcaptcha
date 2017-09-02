@@ -32,14 +32,14 @@ var userRoleID = "339841406409375754"; // The Role ID for the User Group
 
 
 // Do not modify
-client.on("guildMemberAdd", (g, m) => {
+/* client.on("guildMemberAdd", (g, m) => {
 
 	m.send({embed: {
 		color: 0xffff00,
 		description: "Welcome on `" + g.name + "`\nPlease send `!receive` in the verify channel to receive your code."
 	}});
 });
-
+*/ not working atm, will fix it 
 
 client.on('message', (message) => {
 var time = new Date();
