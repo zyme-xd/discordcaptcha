@@ -2,7 +2,6 @@
 Captcha Verification Bot based on Discord.js
 
 
-Bot minified in one file: index.js
 
 This bot is based on the discord library discord.js, that means you need to install node.js and install the git repository discord.js.
 
