@@ -4,7 +4,7 @@ const fs = require("fs");
 
 
 // Config
-var token = "MzQwODc1MDM4NzEyNjU5OTc5.DIwEMg.-Zw7hTffFjZLL23HDlQiS080Gd0";
+var token = "";
 var clientID = "340875038712659979";
 var timex;
 var timexx;
