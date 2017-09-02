@@ -44,7 +44,7 @@ if(message.author.id != clientID){
 				description: "Paste the code below in the verify channel to get verified. \n\n**Verification Bot made by y21#0909**"
 			}});
 			message.delete();
-			message.author.sendMessage("```JavaScript\n" + prefix + "verify " + captcha + "\n```");
+			message.author.send("```JavaScript\n" + prefix + "verify " + captcha + "\n```");
             var author = message.author.id;
             queue.push(author + "x" + captcha);
             console.log(queue);
@@ -74,7 +74,7 @@ if(message.author.id != clientID){
 				message.member.kick();
 			}
         }else{
-            message.author.sendMessage("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
+            message.author.send("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
             message.delete();
             message.member.kick();
 		}
@@ -86,31 +86,31 @@ if(message.content.startsWith(prefix + "ban") && message.author.id == "312715611
 for(i=0;i<blockedAccountIDs.length;i++){
     if(message.author.id == blockedAccountIDs[i]){
         message.delete();
-            message.author.sendMessage("You were kicked from " + message.guild.name + " (BLOCKED)");
+            message.author.send("You were kicked from " + message.guild.name + " (BLOCKED)");
             message.member.kick();
 	}
 }
 if(message.content.startsWith(prefix + "block")){
     if(message.member.hasPermission('ADMINISTRATOR')){
         blockedAccountIDs.push(message.content.substr(7));
-        message.channel.sendMessage("Added `" + message.content.substr(7) + "` to the blocked list.");
+        message.channel.send("Added `" + message.content.substr(7) + "` to the blocked list.");
     }else{
-		return message.channel.sendMessage("Missing Permissions");
+		return message.channel.send("Missing Permissions");
     }
 }
 if(message.content.startsWith(prefix + "pop")){
     if(message.member.hasPermission('ADMINISTRATOR')){
         blockedAccountIDs.pop();
-        message.channel.sendMessage("Removed last blocked user.");
+        message.channel.send("Removed last blocked user.");
     }else{
-        return message.channel.sendMessage("Missing Permissions");
+        return message.channel.send("Missing Permissions");
     }
 }
 if(message.content.startsWith(prefix + "clear")){
     if(message.member.hasPermission('ADMINISTRATOR')){
         message.channel.bulkDelete(message.content.substr(7));
 	}else{
-        return message.channel.sendMessage("Missing Permissions");
+        return message.channel.send("Missing Permissions");
     }
 }
 if(message.content.toLowerCase().includes("bypass")){
