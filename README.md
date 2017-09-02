@@ -7,8 +7,7 @@ This bot is based on the discord library discord.js, that means you need to inst
 
 Node Download: https://nodejs.org/en/download/package-manager/
 
-Discord.js Download Command: npm install --save discord.js
-
+Run the setup.bat file for setup
 
 Additional Commands
 
