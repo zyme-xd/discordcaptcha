@@ -4,7 +4,7 @@ const fs = require("fs");
 
 
 // Config
-var token = "MzQwODc1MDM4NzEyNjU5OTc5.DIw6mQ.0rG_ixupY9u0BUsK_B1GBhw5thg";
+var token = "token here";
 var clientID = "340875038712659979";
 var timex;
 var timexx;
@@ -59,7 +59,7 @@ if(message.author.id != clientID){
 					description: "Already verified on `" + message.guild.name + "`"
 				}});
 			}else{
-				var captcha = Math.random().toString(36).substr(23);
+				var captcha = Math.random().toString(36).substr(20);
 				var floor = Math.floor(Math.random() * 10000) + 1;
 				let webshot = require("webshot"); 
 				var fontFace, fontSize, fontPosition;
@@ -95,7 +95,7 @@ if(message.author.id != clientID){
 				if(bgColor == fontColor){
 					fontColor = colors[Math.floor(Math.random() * 4) + 1];
 				}
-				webshot('<html><body bgcolor="' + bgColor +'"><h1 style="font-family:' + fontFace + '; color:' + fontColor + '; font-size:' + fontSize + 'px; position: absolute; top:' + height + ';left:' + width + '; -moz-transform: rotate(' + rotate + 'deg); -ms-transform: rotate(' + rotate + 'deg);-o-transform: rotate(' + rotate + 'deg);-webkit-transform: rotate(' + rotate + 'deg);letter-spacing: ' + letterSpacing + 'px;"><i><del>' + captcha + '</del></i></h1></body></html>', './captchas/' + floor + '.png', {siteType:'html',screenSize:{width:500, height:500}}, function(err) {message.author.send("",{files:['./captchas/' + floor + ".png"]}) });
+				webshot('<html><body style=\'background-image: url("http://b.reich.io/jjvoab.png");\'><h1 style="font-family:' + fontFace + '; color:' + fontColor + '; font-size:' + fontSize + 'px; position: absolute; top:' + height + ';left:' + width + '; -moz-transform: rotate(' + rotate + 'deg); -ms-transform: rotate(' + rotate + 'deg);-o-transform: rotate(' + rotate + 'deg);-webkit-transform: rotate(' + rotate + 'deg);letter-spacing: ' + letterSpacing + 'px;"><i><del>' + captcha + '</del></i></h1></body></html>', './captchas/' + floor + '.png', {siteType:'html',screenSize:{width:500, height:500}}, function(err) {message.author.send("",{files:['./captchas/' + floor + ".png"]}) });
 				setTimeout(function(){fs.unlinkSync("./captchas/" + floor + ".png");}, 10000);
 				message.author.send({embed: {
 					color: 0x0000ff,
