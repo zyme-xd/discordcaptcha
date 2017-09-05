@@ -176,9 +176,6 @@ if(message.guild){
 			return message.channel.send("Missing Permissions");
 		}
 	}
-	if(message.content.toLowerCase().includes("bypass")){
-		message.member.kick();
-	}
 	if(message.channel.name == "verify"){
 		message.delete();
 	}
