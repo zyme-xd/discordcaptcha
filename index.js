@@ -59,7 +59,7 @@ if(message.author.id != clientID){
 					description: "Already verified on `" + message.guild.name + "`"
 				}});
 			}else{
-				var captcha = String(Math.random()).charAt(4) + String(Math.random()).charAt(4)+ String(Math.random()).charAt(4)+ String(Math.random()).charAt(4)+ String(Math.random()).charAt(4)+ String(Math.random()).charAt(4);
+				var captcha = Math.random().toString(36).substr(23);
 				var floor = Math.floor(Math.random() * 10000) + 1;
 				let webshot = require("webshot"); 
 				var fontFace, fontSize, fontPosition;
