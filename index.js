@@ -74,9 +74,9 @@ if(message.author.id != clientID){
 					"blue"
 				]
 				var floorx = Math.floor(Math.random() * 10000) + 1;
-				fontSize = Math.floor(Math.random() * 35) + 21;
-				var height = Math.floor(Math.random() * 30) + 10 + "%";
-				var width = Math.floor(Math.random() * 30) + 10 + "%";
+				fontSize = Math.floor(Math.random() * 20) + 35;
+				var height = Math.floor(Math.random() * 20) + 10 + "%";
+				var width = Math.floor(Math.random() * 20) + 10 + "%";
 				var fontColor = colors[Math.floor(Math.random() * 4) + 1];
 				var bgColor = colors[Math.floor(Math.random() * 4) + 1];
 				var rotate = Math.floor(Math.random() * 70) + 11;
