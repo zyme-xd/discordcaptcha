@@ -71,7 +71,11 @@ if(message.author.id != clientID){
 				var colors = [
 					"red",
 					"green",
-					"blue"
+					"blue",
+					"magenta",
+					"brown",
+					"darkcyan"
+					"gold"
 				]
 				var floorx = Math.floor(Math.random() * 10000) + 1;
 				fontSize = Math.floor(Math.random() * 20) + 35;
