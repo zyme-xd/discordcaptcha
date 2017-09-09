@@ -74,7 +74,7 @@ if(message.author.id != clientID){
 					"blue",
 					"magenta",
 					"brown",
-					"darkcyan"
+					"darkcyan",
 					"gold"
 				]
 				var floorx = Math.floor(Math.random() * 10000) + 1;
