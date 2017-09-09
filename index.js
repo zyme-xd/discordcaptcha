@@ -133,7 +133,7 @@ if(message.author.id != clientID){
 					color: 0x00ff00,
 					description: "Successfully verified on `" + message.guild.name + "`"
 				}});
-				client.channels.find('name', 'main-chat').send("<@" + message.author.id + "> was successfully verified.");
+				client.channels.find('name', normalChat).send("<@" + message.author.id + "> was successfully verified.");
 				queue.pop();
 				fs.appendFileSync("./verify_logs.txt", "[VerifyBot] " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "| " + message.author.tag + "(" + message.author.id + ") verified himself.");
 				message.member.addRole(userRoleID).catch(error => console.log(error));
