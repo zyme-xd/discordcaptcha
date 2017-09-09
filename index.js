@@ -4,14 +4,9 @@ const fs = require("fs");
 
 
 // Config
-var token = "token here";
-var clientID = "340875038712659979";
-var timex;
-var timexx;
-var prefix = "!"; // Make sure that the prefix is not longer than 1 Char!
-var queue = [];
-var filter = [];
-var kicked = [];
+const token = "Bot Token Here";
+const clientID = "Client ID here"; // Bot's ID. (https://i.imgur.com/XISVbse.png)
+const prefix = "!"; // Make sure that the prefix is not longer than 1 Char!
 var blockedAccountIDs = [
 	"337913202480250881",
 	"337908053041217548",
@@ -26,13 +21,21 @@ var blockedAccountIDs = [
 	"337912102083887107",
 	"337913416834613248",
 ];
-var normalChat = "main-chat"; // Channel name where everybody writes
+const normalChat = "main-chat"; // Channel name where everybody writes
+const userRoleID = "339841406409375754"; // The Role ID for the User Group
+var streamingGame = "DiscordCaptcha"; // Streaming Game
+var streamingLink = "https://www.twitch.tv/doxicalswitch"; // Twitch Link. Needed for Streaming
+
+
+
+
+
+
+// DON'T Manipulate the next lines. I've warned you.
+// ----
 var waitingQueue = [];
-
-var userRoleID = "339841406409375754"; // The Role ID for the User Group
-
-
-// Do not modify
+var queue = [];
+var kicked = [];
 client.on("guildMemberAdd", (member) => {
 	member.user.send({embed: {
 		color: 0xffff00,
@@ -51,7 +54,7 @@ var time = new Date();
 var content = message.content;
 var author = message.author.id;
 if(message.author.id != clientID){
-	if(message.content == prefix + "receive"){
+	if(message.content == prefix + "receive" || message.content == prefix + "verify" || message.content == prefix + "captcha"){
 		if(message.channel.name == "verify"){
 			if(message.member.roles.has(userRoleID)){
 				message.author.send({embed: {
@@ -140,9 +143,11 @@ if(message.author.id != clientID){
 			}
 			
         }else{
-            message.author.send("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
-            message.delete();
-            message.member.kick();
+			if(message.content.toLowerCase() != prefix + "verify"){
+				message.author.send("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
+				message.delete();
+				message.member.kick();
+			}
 		}
 	}
 }
