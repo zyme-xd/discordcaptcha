@@ -3,6 +3,8 @@ Captcha Verification Bot based on Discord.js
 
 `Read the wiki for some fixes`
 
+! Configuration File: src/config.json !
+! MAKE SURE THE PREFIX IS NOT LONGER THAN 1 CHAR !
 This bot is based on the discord library discord.js, that means you need to install node.js and install the git repository discord.js.
 
 Node Download: https://nodejs.org/en/download/package-manager/

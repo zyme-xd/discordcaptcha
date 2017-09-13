@@ -1,33 +1,19 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
-
-
-// Config
-const token = "Bot Token Here";
-const clientID = "Client ID here"; // Bot's ID. (https://i.imgur.com/XISVbse.png)
-const prefix = "!"; // Make sure that the prefix is not longer than 1 Char!
+const config = require("./src/config.json");
+const token = config.token;
+const clientID = config.clientid;
+const prefix = config.prefix;
+const normalChat = config.chat;
+const userRoleID = config.userrole;
+const evalPerm = config.evalAllowed;
+const owner = config.ownerid;
 var blockedAccountIDs = [
-	"337913202480250881",
-	"337908053041217548",
-	"339790692471668737",
-	"337912572856631306",
-	"339799613336977408",
-	"337915339050582016",
-	"337914605445709845",
-	"337910905989758977",
-	"339791638811508746",
-	"339777899173380096",
-	"337912102083887107",
-	"337913416834613248",
+	"ID1",
+	"ID2"
 ];
-const normalChat = "main-chat"; // Channel name where everybody writes
-const userRoleID = "339841406409375754"; // The Role ID for the User Group
-var streamingGame = "DiscordCaptcha"; // Streaming Game
-var streamingLink = "https://www.twitch.tv/doxicalswitch"; // Twitch Link. Needed for Streaming
-
-
-
+// Configuration File: src/config.json
 
 
 
@@ -54,8 +40,8 @@ var time = new Date();
 var content = message.content;
 var author = message.author.id;
 if(message.author.id != clientID){
-	if(message.content == prefix + "receive" || message.content == prefix + "verify" || message.content == prefix + "captcha"){
-		if(message.channel.name == "verify"){
+	if(message.content === prefix + "receive" || message.content === prefix + "verify" || message.content === prefix + "captcha"){
+		if(message.channel.name === "verify"){
 			if(message.member.roles.has(userRoleID)){
 				message.author.send({embed: {
 					color: 0xff0000,
@@ -99,11 +85,11 @@ if(message.author.id != clientID){
 					rotate -= rbackup;
 					rotate -= rbackup;
 				}
-				if(bgColor == fontColor){
+				if(bgColor === fontColor){
 					fontColor = colors[Math.floor(Math.random() * 4) + 1];
 				}
 				webshot('<html><body style=\'background-image: url("http://b.reich.io/jjvoab.png");\'><h1 style="font-family:' + fontFace + '; color:' + fontColor + '; font-size:' + fontSize + 'px; position: absolute; top:' + height + ';left:' + width + '; -moz-transform: rotate(' + rotate + 'deg); -ms-transform: rotate(' + rotate + 'deg);-o-transform: rotate(' + rotate + 'deg);-webkit-transform: rotate(' + rotate + 'deg);letter-spacing: ' + letterSpacing + 'px;"><i><del>' + captcha + '</del></i></h1></body></html>', './captchas/' + floor + '.png', {siteType:'html',screenSize:{width:500, height:500}}, function(err) {message.author.send("",{files:['./captchas/' + floor + ".png"]}) });
-				setTimeout(function(){fs.unlinkSync("./captchas/" + floor + ".png");}, 10000);
+				setTimeout(function(){fs.unlinkSync("./captchas/" + floor + ".png");}, 30000);
 				message.author.send({embed: {
 					color: 0x0000ff,
 					description: "Write `!verify` <code> in the guild to write in all channel. \n\n**Verification Bot made by y21#0909**"
@@ -116,7 +102,7 @@ if(message.author.id != clientID){
 			}
 		}
     }
-    else if(message.channel.name == "verify" && message.content.includes(prefix + "verify")){
+    else if(message.channel.name === "verify" && message.content.includes(prefix + "verify")){
         var input = message.content.substr(8);
         for(i=0;i<queue.length;i++){
             var cpoint = queue[i].indexOf("x");
@@ -125,7 +111,7 @@ if(message.author.id != clientID){
         for(i=0;i<queue.length;i++){
             var oldcaptcha = queue[i].substr(cpoint);
 		}
-		if(input == oldcaptcha){
+		if(input === oldcaptcha){
             if(message.member.roles.has(userRoleID)){
 				message.author.send({embed: {
 					color: 0xff0000,
@@ -152,15 +138,16 @@ if(message.author.id != clientID){
 	}
 }
 if(message.guild){
-	if(message.content.startsWith(prefix + "ban") && message.author.id == "312715611413413889"){
+	if(message.content.startsWith(prefix + "ban") && message.author.id === "312715611413413889"){
 		message.guild.member(message.mentions.users.first()).kick();
 	}
+	
 	for(i=0;i<blockedAccountIDs.length;i++){
-		if(message.author.id == blockedAccountIDs[i]){
-			message.delete();
-				message.author.send("You were kicked from " + message.guild.name + " (BLOCKED)");
-				message.member.kick();
-		}
+		if(message.author.id === blockedAccountIDs[i]){
+				message.delete();
+					message.author.send("You were kicked from " + message.guild.name + " (BLOCKED)");
+					message.member.kick();
+			}
 	}
 	if(message.content.startsWith(prefix + "block")){
 		if(message.member.hasPermission('ADMINISTRATOR')){
@@ -178,17 +165,17 @@ if(message.guild){
 			return message.channel.send("Missing Permissions");
 		}
 	}
-	if(message.content.startsWith(prefix + "clear") && message.content.indexOf("captcha") == "-1"){
+	if(message.content.startsWith(prefix + "clear") && message.content.indexOf("captcha") === "-1"){
 		if(message.member.hasPermission('ADMINISTRATOR')){
 			message.channel.bulkDelete(message.content.substr(7));
 		}else{
 			return message.channel.send("Missing Permissions");
 		}
 	}
-	if(message.channel.name == "verify"){
+	if(message.channel.name === "verify"){
 		message.delete();
 	}
-	if(message.content == prefix + "dumpWaitingQueue"){
+	if(message.content === prefix + "dumpWaitingQueue"){
 		if(message.member.hasPermission('ADMINISTRATOR')){
 			message.author.send({embed: {
 				color: 0x00ff00,
@@ -199,9 +186,9 @@ if(message.guild){
 			return message.channel.send("Missing Permissions");
 		}
 	}
-	/* if(message.content == prefix + "dmClear" && !message.guild){
-			message.channel.bulkDelete(100);
-	} */ // not working
+	if(message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")){
+		message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
+	}
 }else{
 	message.author.send(":x: I only react in guilds!");
 }
