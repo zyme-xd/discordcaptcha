@@ -9,6 +9,8 @@ const normalChat = config.chat;
 const userRoleID = config.userrole;
 const evalPerm = config.evalAllowed;
 const owner = config.ownerid;
+const streamingGame = config.streamingGame;
+const streamingLink = config.streamingLink;
 var blockedAccountIDs = [
 	"ID1",
 	"ID2"
@@ -32,7 +34,7 @@ client.on("guildMemberAdd", (member) => {
 
 client.on("ready", () => {
 	console.log("Logged in!")
-	client.user.setGame("DiscordCaptcha", "https://www.twitch.tv/doxicalswitch");
+	client.user.setGame(streamingGame, streamingLink);
 });
 
 client.on('message', (message) => {
