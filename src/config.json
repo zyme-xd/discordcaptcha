@@ -1,5 +1,5 @@
 {
-	"token": "MzQwODc1MDM4NzEyNjU5OTc5.DJrzOg.85myjBEJ_b5bOpcWy1olSc0mzD8",
+	"token": "token",
 	"clientid": "340875038712659979",
 	"prefix": "!",
 	"chat": "main-chat",
@@ -7,5 +7,18 @@
 	"streamingGame": "DiscordCaptcha",
 	"streamingLink": "https://www.twitch.tv/doxicalswitch",
 	"evalAllowed": "false",
-	"ownerid": "312715611413413889"
+  "ownerid": "312715611413413889",
+  "possibleCaptchaColors": [
+    "red",
+    "green",
+    "blue",
+    "magenta",
+    "brown",
+    "darkcyan",
+    "gold"
+  ],
+  "blockedIDs": [
+    "ID1",
+    "ID2"
+  ]
 }
