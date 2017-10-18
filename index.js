@@ -13,6 +13,7 @@ const streamingGame = config.streamingGame;
 const streamingLink = config.streamingLink;
 const colors = config.possibleCaptchaColors;
 const blockedAccountIDs = config.blockedIDs;
+const query = require("./src/Query.json");
 // Configuration File: src/config.json
 
 var waitingQueue = [];
@@ -34,9 +35,20 @@ client.on("ready", () => {
 });
 
 client.on('message', (message) => {
+    if (!message.guild) return;
+    let file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
+    let queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
     var time = new Date();
     var content = message.content;
     var author = message.author.id;
+    if (file.blockedIDs[message.author.id]) {
+        if (file.blockedIDs[message.author.id].blocked == "true") {
+            message.member.kick();
+            console.log(message.member + " was kicked.");
+        }
+    }
     if (message.author.id != clientID) {
         if (message.content === prefix + "receive" || message.content === prefix + "verify" || message.content === prefix + "captcha") {
             if (message.channel.name === "verify") {
@@ -100,8 +112,16 @@ client.on('message', (message) => {
                         }
                     });
                     message.delete();
-                    var author = message.author.id;
+
+                    queryFile.query[author + "x" + captcha] = {
+                        verified: "false"
+                    };
+                    fs.writeFile("./src/Query.json", JSON.stringify(queryFile));
                     queue.push(author + "x" + captcha);
+
+
+
+
                     waitingQueue.push(message.author.id);
                     console.log(queue);
                 }
@@ -131,6 +151,7 @@ client.on('message', (message) => {
                         }
                     });
                     client.channels.find('name', normalChat).send("<@" + message.author.id + "> was successfully verified.");
+                    queryFile.query[message.author.id + "x" + oldcaptcha].verified = "true";
                     queue.pop();
                     fs.appendFileSync("./verify_logs.txt", "[VerifyBot] " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "| " + message.author.tag + "(" + message.author.id + ") verified himself.\n");
                     message.member.addRole(userRoleID).catch(error => console.log(error));
@@ -145,62 +166,54 @@ client.on('message', (message) => {
             }
         }
     }
-    if (message.guild) {
-        if (message.content.startsWith(prefix + "ban") && message.author.id === config.ownerid) {
+    if (message.content.toLowerCase().startsWith(prefix + "ban")) {
+        if (message.member.hasPermission('ADMINISTRATOR')) {
             message.guild.member(message.mentions.users.first()).kick();
         }
-
-        for (i = 0; i < blockedAccountIDs.length; i++) {
-            if (message.author.id === blockedAccountIDs[i]) {
-                message.delete();
-                message.author.send("You were kicked from " + message.guild.name + " (BLOCKED)");
-                message.member.kick();
-            }
-        }
-        if (message.content.startsWith(prefix + "block")) {
-            if (message.member.hasPermission('ADMINISTRATOR')) {
-                blockedAccountIDs.push(message.content.substr(7));
+    }
+    if (message.content.toLowerCase().startsWith(prefix + "block")) {
+        if (message.member.hasPermission('ADMINISTRATOR')) {
+            if (!file.blockedIDs[args[0]]) {
+                file.blockedIDs[args[0]] = {
+                    blocked: "true"
+                };
+                fs.writeFileSync("./src/config.json", JSON.stringify(file));
                 message.channel.send("Added `" + message.content.substr(7) + "` to the blocked list.");
             } else {
-                return message.channel.send("Missing Permissions");
+                message.channel.send("ID is already blocked.");
             }
+
+        } else {
+            return message.channel.send("Missing Permissions");
         }
-        if (message.content.startsWith(prefix + "pop")) {
-            if (message.member.hasPermission('ADMINISTRATOR')) {
-                blockedAccountIDs.pop();
-                message.channel.send("Removed last blocked user.");
-            } else {
-                return message.channel.send("Missing Permissions");
-            }
-        }
-        if (message.content.startsWith(prefix + "clear") && message.content.indexOf("captcha") === "-1") {
-            if (message.member.hasPermission('ADMINISTRATOR')) {
-                message.channel.bulkDelete(message.content.substr(7));
-            } else {
-                return message.channel.send("Missing Permissions");
-            }
-        }
-        if (message.channel.name === "verify") {
-            message.delete();
-        }
-        if (message.content === prefix + "dumpWaitingQueue") {
-            if (message.member.hasPermission('ADMINISTRATOR')) {
-                message.author.send({
-                    embed: {
-                        color: 0x00ff00,
-                        description: "**Waiting Queue Dump**\n\n" + waitingQueue
-                    }
-                });
-                message.delete();
-            } else {
-                return message.channel.send("Missing Permissions");
-            }
-        }
-        if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
-            message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
-        }
-    } else {
-        message.author.send(":x: I only react in guilds!");
     }
+    if (message.content.toLowerCase().startsWith(prefix + "removeBlock")) {
+        if (message.member.hasPermission('ADMINISTRATOR')) {
+            if (file.blockedIDs[args[0]].blocked == "true") {
+                file.blockedIDs[args[0]].blocked = "false";
+                fs.writeFileSync("./src/config.json", JSON.stringify(file));
+                message.channel.send("Successfully removed the block for `" + args[0] + "`.")
+            } else {
+                message.channel.send("ID is not blocked.");
+            }
+        } else {
+            return message.channel.send("Missing Permissions");
+        }
+    }
+
+    if (message.content.startsWith(prefix + "clear") && message.content.indexOf("captcha") === "-1") {
+        if (message.member.hasPermission('ADMINISTRATOR')) {
+            message.channel.bulkDelete(message.content.substr(7));
+        } else {
+            return message.channel.send("Missing Permissions");
+        }
+    }
+    if (message.channel.name === "verify") {
+        message.delete();
+    }
+    if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
+        message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
+    }
+
 });
 client.login(config.token);
