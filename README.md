@@ -2,6 +2,8 @@
 
 A Captcha verification bot based on discord.js.
 
+**Since it's using WebShot for images, this version is only compatible on Windows.**
+
 ## Setup procedure
 
 The configuration file is located in src/config.json.
