@@ -2,7 +2,7 @@
 
 A Captcha verification bot based on discord.js.
 
-**Since it's using WebShot for images, this version is only compatible on Windows.**
+**Since it's using WebShot for images, this version is only compatible on Windows. For Linux, try the `linux-compatible-v2` branche.**
 
 ## Setup procedure
 
