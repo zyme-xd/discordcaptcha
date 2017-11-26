@@ -1,5 +1,5 @@
-<img src="https://image.ibb.co/gEN0oR/discord_banner.png">
-A Captcha verification bot based on discord.js.
+<img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
+A Captcha verification bot based on Discord.js.
 
 ⚠️ This version is only working on Windows (Webshot Module). Try the <a href="https://github.com/y21/discordcaptcha/tree/linux-stable">`linux-stable`</a> Branche for Linux-compatibility
 
