@@ -1,39 +1,24 @@
-# DiscordCaptcha
-
+<img src="https://image.ibb.co/gEN0oR/discord_banner.png">
 A Captcha verification bot based on discord.js.
 
-**Since it's using WebShot for images, this version is only compatible on Windows. For Linux, try the `linux-compatible-v2` branche.**
+⚠️ This version is only working on Windows (Webshot Module). Try the <a href="https://github.com/y21/discordcaptcha/tree/linux-stable">`linux-stable`</a> Branche for Linux-compatibility
 
 ## Setup procedure
+DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
+To install all required NPM-Modules, run `npm install` <b>in bots' directory</b><br/><br/>
 
-The configuration file is located in src/config.json.
-
-![Config](https://i.imgur.com/i50h5nT.gif)
-
-**Note: The prefix must not be longer than 1 character, otherwise some commands won't work!**
-
-![Prefix](https://i.imgur.com/xRFvCCG.png)
-
-Download Node.js from here: https://nodejs.org/en/download/package-manager/
-
-![NodeInstall](https://i.imgur.com/cvgsE16.png)
-
-Before starting the bot for the first time, run `~/setup.bat`.
-
-**If your operating system is not Windows, please run `npm install` in the bot's directory with your respective terminal program.
+The config file is located in `~/src/`. Get your Token from <a href="https://discordapp.com/developers/applications/me">here</a>.
 
 ## Additional commands
 
-!block <USERID> -> User will get kicked after writing something.
-
-!pop -> Removes the last blocked ID.
-
-!clear <int 1-100> -> Deletes x messages.
+```js
+!block <UserID> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
+!pop <UserID> // Removes a User ID from the blacklist. User can write again without getting kicked.
+!clear <UserID> // Clears an amount of messages.
+```
 
 ## Tips
 
-Look at the wiki for some fixes.
-
-Make sure you've created a channel called verify and the bot role is higher than the verified role.
-![verifychannel](https://i.imgur.com/Ws9HJql.png)
-![roles](https://i.imgur.com/R7ugoYO.png)
+• Look at the wiki for some fixes.<br/>
+• Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
+• Open a Pull Request/Issue
