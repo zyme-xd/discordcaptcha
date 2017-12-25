@@ -18,11 +18,12 @@ const blockCommand = require("./commands/block.js");
 const removeBlockCommand = require("./commands/removeBlock.js");
 const banCommand = require("./commands/ban.js");
 const clearCommand = require("./commands/clear.js");
+const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
+const queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 // Configuration File: src/config.json
 
 var waitingQueue = [];
 var queue = [];
-var kicked = [];
 client.on("guildMemberAdd", (member) => {
     try {
         member.user.send({
@@ -49,13 +50,9 @@ client.on("ready", () => {
 client.on('message', (message) => {
     try {
         if (!message.guild) return;
-        let file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
-        let queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         var time = new Date();
-        var content = message.content;
-        var author = message.author.id;
         if (file.blockedIDs[message.author.id]) {
             if (file.blockedIDs[message.author.id].blocked == "true") {
                 message.member.kick();
@@ -126,11 +123,11 @@ client.on('message', (message) => {
                         });
                         message.delete();
 
-                        queryFile.query[author + "x" + captcha] = {
+                        queryFile.query[message.author + "x" + captcha] = {
                             verified: "false"
                         };
                         fs.writeFile("./src/Query.json", JSON.stringify(queryFile));
-                        queue.push(author + "x" + captcha);
+                        queue.push(message.author + "x" + captcha);
 
 
 
@@ -184,11 +181,11 @@ client.on('message', (message) => {
 
         }
         if (message.content.toLowerCase().startsWith(prefix + "block")) {
-            blockCommand(message, fs);
+            blockCommand(message, fs, prefix);
 
         }
         if (message.content.startsWith(prefix + "removeBlock")) {
-            removeBlockCommand(message, fs);
+            removeBlockCommand(message, fs, prefix);
         }
         if (message.content.startsWith(prefix + "clear")) {
             clearCommand(message);
