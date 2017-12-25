@@ -1,13 +1,13 @@
 {
   "name": "discordcaptcha-master",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "description": "Captcha Verification Bot based on Discord.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "y21",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^11.2.1",
     "webshot": "^0.18.0"
