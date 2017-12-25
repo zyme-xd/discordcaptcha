@@ -14,6 +14,10 @@ const streamingLink = config.streamingLink;
 const colors = config.possibleCaptchaColors;
 const blockedAccountIDs = config.blockedIDs;
 const query = require("./src/Query.json");
+const blockCommand = require("./commands/block.js");
+const removeBlockCommand = require("./commands/removeBlock.js");
+const banCommand = require("./commands/ban.js");
+const clearCommand = require("./commands/clear.js");
 // Configuration File: src/config.json
 
 var waitingQueue = [];
@@ -167,53 +171,24 @@ client.on('message', (message) => {
         }
     }
     if (message.content.toLowerCase().startsWith(prefix + "ban")) {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            message.guild.member(message.mentions.users.first()).kick();
-        }
+        banCommand(message);
+        
     }
     if (message.content.toLowerCase().startsWith(prefix + "block")) {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            if (!file.blockedIDs[args[0]]) {
-                file.blockedIDs[args[0]] = {
-                    blocked: "true"
-                };
-                fs.writeFileSync("./src/config.json", JSON.stringify(file));
-                message.channel.send("Added `" + message.content.substr(7) + "` to the blocked list.");
-            } else {
-                message.channel.send("ID is already blocked.");
-            }
+        blockCommand(message, fs);
 
-        } else {
-            return message.channel.send("Missing Permissions");
-        }
     }
     if (message.content.toLowerCase().startsWith(prefix + "removeBlock")) {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            if (file.blockedIDs[args[0]].blocked == "true") {
-                file.blockedIDs[args[0]].blocked = "false";
-                fs.writeFileSync("./src/config.json", JSON.stringify(file));
-                message.channel.send("Successfully removed the block for `" + args[0] + "`.")
-            } else {
-                message.channel.send("ID is not blocked.");
-            }
-        } else {
-            return message.channel.send("Missing Permissions");
-        }
+        removeBlockCommand(message, fs);
     }
-
-    if (message.content.startsWith(prefix + "clear") && message.content.indexOf("captcha") === "-1") {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            message.channel.bulkDelete(message.content.substr(7));
-        } else {
-            return message.channel.send("Missing Permissions");
-        }
+    if (message.content.startsWith(prefix + "clear")) {
+        clearCommand(message);
     }
-    if (message.channel.name === "verify") {
-        message.delete();
-    }
+    
     if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
         message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
     }
 
+    message.channel.name === "verify" ? message.delete() : null; // Delete Message if channels' name is "verify"
 });
 client.login(config.token);
