@@ -187,7 +187,7 @@ client.on('message', (message) => {
             blockCommand(message, fs);
 
         }
-        if (message.content.toLowerCase().startsWith(prefix + "removeBlock")) {
+        if (message.content.startsWith(prefix + "removeBlock")) {
             removeBlockCommand(message, fs);
         }
         if (message.content.startsWith(prefix + "clear")) {
