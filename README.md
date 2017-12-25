@@ -13,7 +13,7 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 
 ```js
 !block <UserID> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
-!pop <UserID> // Removes a User ID from the blacklist. User can write again without getting kicked.
+!removeBlock <UserID> // Removes a User ID from the blacklist. User can write again without getting kicked.
 !clear <UserID> // Clears an amount of messages.
 ```
 
