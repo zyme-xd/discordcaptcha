@@ -16,5 +16,7 @@
         "brown",
         "darkcyan",
         "gold"
-    ]
+    ],
+	"blockedIDs":{
+	}
 }
