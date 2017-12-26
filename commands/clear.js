@@ -1,11 +1,11 @@
 module.exports = (message) => {
-    if (message.member.hasPermission('MANAGE_MESSAGES')) {
-        try {
+    try {
+        if (message.member.hasPermission('MANAGE_MESSAGES')) {
             message.channel.bulkDelete(message.content.substr(7));
-        } catch (e) {
-            message.reply(e);
+        } else {
+            return message.channel.send("Missing Permissions");
         }
-    } else {
-        return message.channel.send("Missing Permissions");
+    } catch (e) {
+        console.log("[DISCORDCAPTCHA-clearMessages] >> " + e);
     }
 };
