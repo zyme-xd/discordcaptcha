@@ -18,7 +18,6 @@ const blockCommand = require("./commands/block.js");
 const removeBlockCommand = require("./commands/removeBlock.js");
 const banCommand = require("./commands/ban.js");
 const clearCommand = require("./commands/clear.js");
-const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
 const queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 // Configuration File: src/config.json
 
@@ -50,6 +49,7 @@ client.on("ready", () => {
 client.on('message', (message) => {
     try {
         if (!message.guild) return;
+        const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
         var time = new Date();
