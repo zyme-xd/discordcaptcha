@@ -20,7 +20,6 @@ const banCommand = require("./commands/ban.js");
 const clearCommand = require("./commands/clear.js");
 const queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 // Configuration File: src/config.json
-
 var waitingQueue = [];
 var queue = [];
 client.on("guildMemberAdd", (member) => {
@@ -35,8 +34,6 @@ client.on("guildMemberAdd", (member) => {
         console.log("[DISCORDCAPTCHA-guildMemberAdd] >> " + e)
     }
 });
-
-
 client.on("ready", () => {
     try {
         console.log("Logged in!")
@@ -122,16 +119,11 @@ client.on('message', (message) => {
                             }
                         });
                         message.delete();
-
                         queryFile.query[message.author + "x" + captcha] = {
                             verified: "false"
                         };
                         fs.writeFile("./src/Query.json", JSON.stringify(queryFile));
                         queue.push(message.author + "x" + captcha);
-
-
-
-
                         waitingQueue.push(message.author.id);
                         console.log(queue);
                     }
@@ -178,11 +170,9 @@ client.on('message', (message) => {
         }
         if (message.content.toLowerCase().startsWith(prefix + "ban")) {
             banCommand(message);
-
         }
         if (message.content.toLowerCase().startsWith(prefix + "block")) {
             blockCommand(message, fs, prefix);
-
         }
         if (message.content.startsWith(prefix + "removeBlock")) {
             removeBlockCommand(message, fs, prefix);
@@ -190,11 +180,9 @@ client.on('message', (message) => {
         if (message.content.startsWith(prefix + "clear")) {
             clearCommand(message);
         }
-
         if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
             message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
         }
-
         message.channel.name === "verify" ? message.delete() : null; // Delete Message if channels' name is "verify"
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
