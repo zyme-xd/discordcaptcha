@@ -54,6 +54,7 @@ client.on('message', (message) => {
             if (file.blockedIDs[message.author.id].blocked == "true") {
                 message.member.kick();
                 console.log(message.member + " was kicked.");
+		    message.delete()
             }
         }
         if (message.author.id != clientID) {
