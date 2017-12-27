@@ -19,7 +19,6 @@ const removeBlockCommand = require("./commands/removeBlock.js");
 const banCommand = require("./commands/ban.js");
 const clearCommand = require("./commands/clear.js");
 const queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-// Configuration File: src/config.json
 var waitingQueue = [];
 var queue = [];
 client.on("guildMemberAdd", (member) => {
@@ -34,18 +33,21 @@ client.on("guildMemberAdd", (member) => {
         console.log("[DISCORDCAPTCHA-guildMemberAdd] >> " + e)
     }
 });
+
+
 client.on("ready", () => {
     try {
         console.log("Logged in!")
         client.user.setGame(streamingGame, streamingLink);
     } catch (e) {
-        console.log("[DISCORDCAPTCHA-readyEvent] >> " + e)
+        console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
     }
 });
 
 client.on('message', (message) => {
     try {
         if (!message.guild) return;
+        let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
         const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
@@ -54,12 +56,16 @@ client.on('message', (message) => {
             if (file.blockedIDs[message.author.id].blocked == "true") {
                 message.member.kick();
                 console.log(message.member + " was kicked.");
-		    message.delete()
+				message.delete();
             }
         }
         if (message.author.id != clientID) {
             if (message.content === prefix + "receive" || message.content === prefix + "verify" || message.content === prefix + "captcha") {
                 if (message.channel.name === "verify") {
+                    if(tempQueryFile.query[message.author.id]) {
+                        message.delete();
+                        return message.reply(":x:");
+                    }
                     if (message.member.roles.has(userRoleID)) {
                         message.author.send({
                             embed: {
@@ -119,11 +125,11 @@ client.on('message', (message) => {
                                 description: "Write `!verify` <code> in the guild to write in all channel. \n\n**Verification Bot made by y21#0909**"
                             }
                         });
-                        message.delete();
-                        queryFile.query[message.author + "x" + captcha] = {
+                        
+                        tempQueryFile.query[message.author.id] = {
                             verified: "false"
                         };
-                        fs.writeFile("./src/Query.json", JSON.stringify(queryFile));
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
                         queue.push(message.author + "x" + captcha);
                         waitingQueue.push(message.author.id);
                         console.log(queue);
@@ -154,18 +160,17 @@ client.on('message', (message) => {
                             }
                         });
                         client.channels.find('name', normalChat).send("<@" + message.author.id + "> was successfully verified.");
-                       queryFile.query[message.author.id + "x" + oldcaptcha] = {
-							verified: "true"
-						};
+                        if(tempQueryFile.query[message.author.id])
+						tempQueryFile.query[message.author.id].verified = "true";
                         queue.pop();
                         fs.appendFileSync("./verify_logs.txt", "[VerifyBot] " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "| " + message.author.tag + "(" + message.author.id + ") verified himself.\n");
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
                         message.member.addRole(userRoleID).catch(error => console.log(error));
                     }
 
                 } else {
                     if (message.content.toLowerCase() != prefix + "verify") {
                         message.author.send("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
-                        message.delete();
                         message.member.kick();
                     }
                 }
@@ -173,9 +178,11 @@ client.on('message', (message) => {
         }
         if (message.content.toLowerCase().startsWith(prefix + "ban")) {
             banCommand(message);
+
         }
         if (message.content.toLowerCase().startsWith(prefix + "block")) {
             blockCommand(message, fs, prefix);
+
         }
         if (message.content.startsWith(prefix + "removeBlock")) {
             removeBlockCommand(message, fs, prefix);
@@ -186,7 +193,8 @@ client.on('message', (message) => {
         if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
             message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
         }
-        (message.channel.name === "verify" && !message.content.startsWith(prefix + "verify"))? message.delete() : null; // Delete Message if channels' name is "verify"
+
+        (message.channel.name === "verify" || message.content.startsWith(prefix + "verify")) ? message.delete() : null; // Delete Message if channels' name is "verify"
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
