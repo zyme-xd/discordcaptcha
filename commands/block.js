@@ -1,3 +1,8 @@
+/**
+ * @param {Object} message - The message object
+ * @param {Module} fs - The npm module fs
+  * @param {string} prefix - The prefix
+**/
 module.exports = (message, fs, prefix) => {
     try {
         let file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
