@@ -1,3 +1,6 @@
+/**
+ * @param {Object} message - The message object
+**/
 module.exports = (message) => {
     try {
         if (message.member.hasPermission('MANAGE_MESSAGES')) {
