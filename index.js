@@ -132,7 +132,6 @@ client.on('message', (message) => {
                         fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
                         queue.push(message.author + "x" + captcha);
                         waitingQueue.push(message.author.id);
-                        console.log(queue);
                     }
                 }
             } else if (message.channel.name === "verify" && message.content.includes(prefix + "verify")) {
