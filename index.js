@@ -19,6 +19,10 @@ const removeBlockCommand = require("./commands/removeBlock.js");
 const banCommand = require("./commands/ban.js");
 const clearCommand = require("./commands/clear.js");
 const queryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
+const verifylogs = require("./src/logs.json");
+
+
+
 var waitingQueue = [];
 var queue = [];
 client.on("guildMemberAdd", (member) => {
@@ -129,9 +133,14 @@ client.on('message', (message) => {
                         tempQueryFile.query[message.author.id] = {
                             verified: "false"
                         };
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
                         queue.push(message.author + "x" + captcha);
                         waitingQueue.push(message.author.id);
+                        verifylogs[message.author.id] = {
+                            inQueue: Date.now(),
+                            verifiedAt: false
+                        };
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
+                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs));
                     }
                 }
             } else if (message.channel.name === "verify" && message.content.includes(prefix + "verify")) {
@@ -162,9 +171,15 @@ client.on('message', (message) => {
                         if(tempQueryFile.query[message.author.id])
 						tempQueryFile.query[message.author.id].verified = "true";
                         queue.pop();
-                        fs.appendFileSync("./verify_logs.txt", "[VerifyBot] " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "| " + message.author.tag + "(" + message.author.id + ") verified himself.\n");
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
+                        if(verifylogs[message.author.id]){
+                            if(verifylogs[message.author.id].verifiedAt != false) return;
+                            verifylogs[message.author.id].verifiedAt = Date.now();
+                        }else{
+                            console.log("This ain't looking good.");
+                        }
                         message.member.addRole(userRoleID).catch(error => console.log(error));
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
+                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs));
                     }
 
                 } else {
