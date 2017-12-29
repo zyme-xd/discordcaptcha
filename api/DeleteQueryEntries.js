@@ -1,3 +1,3 @@
 module.exports.all = function(fs){
-    return fs.writeFileSync("./src/Query.json", JSON.stringify({"query":{}}));
+    try { return fs.writeFileSync("./src/Query.json", JSON.stringify({"query":{}})); } catch(e) { return e; }
 }
