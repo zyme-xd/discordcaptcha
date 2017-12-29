@@ -204,6 +204,18 @@ client.on('message', (message) => {
         if (message.content.startsWith(prefix + "clear")) {
             clearCommand(message);
         }
+        if(message.content === prefix + "api queries"){
+            if(message.author.id === owner){
+                const getQueryEntries = require("./api/GetQueryEntries.js");
+                message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
+            }
+        }
+		if(message.content == prefix + "api querydelete"){
+			if(message.author.id === owner){
+				require("./api/DeleteQueryEntries.js").all(fs);
+				message.channel.send("Deleted the query.");
+			}
+		}
         if (message.author.id === owner && evalPerm === "true" && message.content.startsWith(prefix + "eval")) {
             message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
         }
