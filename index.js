@@ -44,8 +44,6 @@ client.on('message', (message) => {
         if (!message.guild) return;
         let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
         const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
-        const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-        const command = args.shift().toLowerCase();
         var time = new Date();
         if (file.blockedIDs[message.author.id]) {
             if (file.blockedIDs[message.author.id].blocked == "true") {
