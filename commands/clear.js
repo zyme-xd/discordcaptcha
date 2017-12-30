@@ -5,7 +5,7 @@
 module.exports = (message, contrib) => {
     try {
         if (contrib.includes(message.author.tag)) {
-            message.channel.bulkDelete(message.content.substr(7));
+            message.channel.bulkDelete(message.content.split(" ")[1]);
         } else {
             return message.channel.send("Missing Permissions");
         }
