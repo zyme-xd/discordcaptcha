@@ -6,12 +6,12 @@ const webshot = require("webshot");
 
 // Command Imports
 const config = require("./src/config.json");
-const blockCommand = require("./commands/block.js");
-const removeBlockCommand = require("./commands/removeBlock.js");
-const banCommand = require("./commands/ban.js");
-const clearCommand = require("./commands/clear.js");
-const verifylogs = require("./src/logs.json");
-
+var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs;
+config["commands"]["blockUser"].enabled ? blockCommand = require("./commands/block.js") : blockCommand = false;
+config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("./commands/removeBlock.js") : removeBlockCommand = false;
+config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/removeBlock.js") : banCommand = false;
+config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
+config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 
 
 var waitingQueue = [];
@@ -171,17 +171,17 @@ client.on('message', (message) => {
         // Moderation Commands
         if (message.content.startsWith(config.prefix)) {
             switch (message.content.split(" ")[0]) {
-                case config.prefix + "ban":
-                    banCommand(message);
+                case config.prefix + config["commands"]["banGuildMember"].command:
+                    banCommand(message, config["commands"]["banGuildMember"].contributors)
                     break;
-                case config.prefix + "block":
-                    blockCommand(message, fs, config.prefix);
+                case config.prefix + config["commands"]["blockUser"].command:
+                    blockCommand(message, fs, config.prefix, config["commands"]["blockUser"].contributors);
                     break;
-                case config.prefix + "removeBlock":
-                    removeBlockCommand(message, fs, config.prefix);
+                case config.prefix + config["commands"]["removeBlockFromUser"].command:
+                    removeBlockCommand(message, fs, config.prefix, config["commands"]["removeBlockFromUser"].contributors);
                     break;
-                case config.prefix + "clear":
-                    clearCommand(message);
+                case config.prefix + config["commands"]["clear"].command:
+                    clearCommand(message, config["commands"]["clear"].contributors);
                     break;
                 case config.prefix + "eval":
                     if (message.author.id === config.ownerid && config.evalAllowed === "true") {
