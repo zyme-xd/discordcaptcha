@@ -13,6 +13,13 @@ config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/
 config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
 config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 
+try {
+    snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
+    .then(r => JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n"));
+} catch(e){
+    console.log(e);
+}
+
 
 var waitingQueue = [];
 var queue = [];
