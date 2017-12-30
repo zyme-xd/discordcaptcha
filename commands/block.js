@@ -18,7 +18,7 @@ module.exports = (message, fs, prefix, contrib) => {
                         blocked: "true"
                     };
                     fs.writeFileSync("./src/config.json", JSON.stringify(file));
-                    message.channel.send("Added `" + message.content.substr(7) + "` to the blocked list.");
+                    message.channel.send("Added `" + message.content.split(" ")[1] + "` to the blocked list.");
                 } else {
                     message.channel.send("ID is already blocked.");
                 }
