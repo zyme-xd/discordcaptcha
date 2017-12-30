@@ -184,20 +184,20 @@ client.on('message', (message) => {
 
         // Moderation Commands
         if (message.content.startsWith(config.prefix)) {
-            switch (command) {
-                case "ban":
+            switch (message.content.split(" ")[0]) {
+                case config.prefix + "ban":
                     banCommand(message);
                     break;
-                case "block":
+                case config.prefix + "block":
                     blockCommand(message, fs, config.prefix);
                     break;
-                case "removeBlock":
+                case config.prefix + "removeBlock":
                     removeBlockCommand(message, fs, config.prefix);
                     break;
-                case "clear":
+                case config.prefix + "clear":
                     clearCommand(message);
                     break;
-                case "eval":
+                case config.prefix + "eval":
                     if (message.author.id === config.ownerid && config.evalAllowed === "true") {
                         message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
                     }
@@ -209,14 +209,14 @@ client.on('message', (message) => {
         // API Commands
 
         if (message.content.startsWith(config.prefix)) {
-            switch (command) {
-                case "api queries":
+            switch (message.content.split(" ")[0]) {
+                case config.prefix + "api queries":
                     if (message.author.id === config.ownerid) {
                         const getQueryEntries = require("./api/GetQueryEntries.js");
                         message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
                     }
                     break;
-                case "api querydelete":
+                case config.prefix + "api querydelete":
                     if (message.author.id === config.ownerid) {
                         require("./api/DeleteQueryEntries.js").all(fs);
                         message.channel.send("Deleted the query.");
