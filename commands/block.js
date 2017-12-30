@@ -1,13 +1,14 @@
 /**
  * @param {Object} message - The message object
  * @param {Module} fs - The npm module fs
-  * @param {string} prefix - The prefix
+ * @param {string} prefix - The prefix
+ * @param {array} contrib - Users that are allowed to use that command
 **/
-module.exports = (message, fs, prefix) => {
+module.exports = (message, fs, prefix, contrib) => {
     try {
         let file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
-        if (message.member.hasPermission('ADMINISTRATOR')) {
+        if (contrib.includes(message.author.tag)) {
             if (message.mentions.users.size === 0) {
                 if (!file.blockedIDs[args[1]]) file.blockedIDs[args[1]] = {
                     blocked: "false"

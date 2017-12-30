@@ -1,9 +1,10 @@
 /**
  * @param {Object} message - The message object
+ * @param {array} contrib - Users that are allowed to use that command
 **/
-module.exports = (message) => {
+module.exports = (message, contrib) => {
     try {
-        if (message.member.hasPermission('MANAGE_MESSAGES')) {
+        if (contrib.includes(message.author.tag)) {
             message.channel.bulkDelete(message.content.substr(7));
         } else {
             return message.channel.send("Missing Permissions");
