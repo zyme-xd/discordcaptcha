@@ -2,7 +2,7 @@
     "token": "token",
     "clientid": "clientid",
     "prefix": "!",
-    "version":1.0,
+    "version":1.0.8,
     "chat": "main-chat",
     "userrole": "339841406409375754",
     "streamingGame": "DiscordCaptcha",
