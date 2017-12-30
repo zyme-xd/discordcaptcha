@@ -215,6 +215,11 @@ client.on('message', (message) => {
                         message.channel.send("Deleted the query.");
                     }
                     break;
+                case "purgelogs":
+                if (message.author.id === config.ownerid) {
+                    require("./api/PurgeVerifyLogs.js")(fs);
+                    message.channel.send("Purged logs.");
+                    break;
                 }
             }
         }
