@@ -200,23 +200,31 @@ client.on('message', (message) => {
 
 
         // API Commands
-
         if (message.content.startsWith(config.prefix)) {
-            switch (message.content.split(" ")[0]) {
-                case config.prefix + "api queries":
+            if (message.content.split(" ")[0] == "?api") {
+                switch(message.content.split(" ")[1]){
+                case config.prefix + "queries":
                     if (message.author.id === config.ownerid) {
                         const getQueryEntries = require("./api/GetQueryEntries.js");
                         message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
                     }
                     break;
-                case config.prefix + "api querydelete":
+                case config.prefix + "querydelete":
                     if (message.author.id === config.ownerid) {
                         require("./api/DeleteQueryEntries.js").all(fs);
                         message.channel.send("Deleted the query.");
                     }
                     break;
+                case config.prefix + "purgelogs":
+                if (message.author.id === config.ownerid) {
+                    require("./api/PurgeVerifyLogs.js")(fs);
+                    message.channel.send("Purged logs.");
+                    console.log(1);
+                    break;
+                }
             }
         }
+    }
 
 
         (message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify") && message.author.id != client.user.id) ? message.delete(): null; // Delete Message if channels' name is "verify"
