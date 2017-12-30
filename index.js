@@ -16,18 +16,6 @@ const verifylogs = require("./src/logs.json");
 
 var waitingQueue = [];
 var queue = [];
-client.on("guildMemberAdd", (member) => {
-    try {
-        member.user.send({
-            embed: {
-                color: 0xffff00,
-                description: "To verify yourself as a human, write `" + config.prefix + "receive` in the guild to receive your captcha"
-            }
-        });
-    } catch (e) {
-        console.log("[DISCORDCAPTCHA-guildMemberAdd] >> " + e)
-    }
-});
 
 
 client.on("ready", () => {
@@ -112,13 +100,13 @@ client.on('message', (message) => {
                         setTimeout(function () {
                             fs.unlinkSync("./captchas/" + floor + ".png");
                         }, 30000);
-                        message.author.send({
-                            embed: {
-                                color: 0x0000ff,
-                                description: "Write `!verify` <code> in the guild to write in all channel. \n\n**Verification Bot made by y21#0909**"
-                            }
-                        });
-
+                        let msg = message.author.send(new Discord.RichEmbed()
+                            .setTitle("Verification")
+                            .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
+                            .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
+                            .setColor("RANDOM")
+                            .setTimestamp()
+                        ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
                         tempQueryFile.query[message.author.id] = {
                             verified: "false"
                         };
@@ -224,7 +212,7 @@ client.on('message', (message) => {
         }
 
 
-        (message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) ? message.delete(): null; // Delete Message if channels' name is "verify"
+        (message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify") && message.author.id != client.user.id) ? message.delete(): null; // Delete Message if channels' name is "verify"
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
