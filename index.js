@@ -203,13 +203,13 @@ client.on('message', (message) => {
         if (message.content.startsWith(config.prefix)) {
             if (message.content.split(" ")[0] == "?api") {
                 switch(message.content.split(" ")[1]){
-                case config.prefix + "queries":
+                case "queries":
                     if (message.author.id === config.ownerid) {
                         const getQueryEntries = require("./api/GetQueryEntries.js");
                         message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
                     }
                     break;
-                case config.prefix + "querydelete":
+                case "querydelete":
                     if (message.author.id === config.ownerid) {
                         require("./api/DeleteQueryEntries.js").all(fs);
                         message.channel.send("Deleted the query.");
