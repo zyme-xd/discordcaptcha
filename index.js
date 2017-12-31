@@ -23,7 +23,7 @@ try {
 }
 
 
-var callback_ = function(err){
+var callback_ = (err) => {
     if (err) console.error(err);
 }
 var waitingQueue = [];
