@@ -31,7 +31,11 @@
             "command":"clear",
             "contributors":["y21#0909"],
             "enabled":true
-        }
+        },
+		"version":{
+			"command":"version",
+			"enabled":true
+		}
     },
     "blockedIDs": {
         
