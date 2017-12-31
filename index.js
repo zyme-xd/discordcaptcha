@@ -23,7 +23,7 @@ try {
 }
 
 
-const callback_ = (err) => {
+var callback_ = function(err){
     if (err) console.error(err);
 }
 var waitingQueue = [];
@@ -67,51 +67,9 @@ client.on('message', (message) => {
                             }
                         });
                     } else {
-                        var captcha = Math.floor(Math.random() * 9000) + 1001;
-                        var floor = Math.floor(Math.random() * 10000) + 1;
-                        var fontFace, fontSize, fontPosition;
-                        if (floor < 5000) {
-                            fontFace = "Comic Sans MS";
-                        } else if (floor >= 5000) {
-                            fontFace = "Arial";
-                        }
-                        var floorx = Math.floor(Math.random() * 10000) + 1;
-                        fontSize = Math.floor(Math.random() * 20) + 35;
-                        var height = Math.floor(Math.random() * 20) + 10 + "%";
-                        var width = Math.floor(Math.random() * 20) + 10 + "%";
-                        var fontColor = config.possibleCaptchaColors[Math.floor(Math.random() * 4) + 1];
-                        var bgColor = config.possibleCaptchaColors[Math.floor(Math.random() * 4) + 1];
-                        var rotate = Math.floor(Math.random() * 70) + 11;
-                        var letterSpacing = Math.floor(Math.random() * 30) + 10;
-                        var boxWidth = Math.floor(Math.random() * 30) + 30;
-                        var boxHeight = Math.floor(Math.random() * 30) + 30;
-                        var boxColor = config.possibleCaptchaColors[Math.floor(Math.random() * 4) + 1];
-                        var boxBorderSize = Math.floor(Math.random() * 7) + 1 + "px";
-                        var boxMarginTop = Math.floor(Math.random() * 70) + 10 + "%";
-                        var boxMarginLeft = Math.floor(Math.random() * 70) + 10 + "%";
-                        if (Math.random() > Math.random()) {
-                            var rbackup = rotate;
-                            rotate -= rbackup;
-                            rotate -= rbackup;
-                        }
-                        if (bgColor === fontColor) {
-                            fontColor = config.possibleCaptchaColors[Math.floor(Math.random() * 4) + 1];
-                        }
-                        webshot('<html><body style=\'background-image: url("http://b.reich.io/jjvoab.png");\'><h1 style="font-family:' + fontFace + '; color:' + fontColor + '; font-size:' + fontSize + 'px; position: absolute; top:' + height + ';left:' + width + '; -moz-transform: rotate(' + rotate + 'deg); -ms-transform: rotate(' + rotate + 'deg);-o-transform: rotate(' + rotate + 'deg);-webkit-transform: rotate(' + rotate + 'deg);letter-spacing: ' + letterSpacing + 'px;"><i><del>' + captcha + '</del></i></h1></body></html>', './captchas/' + floor + '.png', {
-                            siteType: 'html',
-                            screenSize: {
-                                width: 500,
-                                height: 500
-                            }
-                        }, function (err) {
-                            message.author.send("", {
-                                files: ['./captchas/' + floor + ".png"]
-                            })
-                        });
-
-                        setTimeout(function () {
-                            fs.unlinkSync("./captchas/" + floor + ".png", callback_);
-                        }, 30000);
+                        let captchas = fs.readdirSync("./captchas", callback_);
+                        var captcha = captchas[Math.floor(Math.random() * captchas.length) + 1];
+                        message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
                         let msg = message.author.send(new Discord.RichEmbed()
                             .setTitle("Verification")
                             .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
@@ -133,13 +91,14 @@ client.on('message', (message) => {
                     }
                 }
             } else if (message.channel.name === "verify" && message.content.includes(config.prefix + "verify")) {
-                var input = message.content.substr(8);
+                var input = message.content.substr(8) + ".png";
                 for (i = 0; i < queue.length; i++) {
                     var cpoint = queue[i].indexOf("x");
                 }
                 cpoint++;
+                var oldcaptcha;
                 for (i = 0; i < queue.length; i++) {
-                    var oldcaptcha = queue[i].substr(cpoint);
+                  oldcaptcha = queue[i].substr(cpoint);
                 }
                 if (input === oldcaptcha) {
                     if (message.member.roles.has(config.userrole)) {
@@ -239,4 +198,7 @@ client.on('message', (message) => {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
 });
+process.on('unhandledRejection', (err) => {
+    console.log(err);
+  });
 client.login(config.token);
