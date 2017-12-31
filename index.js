@@ -6,7 +6,6 @@ const snekfetch = require("snekfetch");
 
 // Command Imports
 const config = require("./src/config.json");
-
 var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs;
 config["commands"]["blockUser"].enabled ? blockCommand = require("./commands/block.js") : blockCommand = false;
 config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("./commands/removeBlock.js") : removeBlockCommand = false;
@@ -14,19 +13,23 @@ config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/
 config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
 config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 
-try {
-    snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
-        .then(r => JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n")); // r.body is buffer
-} catch (e) {
-    console.log(e);
-}
 
 
-var callback_ = function(err){
+const callback_ = function (err) {
     if (err) console.error(err);
 }
 var waitingQueue = [];
 var queue = [];
+let latestVersion = false;
+try {
+    snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
+        .then(r => {
+            JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
+            latestVersion = JSON.parse(r.body).version
+        }); // r.body is buffer
+} catch (e) {
+    console.log(e);
+}
 
 
 client.on("ready", () => {
@@ -97,7 +100,7 @@ client.on('message', (message) => {
                 cpoint++;
                 var oldcaptcha;
                 for (i = 0; i < queue.length; i++) {
-                  oldcaptcha = queue[i].substr(cpoint);
+                    oldcaptcha = queue[i].substr(cpoint);
                 }
                 if (input === oldcaptcha) {
                     if (message.member.roles.has(config.userrole)) {
@@ -138,7 +141,7 @@ client.on('message', (message) => {
             }
         }
 
-        // Moderation Commands
+        // Bot Commands
         if (message.content.startsWith(config.prefix)) {
             switch (message.content.split(" ")[0]) {
                 case config.prefix + config["commands"]["banGuildMember"].command:
@@ -161,6 +164,15 @@ client.on('message', (message) => {
                     if (message.author.id === config.ownerid && config.evalAllowed === "true") {
                         message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
                     }
+                    break;
+                case config.prefix + "version":
+                    message.channel.send(new Discord.RichEmbed()
+                        .setColor("RANDOM")
+                        .setTitle("Version")
+                        .setDescription(`Current DiscordCaptcha version: \`${config.version}\`\nLatest version: \`${latestVersion}\``)
+                        .addField("Repository", "https://github.com/y21/serverbuild/")
+                        .setTimestamp()
+                    );
                     break;
             }
         }
@@ -199,5 +211,5 @@ client.on('message', (message) => {
 });
 process.on('unhandledRejection', (err) => {
     console.log(err);
-  });
+});
 client.login(config.token);
