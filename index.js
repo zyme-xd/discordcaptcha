@@ -6,11 +6,12 @@ const snekfetch = require("snekfetch");
 
 // Command Imports
 const config = require("./src/config.json");
-var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs;
+var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs, versionCommand;
 config["commands"]["blockUser"].enabled ? blockCommand = require("./commands/block.js") : blockCommand = false;
 config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("./commands/removeBlock.js") : removeBlockCommand = false;
 config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/removeBlock.js") : banCommand = false;
 config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
+config["commands"]["version"].enabled ? versionCommand = true : versionCommand = false;
 config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 
 
@@ -165,14 +166,14 @@ client.on('message', (message) => {
                         message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
                     }
                     break;
-                case config.prefix + "version":
-                    message.channel.send(new Discord.RichEmbed()
+                case config.prefix + config["commands"]["version"].command:
+                    versionCommand ? message.channel.send(new Discord.RichEmbed()
                         .setColor("RANDOM")
                         .setTitle("Version")
                         .setDescription(`Current DiscordCaptcha version: \`${config.version}\`\nLatest version: \`${latestVersion}\``)
                         .addField("Repository", "https://github.com/y21/serverbuild/")
                         .setTimestamp()
-                    );
+                    ) : null;
                     break;
             }
         }
