@@ -1,8 +1,6 @@
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
-⚠️ This version is only working on Windows (Webshot Module). Try the <a href="https://github.com/y21/discordcaptcha/tree/linux-stable">`linux-stable`</a> Branche for Linux-compatibility
-
 ## Setup procedure
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
 To install all required NPM-Modules, run `npm install` <b>in bots' directory</b><br/><br/>
