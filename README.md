@@ -17,6 +17,15 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 !block <Snowflake | Mention> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
 !removeBlock <Snowflake | Mention> // Removes a User ID from the blacklist. User can write again without getting kicked.
 !clear <amount> // Clears an amount of messages.
+!version // The current version and the latest version
+```
+
+## API related commands
+
+```js
+!api queries // Current query
+!api querydelete // Deletes the query (should be executed every 2 or 3 weeks)
+!api purgelogs // Purges the logs
 ```
 
 ## Tips
