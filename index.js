@@ -3,9 +3,11 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
 const webshot = require("webshot");
+const snekfetch = require("snekfetch");
 
 // Command Imports
 const config = require("./src/config.json");
+
 var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs;
 config["commands"]["blockUser"].enabled ? blockCommand = require("./commands/block.js") : blockCommand = false;
 config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("./commands/removeBlock.js") : removeBlockCommand = false;
@@ -15,12 +17,15 @@ config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 
 try {
     snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
-    .then(r => JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n"));
-} catch(e){
+        .then(r => JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n")); // r.body is buffer
+} catch (e) {
     console.log(e);
 }
 
 
+var callback_ = function(err){
+    if (err) console.error(err);
+}
 var waitingQueue = [];
 var queue = [];
 
@@ -105,7 +110,7 @@ client.on('message', (message) => {
                         });
 
                         setTimeout(function () {
-                            fs.unlinkSync("./captchas/" + floor + ".png");
+                            fs.unlinkSync("./captchas/" + floor + ".png", callback_);
                         }, 30000);
                         let msg = message.author.send(new Discord.RichEmbed()
                             .setTitle("Verification")
@@ -123,8 +128,8 @@ client.on('message', (message) => {
                             inQueue: Date.now(),
                             verifiedAt: false
                         };
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
-                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs));
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
                     }
                 }
             } else if (message.channel.name === "verify" && message.content.includes(config.prefix + "verify")) {
@@ -162,8 +167,8 @@ client.on('message', (message) => {
                             console.log("This ain't looking good.");
                         }
                         message.member.addRole(config.userrole).catch(error => console.log(error));
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile));
-                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs));
+                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
                     }
 
                 } else {
@@ -206,29 +211,28 @@ client.on('message', (message) => {
         // API Commands
         if (message.content.startsWith(config.prefix)) {
             if (message.content.split(" ")[0] == "?api") {
-                switch(message.content.split(" ")[1]){
-                case "queries":
-                    if (message.author.id === config.ownerid) {
-                        const getQueryEntries = require("./api/GetQueryEntries.js");
-                        message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
-                    }
-                    break;
-                case "querydelete":
-                    if (message.author.id === config.ownerid) {
-                        require("./api/DeleteQueryEntries.js").all(fs);
-                        message.channel.send("Deleted the query.");
-                    }
-                    break;
-                case "purgelogs":
-                if (message.author.id === config.ownerid) {
-                    require("./api/PurgeVerifyLogs.js")(fs);
-                    message.channel.send("Purged logs.");
-                    break;
+                switch (message.content.split(" ")[1]) {
+                    case "queries":
+                        if (message.author.id === config.ownerid) {
+                            const getQueryEntries = require("./api/GetQueryEntries.js");
+                            message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
+                        }
+                        break;
+                    case "querydelete":
+                        if (message.author.id === config.ownerid) {
+                            require("./api/DeleteQueryEntries.js").all(fs);
+                            message.channel.send("Deleted the query.");
+                        }
+                        break;
+                    case "purgelogs":
+                        if (message.author.id === config.ownerid) {
+                            require("./api/PurgeVerifyLogs.js")(fs);
+                            message.channel.send("Purged logs.");
+                            break;
+                        }
                 }
             }
         }
-    }
-
 
         (message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify") && message.author.id != client.user.id) ? message.delete(): null; // Delete Message if channels' name is "verify"
     } catch (e) {
