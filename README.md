@@ -3,7 +3,7 @@ A Captcha verification bot based on Discord.js.
 
 ## Setup procedure
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
-To install all required NPM-Modules, run `npm install` <b>in bots' directory</b><br/><br/>
+To install all required NPM-Modules, run `npm install` <b>in bots' directory</b>(Click <a href="https://discordjs.guide/#/preparations/?id=installing-nodejs">here</a> for a detailed installation)<br/><br/>
 
 The config file is located in `~/src/`. Get your Token from <a href="https://discordapp.com/developers/applications/me">here</a>.
 
