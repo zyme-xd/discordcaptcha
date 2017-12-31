@@ -179,15 +179,19 @@ client.on('message', (message) => {
         if (message.content.startsWith(config.prefix)) {
             switch (message.content.split(" ")[0]) {
                 case config.prefix + config["commands"]["banGuildMember"].command:
+                    if (!banCommand) return;
                     banCommand(message, config["commands"]["banGuildMember"].contributors)
                     break;
                 case config.prefix + config["commands"]["blockUser"].command:
+                    if (!blockCommand) return;
                     blockCommand(message, fs, config.prefix, config["commands"]["blockUser"].contributors);
                     break;
                 case config.prefix + config["commands"]["removeBlockFromUser"].command:
+                    if (!removeBlockCommand) return;
                     removeBlockCommand(message, fs, config.prefix, config["commands"]["removeBlockFromUser"].contributors);
                     break;
                 case config.prefix + config["commands"]["clear"].command:
+                    if (!clearCommand) return;
                     clearCommand(message, config["commands"]["clear"].contributors);
                     break;
                 case config.prefix + "eval":
