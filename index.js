@@ -13,6 +13,7 @@ config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/
 config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
 config["commands"]["version"].enabled ? versionCommand = true : versionCommand = false;
 config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
+var dmsEnabled;
 
 
 
@@ -70,16 +71,18 @@ client.on('message', (message) => {
                             }
                         });
                     } else {
+                        dmsEnabled = false;
                         let captchas = fs.readdirSync("./captchas", callback_);
                         var captcha = captchas[Math.floor(Math.random() * captchas.length) + 1];
-                        message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
                         let msg = message.author.send(new Discord.RichEmbed()
                             .setTitle("Verification")
                             .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
                             .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
                             .setColor("RANDOM")
                             .setTimestamp()
-                        ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
+                        ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : dmsEnabled = true);
+                        if(!dmsEnabled) return message.delete();
+                        message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
                         tempQueryFile.query[message.author.id] = {
                             verified: "false"
                         };
