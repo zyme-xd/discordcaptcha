@@ -17,9 +17,7 @@ var dmsEnabled;
 
 
 
-const callback_ = function (err) {
-    if (err) console.error(err);
-}
+const callback_ = err => { err ? console.error(err) : null };
 var waitingQueue = [];
 var queue = [];
 let latestVersion = false;
