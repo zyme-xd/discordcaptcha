@@ -173,7 +173,7 @@ client.on('message', (message) => {
                         .setColor("RANDOM")
                         .setTitle("Version")
                         .setDescription(`Current DiscordCaptcha version: \`${config.version}\`\nLatest version: \`${latestVersion}\``)
-                        .addField("Repository", "https://github.com/y21/serverbuild/")
+                        .addField("Repository", "https://github.com/y21/discordcaptcha/")
                         .setTimestamp()
                     ) : null;
                     break;
