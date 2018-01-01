@@ -38,6 +38,7 @@ client.on("ready", () => {
     try {
         console.log("Logged in!")
         client.user.setGame(config.streamingGame, config.streamingLink);
+        client.guilds.size > 1 ? console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") : null;
     } catch (e) {
         console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
     }
