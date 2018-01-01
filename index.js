@@ -80,7 +80,7 @@ client.on('message', (message) => {
                             .setColor("RANDOM")
                             .setTimestamp()
                         ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : dmsEnabled = true);
-                        if(!dmsEnabled) return message.delete();
+                        //if(!dmsEnabled) return message.delete();
                         message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
                         tempQueryFile.query[message.author.id] = {
                             verified: "false"
