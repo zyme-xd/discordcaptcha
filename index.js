@@ -37,6 +37,9 @@ client.on("ready", () => {
         console.log("Logged in!")
         client.user.setGame(config.streamingGame, config.streamingLink);
         client.guilds.size > 1 ? console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") : null;
+        client.guilds.forEach(guild => {
+            !guild.roles.get(config.userrole) ? console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`) : null;
+        });
     } catch (e) {
         console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
     }
