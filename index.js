@@ -11,7 +11,7 @@ var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs, vers
 config["commands"]["blockUser"].enabled ? blockCommand = require("./commands/block.js") : blockCommand = false;
 config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("./commands/removeBlock.js") : removeBlockCommand = false;
 config["commands"]["banGuildMember"].enabled ? banCommand = require("./commands/removeBlock.js") : banCommand = false;
-config["commands"]["clear"].enabled ? clearCommand = require("./commands/removeBlock.js") : clearCommand = false;
+config["commands"]["clear"].enabled ? clearCommand = require("./commands/clear.js") : clearCommand = false;
 config["commands"]["version"].enabled ? versionCommand = true : versionCommand = false;
 config.logging ? verifylogs = require("./src/logs.json") : verifylogs = false;
 var dmsEnabled;
