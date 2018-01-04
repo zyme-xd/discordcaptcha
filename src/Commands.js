@@ -1,4 +1,4 @@
-module.exports = (message, config, Discord, fs) => {
+module.exports = (message, config, Discord, fs, latestVersion) => {
     var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs, versionCommand;
     config["commands"]["blockUser"].enabled ? blockCommand = require("../commands/block.js") : blockCommand = false;
     config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("../commands/removeBlock.js") : removeBlockCommand = false;
