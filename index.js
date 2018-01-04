@@ -17,7 +17,7 @@ try {
         .then(r => {
             JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
             latestVersion = JSON.parse(r.body).version
-        }); // r.body is buffer
+        });
 } catch (e) {
     console.log(e);
 }
