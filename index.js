@@ -3,12 +3,15 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
+
+
 // Command Imports
 const config = require("./src/config.json");
 var dmsEnabled;
 const callback_ = err => {
     err ? console.error(err) : null
 };
+
 var waitingQueue = [];
 var queue = [];
 let latestVersion = false;
@@ -21,6 +24,7 @@ try {
 } catch (e) {
     console.log(e);
 }
+
 client.on("ready", () => {
     try {
         console.log("Logged in!")
@@ -33,6 +37,7 @@ client.on("ready", () => {
         console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
     }
 });
+
 client.on('message', (message) => {
     try {
         if (!message.guild) return;
@@ -134,15 +139,19 @@ client.on('message', (message) => {
                 }
             }
         }
+        
         require("./src/Commands.js")(message, config, Discord, fs); // Command Handler
+        
         if ((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id) {
             message.delete();
         }
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
+    
 });
 process.on('unhandledRejection', (err) => {
     console.log(err);
 });
+
 client.login(config.token);
