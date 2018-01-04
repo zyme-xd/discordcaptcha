@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
-
+const verifylogs = require("./src/logs.json");
 
 // Command Imports
 const config = require("./src/config.json");
@@ -12,9 +12,24 @@ const callback_ = err => {
     err ? console.error(err) : null
 };
 
+class Captcha {
+    constructor(captcha){
+        this.captcha = captcha;
+    }
+
+    generate(){
+        let temp = fs.readdirSync("./captchas", callback_);
+        let rand = Math.floor(Math.random() * temp.length) + 1;
+        this.captcha = temp[rand];
+        return this.captcha;
+    }
+}
+
+
+
 var waitingQueue = [];
 var queue = [];
-let latestVersion;
+var latestVersion;
 try {
     snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
         .then(r => {
@@ -67,8 +82,7 @@ client.on('message', (message) => {
                         });
                     } else {
                         dmsEnabled = false;
-                        let captchas = fs.readdirSync("./captchas", callback_);
-                        var captcha = captchas[Math.floor(Math.random() * captchas.length) + 1];
+                        let captcha = new Captcha().generate();
                         let msg = message.author.send(new Discord.RichEmbed()
                             .setTitle("Verification")
                             .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
