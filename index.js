@@ -12,9 +12,15 @@ const callback_ = err => {
     err ? console.error(err) : null
 };
 
+
+var waitingQueue = [];
+var queue = [];
+var latestVersion;
+
 class Captcha {
-    constructor(captcha){
+    constructor(captcha, author){
         this.captcha = captcha;
+        this.author = author;
     }
 
     generate(){
@@ -23,13 +29,21 @@ class Captcha {
         this.captcha = temp[rand];
         return this.captcha;
     }
+
+    log(tempQueryFile){
+        queue.push(this.author + "x" + this.captcha);
+        waitingQueue.push(this.author.id);
+        verifylogs[this.author.id] = {
+            inQueue: Date.now(),
+            verifiedAt: false
+        };
+        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+    }
 }
 
 
 
-var waitingQueue = [];
-var queue = [];
-var latestVersion;
 try {
     snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
         .then(r => {
@@ -81,8 +95,9 @@ client.on('message', (message) => {
                             }
                         });
                     } else {
+                        let captchaInstance = new Captcha(null, message.author);
                         dmsEnabled = false;
-                        let captcha = new Captcha().generate();
+                        let captcha = captchaInstance.generate();
                         let msg = message.author.send(new Discord.RichEmbed()
                             .setTitle("Verification")
                             .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
@@ -95,14 +110,7 @@ client.on('message', (message) => {
                         tempQueryFile.query[message.author.id] = {
                             verified: "false"
                         };
-                        queue.push(message.author + "x" + captcha);
-                        waitingQueue.push(message.author.id);
-                        verifylogs[message.author.id] = {
-                            inQueue: Date.now(),
-                            verifiedAt: false
-                        };
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+                        captchaInstance.log(tempQueryFile);
                     }
                 }
             } else if (message.channel.name === "verify" && message.content.includes(config.prefix + "verify")) {
