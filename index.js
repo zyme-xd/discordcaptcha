@@ -210,7 +210,9 @@ client.on('message', (message) => {
             }
         }
 
-        (message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify") && message.author.id != client.user.id) ? message.delete(): null; // Delete Message if channels' name is "verify"
+        if((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id){
+            message.delete();
+        }
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
