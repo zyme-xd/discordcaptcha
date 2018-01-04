@@ -187,22 +187,22 @@ client.on('message', (message) => {
         // API Commands
         if (message.content.startsWith(config.prefix)) {
             if (message.content.split(" ")[0] == "?api") {
+                let Handler = require("./api/Handler.js");
                 switch (message.content.split(" ")[1]) {
                     case "queries":
                         if (message.author.id === config.ownerid) {
-                            const getQueryEntries = require("./api/GetQueryEntries.js");
-                            message.channel.send("```js\n" + require("util").inspect(getQueryEntries(fs)) + "\n```");
+                            message.channel.send("```js\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
                         }
                         break;
                     case "querydelete":
                         if (message.author.id === config.ownerid) {
-                            require("./api/DeleteQueryEntries.js").all(fs);
+                            new Handler("DeleteQueryEntries").request();
                             message.channel.send("Deleted the query.");
                         }
                         break;
                     case "purgelogs":
                         if (message.author.id === config.ownerid) {
-                            require("./api/PurgeVerifyLogs.js")(fs);
+                            new Handler("PurgeVerifyLogs").request();
                             message.channel.send("Purged logs.");
                             break;
                         }
