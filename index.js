@@ -18,7 +18,9 @@ var dmsEnabled;
 
 
 
-const callback_ = err => { err ? console.error(err) : null };
+const callback_ = err => {
+    err ? console.error(err) : null
+};
 var waitingQueue = [];
 var queue = [];
 let latestVersion = false;
@@ -191,7 +193,7 @@ client.on('message', (message) => {
                 switch (message.content.split(" ")[1]) {
                     case "queries":
                         if (message.author.id === config.ownerid) {
-                            message.channel.send("```js\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
+                            message.channel.send("```js\n//Query\n\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
                         }
                         break;
                     case "querydelete":
@@ -206,11 +208,16 @@ client.on('message', (message) => {
                             message.channel.send("Purged logs.");
                         }
                         break;
+                    case "logs":
+                        if (message.author.id === config.ownerid) {
+                            message.channel.send("```js\n//Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
+                        }
+                        break;
                 }
             }
         }
 
-        if((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id){
+        if ((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id) {
             message.delete();
         }
     } catch (e) {
