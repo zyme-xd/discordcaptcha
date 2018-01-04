@@ -193,7 +193,7 @@ client.on('message', (message) => {
                 switch (message.content.split(" ")[1]) {
                     case "queries":
                         if (message.author.id === config.ownerid) {
-                            message.channel.send("```js\n//Query\n\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
+                            message.channel.send("```js\n// Query\n\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
                         }
                         break;
                     case "querydelete":
@@ -210,8 +210,13 @@ client.on('message', (message) => {
                         break;
                     case "logs":
                         if (message.author.id === config.ownerid) {
-                            message.channel.send("```js\n//Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
+                            message.channel.send("```js\n// Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
                         }
+                        break;
+                    case "captchas":
+                    if (message.author.id === config.ownerid) {
+                        message.channel.send("```js\n// Captchas\n\n" + require("util").inspect(new Handler("GetCaptchas").request()).substr(0,1999) + "\n```");
+                    }
                         break;
                 }
             }
