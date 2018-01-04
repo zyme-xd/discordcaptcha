@@ -34,6 +34,7 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 !api querydelete // Deletes the query (should be executed every 2 or 3 weeks)
 !api purgelogs // Purges the logs
 !api logs // Get logs
+!api captchas // All captchas (limited to 2000 chars)
 ```
 
 ## Tips
