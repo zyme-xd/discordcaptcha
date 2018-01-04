@@ -22,6 +22,11 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 !version // The current version and the latest version
 ```
 
+## Adding captchas
+You can add as many captchas as you want into the `~/captchas/` directory, but please keep in mind that:
+- Extension has to be .png
+- Filename **has** to be the same as the captcha.
+
 ## API related commands
 
 ```js
