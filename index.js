@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
+const Handler = require("./api/Handler.js");
 
 // Command Imports
 const config = require("./src/config.json");
@@ -187,7 +188,6 @@ client.on('message', (message) => {
         // API Commands
         if (message.content.startsWith(config.prefix)) {
             if (message.content.split(" ")[0] == "?api") {
-                let Handler = require("./api/Handler.js");
                 switch (message.content.split(" ")[1]) {
                     case "queries":
                         if (message.author.id === config.ownerid) {
