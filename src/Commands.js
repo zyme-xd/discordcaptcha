@@ -49,32 +49,32 @@ module.exports = (message, config, Discord, fs, latestVersion) => {
     if (message.content.startsWith(config.prefix)) {
         if (message.content.split(" ")[0] == "?api") {
             switch (message.content.split(" ")[1]) {
-                case "queries":
-                    if (message.author.id === config.ownerid) {
+                case config["commands"]["queries"].command:
+                    if (message.author.id === config.ownerid && config["commands"]["queries"].enabled) {
                         message.channel.send("```js\n// Query\n\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
                     }
                     break;
-                case "querydelete":
-                    if (message.author.id === config.ownerid) {
+                case config["commands"]["querydelete"].command:
+                    if (message.author.id === config.ownerid && config["commands"]["querydelete"].enabled) {
                         new Handler("DeleteQueryEntries").request();
                         message.channel.send("Deleted the query.");
                     }
                     break;
-                case "purgelogs":
-                    if (message.author.id === config.ownerid) {
+                case config["commands"]["purgelogs"].command:
+                    if (message.author.id === config.ownerid && config["commands"]["purgelogs"].enabled) {
                         new Handler("PurgeVerifyLogs").request();
                         message.channel.send("Purged logs.");
                     }
                     break;
-                case "logs":
-                    if (message.author.id === config.ownerid) {
+                case config["commands"]["logs"].command:
+                    if (message.author.id === config.ownerid && config["commands"]["logs"].enabled) {
                         message.channel.send("```js\n// Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
                     }
                     break;
-                case "captchas":
-                if (message.author.id === config.ownerid) {
-                    message.channel.send("```js\n// Captchas\n\n" + require("util").inspect(new Handler("GetCaptchas").request()).substr(0,1999) + "\n```");
-                }
+                case config["commands"]["captchas"].command:
+                    if (message.author.id === config.ownerid && config["commands"]["captchas"].enabled) {
+                        message.channel.send("```js\n// Captchas\n\n" + require("util").inspect(new Handler("GetCaptchas").request()).substr(0, 1999) + "\n```");
+                    }
                     break;
             }
         }
