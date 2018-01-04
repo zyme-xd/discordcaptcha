@@ -204,8 +204,8 @@ client.on('message', (message) => {
                         if (message.author.id === config.ownerid) {
                             new Handler("PurgeVerifyLogs").request();
                             message.channel.send("Purged logs.");
-                            break;
                         }
+                        break;
                 }
             }
         }
