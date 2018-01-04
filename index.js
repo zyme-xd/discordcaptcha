@@ -14,12 +14,12 @@ const callback_ = err => {
 
 var waitingQueue = [];
 var queue = [];
-let latestVersion = false;
+let latestVersion;
 try {
     snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
         .then(r => {
             JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
-            latestVersion = JSON.parse(r.body).version
+           latestVersion = JSON.parse(r.body).version;
         });
 } catch (e) {
     console.log(e);
@@ -140,7 +140,7 @@ client.on('message', (message) => {
             }
         }
         
-        require("./src/Commands.js")(message, config, Discord, fs); // Command Handler
+        require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
         
         if ((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id) {
             message.delete();
