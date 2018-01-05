@@ -55,8 +55,19 @@
         "captchas": {
             "command": "captchas",
             "enabled": true
+        },
+        "makerole": {
+            "command": "create-role",
+            "enabled": true,
+            "contributors":["y21#0909"]
         }
     },
     "blockedIDs": {
+        "1": {
+            "blocked": "false"
+        },
+        "312715611413413889": {
+            "blocked": "false"
+        }
     }
 }
