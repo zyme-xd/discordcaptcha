@@ -20,6 +20,7 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 !removeBlock <Snowflake | Mention> // Removes a User ID from the blacklist. User can write again without getting kicked.
 !clear <Amount of messages> // Clears an amount of messages, up to 100
 !version // The current version and the latest version
+!create-role // Creates the verification role
 ```
 
 ## Adding captchas
