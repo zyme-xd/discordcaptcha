@@ -1,3 +1,38 @@
+class Captcha {
+    /**
+     * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
+     * @param {object} author - The author object (Has to has an id property and should look like <@123456789>)
+     */
+    constructor(captcha, author) {
+        this.captcha = captcha;
+        this.author = author;
+    }
+
+    /**
+     * @returns {string} Captcha value of class
+     */
+    generate() {
+        let temp = fs.readdirSync("./captchas", callback_);
+        let rand = Math.floor(Math.random() * temp.length) + 1;
+        this.captcha = temp[rand];
+        return this.captcha;
+    }
+
+    /**
+     * @param {object} tempQueryFile - Temporary Query File
+     */
+    log(tempQueryFile) {
+        queue.push(this.author + "x" + this.captcha);
+        waitingQueue.push(this.author.id);
+        verifylogs[this.author.id] = {
+            inQueue: Date.now(),
+            verifiedAt: false
+        };
+        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+    }
+}
+
 // Module Imports and instances
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -17,38 +52,11 @@ var waitingQueue = [];
 var queue = [];
 var latestVersion;
 
-class Captcha {
-    constructor(captcha, author){
-        this.captcha = captcha;
-        this.author = author;
-    }
-
-    generate(){
-        let temp = fs.readdirSync("./captchas", callback_);
-        let rand = Math.floor(Math.random() * temp.length) + 1;
-        this.captcha = temp[rand];
-        return this.captcha;
-    }
-
-    log(tempQueryFile){
-        queue.push(this.author + "x" + this.captcha);
-        waitingQueue.push(this.author.id);
-        verifylogs[this.author.id] = {
-            inQueue: Date.now(),
-            verifiedAt: false
-        };
-        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
-    }
-}
-
-
-
 try {
     snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
         .then(r => {
             JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
-           latestVersion = JSON.parse(r.body).version;
+            latestVersion = JSON.parse(r.body).version;
         });
 } catch (e) {
     console.log(e);
@@ -161,16 +169,16 @@ client.on('message', (message) => {
                 }
             }
         }
-        
+
         require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
-        
+
         if ((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id) {
             message.delete();
         }
     } catch (e) {
         console.log("[DISCORDCAPTCHA-message] >> " + e);
     }
-    
+
 });
 process.on('unhandledRejection', (err) => {
     console.log(err);
