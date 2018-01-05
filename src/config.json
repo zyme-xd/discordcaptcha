@@ -14,22 +14,22 @@
     "commands": {
         "blockUser": {
             "command": "block",
-            "contributors": ["y21#0909"],
+            "contributors": [],
             "enabled": true
         },
         "removeBlockFromUser": {
             "command": "removeBlock",
-            "contributors": ["y21#0909"],
+            "contributors": [],
             "enabled": true
         },
         "banGuildMember": {
             "command": "ban",
-            "contributors": ["y21#0909"],
+            "contributors": [],
             "enabled": true
         },
         "clear": {
             "command": "clear",
-            "contributors": ["y21#0909"],
+            "contributors": [],
             "enabled": true
         },
         "version": {
@@ -38,28 +38,33 @@
         },
         "queries": {
             "command": "queries",
-            "enabled": true
+            "enabled": true,
+			"contributors": []
         },
         "querydelete": {
             "command": "querydelete",
-            "enabled": true
+            "enabled": true,
+			"contributors": []
         },
         "purgelogs": {
             "command": "purgelogs",
-            "enabled": true
+            "enabled": true,
+			"contributors": []
         },
         "logs": {
             "command": "logs",
-            "enabled": true
+            "enabled": true,
+			"contributors": []
         },
         "captchas": {
             "command": "captchas",
-            "enabled": true
+            "enabled": true,
+			"contributors": []
         },
         "makerole": {
             "command": "create-role",
             "enabled": true,
-            "contributors":["y21#0909"]
+            "contributors": []
         }
     },
     "blockedIDs": {
