@@ -72,6 +72,11 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
+	if(config["blockedIDs"][message.author.id]){
+		if(config["blockedIDs"][message.author.id].blocked === "true"){
+			message.member.kick();
+		}
+	}
 	let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 	if (message.channel.name === "verify") {
 		message.delete();
