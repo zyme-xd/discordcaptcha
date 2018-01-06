@@ -82,6 +82,7 @@ client.on('message', (message) => {
     if(message.channel.name === "verify"){
         message.delete();
         if(message.content === `${config.prefix}verify`){
+            if(tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
             let dmsEnabled;
             let captchaInstance = new Captcha(null, message.author);
             dmsEnabled = false;
