@@ -76,109 +76,54 @@ client.on("ready", () => {
 });
 
 client.on('message', (message) => {
-    try {
-        if (!message.guild) return;
-        let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-        const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
-        var time = new Date();
-        if (file.blockedIDs[message.author.id]) {
-            if (file.blockedIDs[message.author.id].blocked == "true") {
-                message.member.kick();
-                console.log(message.member + " was kicked.");
-                message.delete();
-            }
-        }
-        if (message.author.id != config.clientid) {
-            if (message.content === config.prefix + "receive" || message.content === config.prefix + "verify" || message.content === config.prefix + "captcha") {
-                if (message.channel.name === "verify") {
-                    if (tempQueryFile.query[message.author.id]) {
-                        message.delete();
-                        return message.reply(":x:");
+    let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
+    const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
+    var time = new Date();
+    if(message.channel.name === "verify"){
+        message.delete();
+        if(message.content === `${config.prefix}verify`){
+            let dmsEnabled;
+            let captchaInstance = new Captcha(null, message.author);
+            dmsEnabled = false;
+            let captcha = captchaInstance.generate();
+            let msg = message.author.send(new Discord.RichEmbed()
+                .setTitle("Verification")
+                .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
+                .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
+                .setColor("RANDOM")
+                .setTimestamp()
+            ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : dmsEnabled = true);
+            //if(!dmsEnabled) return message.delete();
+            message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
+            tempQueryFile.query[message.author.id] = {
+                verified: "false"
+            };
+            captchaInstance.log(tempQueryFile);
+            message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, { max: 1, errors: ['time'] })
+            .then(m => {
+                message.author.send({
+                    embed: {
+                        color: 0x00ff00,
+                        description: "Successfully verified on `" + message.guild.name + "`"
                     }
-                    if (message.member.roles.has(config.userrole)) {
-                        message.author.send({
-                            embed: {
-                                color: 0xff0000,
-                                description: "Already verified on `" + message.guild.name + "`"
-                            }
-                        });
-                    } else {
-                        let captchaInstance = new Captcha(null, message.author);
-                        dmsEnabled = false;
-                        let captcha = captchaInstance.generate();
-                        let msg = message.author.send(new Discord.RichEmbed()
-                            .setTitle("Verification")
-                            .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
-                            .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
-                            .setColor("RANDOM")
-                            .setTimestamp()
-                        ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : dmsEnabled = true);
-                        //if(!dmsEnabled) return message.delete();
-                        message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
-                        tempQueryFile.query[message.author.id] = {
-                            verified: "false"
-                        };
-                        captchaInstance.log(tempQueryFile);
-                    }
-                }
-            } else if (message.channel.name === "verify" && message.content.includes(config.prefix + "verify")) {
-                var input = message.content.substr(8) + ".png";
-                for (i = 0; i < queue.length; i++) {
-                    var cpoint = queue[i].indexOf("x");
-                }
-                cpoint++;
-                var oldcaptcha;
-                for (i = 0; i < queue.length; i++) {
-                    oldcaptcha = queue[i].substr(cpoint);
-                }
-                if (input === oldcaptcha) {
-                    if (message.member.roles.has(config.userrole)) {
-                        message.author.send({
-                            embed: {
-                                color: 0xff0000,
-                                description: "Already verified on `" + message.guild.name + "`"
-                            }
-                        });
-                    } else {
-                        message.author.send({
-                            embed: {
-                                color: 0x00ff00,
-                                description: "Successfully verified on `" + message.guild.name + "`"
-                            }
-                        });
-                        client.channels.find('name', config.chat).send("<@" + message.author.id + "> was successfully verified.");
-                        if (tempQueryFile.query[message.author.id])
-                            tempQueryFile.query[message.author.id].verified = "true";
-                        queue.pop();
-                        if (verifylogs[message.author.id]) {
-                            if (verifylogs[message.author.id].verifiedAt != false) return;
-                            verifylogs[message.author.id].verifiedAt = Date.now();
-                        } else {
-                            console.log("This ain't looking good.");
-                        }
-                        message.member.addRole(config.userrole).catch(error => console.log(error));
-                        fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-                        fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
-                    }
-
+                });
+                client.channels.find('name', config.chat).send("<@" + message.author.id + "> was successfully verified.");
+                if (tempQueryFile.query[message.author.id])
+                    tempQueryFile.query[message.author.id].verified = "true";
+                queue.pop();
+                if (verifylogs[message.author.id]) {
+                    if (verifylogs[message.author.id].verifiedAt != false) return;
+                    verifylogs[message.author.id].verifiedAt = Date.now();
                 } else {
-                    if (message.content.toLowerCase() != config.prefix + "verify") {
-                        message.author.send("You were kicked from " + message.guild.name + " (WRONG_CAPTCHA)");
-                        message.member.kick();
-                    }
+                    console.log("This ain't looking good.");
                 }
-            }
-        }
-
+                message.member.addRole(config.userrole).catch(error => console.log(error));
+                fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+                fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+            }).catch(() => {});
+        }}
+        
         require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
-
-        if ((message.channel.name === "verify" || message.content.startsWith(config.prefix + "verify")) && message.author.id != client.user.id) {
-            message.delete();
-        }
-    } catch (e) {
-        console.log("[DISCORDCAPTCHA-message] >> " + e);
-    }
-
 });
 process.on('unhandledRejection', (err) => {
     console.log(err);
