@@ -21,7 +21,8 @@ class Captcha {
 	/**
      * @param {object} tempQueryFile - Temporary Query File
      */
-	log(tempQueryFile){
+	log(){
+		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 		queue.push(this.author + "x" + this.captcha);
 		waitingQueue.push(this.author.id);
 		verifylogs[this.author.id] = {
@@ -92,7 +93,7 @@ client.on("message", (message) => {
 			tempQueryFile.query[message.author.id] = {
 				verified: "false"
 			};
-			captchaInstance.log(tempQueryFile);
+			captchaInstance.log();
 			message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
 				max: 1,
 				errors: ["time"]
