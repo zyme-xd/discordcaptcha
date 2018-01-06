@@ -21,7 +21,7 @@ class Captcha {
     /**
      * @param {object} tempQueryFile - Temporary Query File
      */
-    log(tempQueryFile) {
+    log(tempQueryFile){
         queue.push(this.author + "x" + this.captcha);
         waitingQueue.push(this.author.id);
         verifylogs[this.author.id] = {
@@ -32,9 +32,8 @@ class Captcha {
         fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
     }
 }
-
 // Module Imports and instances
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
@@ -42,9 +41,8 @@ const verifylogs = require("./src/logs.json");
 
 // Command Imports
 const config = require("./src/config.json");
-var dmsEnabled;
 const callback_ = err => {
-    err ? console.error(err) : null
+    err ? console.error(err) : null;
 };
 
 
@@ -53,7 +51,7 @@ var queue = [];
 var latestVersion;
 
 try {
-    snekfetch.get('https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json')
+    snekfetch.get("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
         .then(r => {
             JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
             latestVersion = JSON.parse(r.body).version;
@@ -64,7 +62,7 @@ try {
 
 client.on("ready", () => {
     try {
-        console.log("Logged in!")
+        console.log("Logged in!");
         client.user.setGame(config.streamingGame, config.streamingLink);
         client.guilds.size > 1 ? console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") : null;
         client.guilds.forEach(guild => {
@@ -75,58 +73,57 @@ client.on("ready", () => {
     }
 });
 
-client.on('message', (message) => {
+client.on("message", (message) => {
     let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-    const file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
-    var time = new Date();
-    if(message.channel.name === "verify"){
+    if (message.channel.name === "verify") {
         message.delete();
-        if(message.content === `${config.prefix}verify`){
-            if(tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
-            let dmsEnabled;
+        if (message.content === `${config.prefix}verify`) {
+            if (tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
             let captchaInstance = new Captcha(null, message.author);
-            dmsEnabled = false;
             let captcha = captchaInstance.generate();
-            let msg = message.author.send(new Discord.RichEmbed()
+            message.author.send(new Discord.RichEmbed()
                 .setTitle("Verification")
                 .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
                 .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
                 .setColor("RANDOM")
                 .setTimestamp()
-            ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : dmsEnabled = true);
-            //if(!dmsEnabled) return message.delete();
+            ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
             message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
             tempQueryFile.query[message.author.id] = {
                 verified: "false"
             };
             captchaInstance.log(tempQueryFile);
-            message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, { max: 1, errors: ['time'] })
-            .then(m => {
-                message.author.send({
-                    embed: {
-                        color: 0x00ff00,
-                        description: "Successfully verified on `" + message.guild.name + "`"
+            message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
+                max: 1,
+                errors: ["time"]
+            })
+                .then(() => {
+                    message.author.send({
+                        embed: {
+                            color: 0x00ff00,
+                            description: "Successfully verified on `" + message.guild.name + "`"
+                        }
+                    });
+                    client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.");
+                    if (tempQueryFile.query[message.author.id])
+                        tempQueryFile.query[message.author.id].verified = "true";
+                    queue.pop();
+                    if (verifylogs[message.author.id]) {
+                        if (verifylogs[message.author.id].verifiedAt != false) return;
+                        verifylogs[message.author.id].verifiedAt = Date.now();
+                    } else {
+                        console.log("This ain't looking good.");
                     }
-                });
-                client.channels.find('name', config.chat).send("<@" + message.author.id + "> was successfully verified.");
-                if (tempQueryFile.query[message.author.id])
-                    tempQueryFile.query[message.author.id].verified = "true";
-                queue.pop();
-                if (verifylogs[message.author.id]) {
-                    if (verifylogs[message.author.id].verifiedAt != false) return;
-                    verifylogs[message.author.id].verifiedAt = Date.now();
-                } else {
-                    console.log("This ain't looking good.");
-                }
-                message.member.addRole(config.userrole).catch(error => console.log(error));
-                fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-                fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
-            }).catch(() => {});
-        }}
-        
-        require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
+                    message.member.addRole(config.userrole).catch(error => console.log(error));
+                    fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+                    fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+                }).catch(() => {});
+        }
+    }
+
+    require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
 });
-process.on('unhandledRejection', (err) => {
+process.on("unhandledRejection", (err) => {
     console.log(err);
 });
 
