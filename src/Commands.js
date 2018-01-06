@@ -60,24 +60,24 @@ module.exports = (message, config, Discord, fs, latestVersion) => {
                     }
                     break;
                 case config["commands"]["querydelete"].command:
-                    if (message.author.id === config.ownerid && config["commands"]["querydelete"].enabled) {
+                    if (config["commands"]["querydelete"].contributors.includes(message.author.tag) && config["commands"]["querydelete"].enabled) {
                         new Handler("DeleteQueryEntries").request();
                         message.channel.send("Deleted the query.");
                     }
                     break;
                 case config["commands"]["purgelogs"].command:
-                    if (message.author.id === config.ownerid && config["commands"]["purgelogs"].enabled) {
+                    if (config["commands"]["purgelogs"].contributors.includes(message.author.tag) && config["commands"]["purgelogs"].enabled) {
                         new Handler("PurgeVerifyLogs").request();
                         message.channel.send("Purged logs.");
                     }
                     break;
                 case config["commands"]["logs"].command:
-                    if (message.author.id === config.ownerid && config["commands"]["logs"].enabled) {
+                    if (config["commands"]["logs"].contributors.includes(message.author.tag) && config["commands"]["logs"].enabled) {
                         message.channel.send("```js\n// Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
                     }
                     break;
                 case config["commands"]["captchas"].command:
-                    if (message.author.id === config.ownerid && config["commands"]["captchas"].enabled) {
+                    if (config["commands"]["captchas"].contributors.includes(message.author.tag) && config["commands"]["captchas"].enabled) {
                         message.channel.send("```js\n// Captchas\n\n" + require("util").inspect(new Handler("GetCaptchas").request()).substr(0, 1999) + "\n```");
                     }
                     break;
