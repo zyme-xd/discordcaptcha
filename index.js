@@ -17,10 +17,7 @@ class Captcha {
 		this.captcha = temp[rand];
 		return this.captcha;
 	}
-
-	/**
-     * @param {object} tempQueryFile - Temporary Query File
-     */
+	
 	log(){
 		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 		queue.push(this.author + "x" + this.captcha);
