@@ -72,59 +72,63 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-	if(config["blockedIDs"][message.author.id]){
-		if(config["blockedIDs"][message.author.id].blocked === "true"){
-			message.member.kick();
+	try{
+		if(config["blockedIDs"][message.author.id]){
+			if(config["blockedIDs"][message.author.id].blocked === "true"){
+				message.member.kick();
+			}
 		}
-	}
-	let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-	if (message.channel.name === "verify") {
-		message.delete();
-		if (message.content === `${config.prefix}verify`) {
-			if (tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
-			let captchaInstance = new Captcha(null, message.author);
-			let captcha = captchaInstance.generate();
-			message.author.send(new Discord.RichEmbed()
-				.setTitle("Verification")
-				.setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
-				.addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
-				.setColor("RANDOM")
-				.setTimestamp()
-			).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
-			message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
-			tempQueryFile.query[message.author.id] = {
-				verified: "false"
-			};
-			captchaInstance.log();
-			message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
-				max: 1,
-				errors: ["time"]
-			})
-				.then(() => {
-					message.author.send({
-						embed: {
-							color: 0x00ff00,
-							description: "Successfully verified on `" + message.guild.name + "`"
+		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
+		if (message.channel.name === "verify") {
+			message.delete();
+			if (message.content === `${config.prefix}verify`) {
+				if (tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
+				let captchaInstance = new Captcha(null, message.author);
+				let captcha = captchaInstance.generate();
+				message.author.send(new Discord.RichEmbed()
+					.setTitle("Verification")
+					.setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
+					.addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
+					.setColor("RANDOM")
+					.setTimestamp()
+				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
+				message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
+				tempQueryFile.query[message.author.id] = {
+					verified: "false"
+				};
+				captchaInstance.log();
+				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
+					max: 1,
+					errors: ["time"]
+				})
+					.then(() => {
+						message.author.send({
+							embed: {
+								color: 0x00ff00,
+								description: "Successfully verified on `" + message.guild.name + "`"
+							}
+						});
+						client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.");
+						if (tempQueryFile.query[message.author.id])
+							tempQueryFile.query[message.author.id].verified = "true";
+						queue.pop();
+						if (verifylogs[message.author.id]) {
+							if (verifylogs[message.author.id].verifiedAt != false) return;
+							verifylogs[message.author.id].verifiedAt = Date.now();
+						} else {
+							console.log("This ain't looking good.");
 						}
-					});
-					client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.");
-					if (tempQueryFile.query[message.author.id])
-						tempQueryFile.query[message.author.id].verified = "true";
-					queue.pop();
-					if (verifylogs[message.author.id]) {
-						if (verifylogs[message.author.id].verifiedAt != false) return;
-						verifylogs[message.author.id].verifiedAt = Date.now();
-					} else {
-						console.log("This ain't looking good.");
-					}
-					message.member.addRole(config.userrole).catch(error => console.log(error));
-					fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-					fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
-				}).catch(() => {});
+						message.member.addRole(config.userrole).catch(error => console.log(error));
+						fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
+						fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+					}).catch(() => {});
+			}
 		}
-	}
 
-	require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
+		require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
+	}catch(e){
+		console.log(e);
+	}
 });
 process.on("unhandledRejection", (err) => {
 	console.log(err);
