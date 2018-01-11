@@ -52,7 +52,7 @@ module.exports = (message, config, Discord, fs, latestVersion) => {
 
     // API Commands
     if (message.content.startsWith(config.prefix)) {
-        if (message.content.split(" ")[0] == "?api") {
+        if (message.content.split(" ")[0] == config.prefix + "api") {
             switch (message.content.split(" ")[1]) {
                 case config["commands"]["queries"].command:
                     if (message.author.id === config.ownerid && config["commands"]["queries"].enabled) {
