@@ -9,7 +9,6 @@
     "streamingLink": "https://www.twitch.tv/doxicalswitch",
     "evalAllowed": "true",
     "ownerid": "312715611413413889",
-    "possibleCaptchaColors": ["red", "green", "blue", "magenta", "brown", "darkcyan", "gold"],
     "logging": true,
     "commands": {
         "blockUser": {
@@ -39,27 +38,27 @@
         "queries": {
             "command": "queries",
             "enabled": true,
-			"contributors": []
+            "contributors": []
         },
         "querydelete": {
             "command": "querydelete",
             "enabled": true,
-			"contributors": []
+            "contributors": []
         },
         "purgelogs": {
             "command": "purgelogs",
             "enabled": true,
-			"contributors": []
+            "contributors": []
         },
         "logs": {
             "command": "logs",
             "enabled": true,
-			"contributors": []
+            "contributors": []
         },
         "captchas": {
             "command": "captchas",
             "enabled": true,
-			"contributors": []
+            "contributors": []
         },
         "makerole": {
             "command": "create-role",
@@ -69,10 +68,7 @@
     },
     "blockedIDs": {
         "1": {
-            "blocked": "false"
-        },
-        "312715611413413889": {
-            "blocked": "false"
+            "blocked": "true"
         }
     }
 }
