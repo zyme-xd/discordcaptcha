@@ -42,8 +42,7 @@ const callback_ = err => {
 };
 
 
-var queue = [];
-var latestVersion;
+let queue = [], latestVersion;
 
 try {
 	snekfetch.get("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
