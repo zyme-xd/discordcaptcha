@@ -108,7 +108,7 @@ client.on("message", (message) => {
 								description: "Successfully verified on `" + message.guild.name + "`"
 							}
 						});
-						client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.");
+						config.logging ? client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.") : null;
 						if (tempQueryFile.query[message.author.id])
 							tempQueryFile.query[message.author.id].verified = "true";
 						queue.pop();
