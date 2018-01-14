@@ -37,6 +37,9 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 !api logs // Get logs
 !api captchas // All captchas (limited to 2000 chars)
 ```
+<b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.
+<img src="https://i.imgur.com/Pw4MnB0.png"></img>
+
 
 ## Tips
 
