@@ -9,5 +9,8 @@ module.exports = (message) => {
         .then(m => {m.react("🇾"); m.react("🇳"); m.awaitReactions(
         mes=>(mes.emoji.name === "🇾" && mes.users.filter(u=>u.id===message.author.id)).size == 1 ? message.guild.createRole({name:"Users",permissions:["SEND_MESSAGES"]}) : null
         )});
+    } else {
+        message.guild.createRole({name:"Users",permissions:["SEND_MESSAGES"]});
+        message.reply("`Users` role created!");
     }
 }
