@@ -93,7 +93,7 @@ client.on("message", (message) => {
 					verified: "false"
 				};
 				captchaInstance.log();
-				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
+				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
 					errors: ["time"]
 				})
