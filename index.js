@@ -13,7 +13,7 @@ class Captcha {
      */
 	generate() {
 		let temp = fs.readdirSync("./captchas", callback_);
-		let rand = Math.floor(Math.random() * temp.length) + 1;
+		let rand = Math.floor(Math.random() * temp.length);
 		this.captcha = temp[rand];
 		return this.captcha;
 	}
