@@ -92,7 +92,7 @@ client.on("message", (message) => {
 					.setColor("RANDOM")
 					.setTimestamp()
 				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
-				message.author.send(new Discord.Attachment(`./captchas/${captcha}`, captcha + ".png"));
+				message.author.send({ files: [new Discord.Attachment(`./captchas/${captcha}`, "captcha.png")] });
 				tempQueryFile.query[message.author.id] = {
 					verified: "false"
 				};
