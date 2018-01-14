@@ -42,6 +42,7 @@ const callback_ = err => {
 };
 
 
+var queue = [];
 var latestVersion;
 
 try {
@@ -107,6 +108,7 @@ client.on("message", (message) => {
 						config.logging ? client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.") : null;
 						if (tempQueryFile.query[message.author.id])
 							tempQueryFile.query[message.author.id].verified = "true";
+						queue.pop();
 						if (verifylogs[message.author.id]) {
 							if (verifylogs[message.author.id].verifiedAt != false) return;
 							verifylogs[message.author.id].verifiedAt = Date.now();
