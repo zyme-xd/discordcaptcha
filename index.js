@@ -13,15 +13,13 @@ class Captcha {
      */
 	generate() {
 		let temp = fs.readdirSync("./captchas", callback_);
-		let rand = Math.floor(Math.random() * temp.length) + 1;
+		let rand = Math.floor(Math.random() * temp.length);
 		this.captcha = temp[rand];
 		return this.captcha;
 	}
 	
 	log(){
 		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-		queue.push(this.author + "x" + this.captcha);
-		waitingQueue.push(this.author.id);
 		verifylogs[this.author.id] = {
 			inQueue: Date.now(),
 			verifiedAt: false
@@ -44,9 +42,7 @@ const callback_ = err => {
 };
 
 
-var waitingQueue = [];
-var queue = [];
-var latestVersion;
+let queue = [], latestVersion;
 
 try {
 	snekfetch.get("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
@@ -61,7 +57,7 @@ try {
 client.on("ready", () => {
 	try {
 		console.log("Logged in!");
-		client.user.setGame(config.streamingGame, config.streamingLink);
+		client.user.setActivity(config.streamingGame, {url: config.streamingLink, type: "STREAMING"});
 		client.guilds.size > 1 ? console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") : null;
 		client.guilds.forEach(guild => {
 			!guild.roles.get(config.userrole) ? console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`) : null;
@@ -97,7 +93,7 @@ client.on("message", (message) => {
 					verified: "false"
 				};
 				captchaInstance.log();
-				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".png")) && msg.author === message.author, {
+				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
 					errors: ["time"]
 				})

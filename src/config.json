@@ -2,7 +2,7 @@
     "token": "token",
     "clientid": "clientid",
     "prefix": "!",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "chat": "main-chat",
     "userrole": "339841406409375754",
     "streamingGame": "DiscordCaptcha",
@@ -64,6 +64,10 @@
             "command": "create-role",
             "enabled": true,
             "contributors": []
+        },
+        "unverify": {
+            "command": "unverify",
+            "enabled": true
         }
     },
     "blockedIDs": {
