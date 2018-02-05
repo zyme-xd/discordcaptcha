@@ -1,37 +1,17 @@
+let sql = require("sqlite");
+sql.open('./src/db.sqlite');
+
 /**
  * @param {Object} message - The message object
- * @param {Module} fs - The npm module fs
- * @param {string} prefix - The prefix
  * @param {array} contrib - Users that are allowed to use that command
 **/
-module.exports = (message, fs, prefix, contrib) => {
+module.exports = async (message, contrib) => {
     try {
-        let file = JSON.parse(fs.readFileSync("./src/config.json", "utf8"));
-        const args = message.content.slice(prefix.length).trim().split(/ +/g);
         if (contrib.includes(message.author.tag)) {
             if (message.mentions.users.size === 0) {
-                if (!file.blockedIDs[args[1]]) file.blockedIDs[args[1]] = {
-                    blocked: "false"
-                };
-                if (file.blockedIDs[args[1]].blocked == "false") {
-                    file.blockedIDs[args[1]] = {
-                        blocked: "true"
-                    };
-                    fs.writeFileSync("./src/config.json", JSON.stringify(file));
+                if (!await sql.get('select * from blocked where id="' + message.content.split(" ")[1] + '"')) {
+                    sql.run('insert into blocked values ("' + message.content.split(" ")[1] + '")');
                     message.channel.send("Added `" + message.content.split(" ")[1] + "` to the blocked list.");
-                } else {
-                    message.channel.send("ID is already blocked.");
-                }
-            } else {
-                if (!file.blockedIDs[message.mentions.users.first().id]) file.blockedIDs[message.mentions.users.first().id] = {
-                    blocked: "false"
-                };
-                if (file.blockedIDs[message.mentions.users.first().id].blocked == "false") {
-                    file.blockedIDs[message.mentions.users.first().id] = {
-                        blocked: "true"
-                    };
-                    fs.writeFileSync("./src/config.json", JSON.stringify(file));
-                    message.channel.send("Added `" + message.mentions.users.first().id + "` to the blocked list.");
                 } else {
                     message.channel.send("ID is already blocked.");
                 }
