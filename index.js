@@ -34,6 +34,8 @@ const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
 const verifylogs = require("./src/logs.json");
+var sql = require("sqlite");
+sql.open('./src/db.sqlite');
 
 // Command Imports
 const config = require("./src/config.json");
@@ -67,13 +69,10 @@ client.on("ready", () => {
 	}
 });
 
-client.on("message", (message) => {
+client.on("message", async (message) => {
 	try{
-		if(config["blockedIDs"][message.author.id]){
-			if(config["blockedIDs"][message.author.id].blocked === "true"){
-				message.member.kick();
-			}
-		}
+        let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
+		if(blocked) message.member.kick();
 		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
 		if (message.channel.name === "verify") {
 			message.delete();
