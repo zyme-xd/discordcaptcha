@@ -1,3 +1,6 @@
+### Don't use this branch! It is in developed and won't work. Use the master branch.
+
+
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
