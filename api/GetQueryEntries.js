@@ -1,7 +1,10 @@
+let sql = require("sqlite");
+sql.open('./src/db.sqlite');
+
 /**
- * @param {module} fs - The npm module fs
- * @returns {object} query - Query entries as object.
+ * @returns {promise} queries - sqlite promise
  */
-module.exports = function(fs){
-   try { return JSON.parse(fs.readFileSync("./src/Query.json", "utf8"))['query']; } catch(e){ return e; }
+module.exports = () => {
+    let queries = sql.all('select * from queries').catch(e => console.log("An error occured: " + e));
+    return queries;
 }
