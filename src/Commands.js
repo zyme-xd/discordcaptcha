@@ -1,4 +1,4 @@
-module.exports = (message, config, Discord, fs, latestVersion) => {
+module.exports = async (message, config, Discord, fs, latestVersion) => {
 	var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs, versionCommand, createRole;
 	config["commands"]["blockUser"].enabled ? blockCommand = require("../commands/block.js") : blockCommand = false;
 	config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("../commands/removeBlock.js") : removeBlockCommand = false;
@@ -78,7 +78,7 @@ module.exports = (message, config, Discord, fs, latestVersion) => {
 				break;
 			case config["commands"]["logs"].command:
 				if (config["commands"]["logs"].contributors.includes(message.author.tag) && config["commands"]["logs"].enabled) {
-					message.channel.send("```js\n// Logs\n\n" + require("util").inspect(new Handler("GetLogs").request()) + "\n```");
+					message.channel.send("```js\n// Logs\n\n" + require("util").inspect(await new Handler("GetLogs").request()) + "\n```");
 				}
 				break;
 			case config["commands"]["captchas"].command:
