@@ -22,7 +22,7 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 			break;
 		case config.prefix + config["commands"]["removeBlockFromUser"].command:
 			if (!removeBlockCommand) return;
-			removeBlockCommand(message, fs, config.prefix, config["commands"]["removeBlockFromUser"].contributors);
+			removeBlockCommand(message, config["commands"]["removeBlockFromUser"].contributors);
 			break;
 		case config.prefix + config["commands"]["clear"].command:
 			if (!clearCommand) return;
