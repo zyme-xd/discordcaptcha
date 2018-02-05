@@ -18,7 +18,7 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 			break;
 		case config.prefix + config["commands"]["blockUser"].command:
 			if (!blockCommand) return;
-			blockCommand(message, fs, config.prefix, config["commands"]["blockUser"].contributors);
+			blockCommand(message, config["commands"]["blockUser"].contributors);
 			break;
 		case config.prefix + config["commands"]["removeBlockFromUser"].command:
 			if (!removeBlockCommand) return;
@@ -61,7 +61,7 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 			switch (message.content.split(" ")[1]) {
 			case config["commands"]["queries"].command:
 				if (message.author.id === config.ownerid && config["commands"]["queries"].enabled) {
-					message.channel.send("```js\n// Query\n\n" + require("util").inspect(new Handler("GetQueryEntries").request()) + "\n```");
+					message.channel.send("```js\n// Query\n\n" + require("util").inspect(await new Handler("GetQueryEntries").request()) + "\n```");
 				}
 				break;
 			case config["commands"]["querydelete"].command:
