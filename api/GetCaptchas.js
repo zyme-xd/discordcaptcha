@@ -1,7 +1,8 @@
+const fs = require("fs");
+
 /**
- * @param {module} fs - The module fs
  * @returns {object} files - An array with filenames
  */
-module.exports = fs => {
+module.exports = () => {
     try { return fs.readdirSync("./captchas") } catch(e){ return e; }
 }
