@@ -88,7 +88,7 @@ client.on("message", async (message) => {
 				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
 				message.author.send({ files: [new Discord.Attachment(`./captchas/${captcha}`, "captcha.png")] });
 				captchaInstance.log();
-                sql.run('insert into queries values ("' + message.author.id + '")');
+              			sql.run('insert into queries values ("' + message.author.id + '")');
 				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
 					errors: ["time"]
