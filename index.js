@@ -105,6 +105,7 @@ client.on("message", async (message) => {
 						sql.run('delete from queries where id="' + message.author.id + '"');
 						queue.pop();
 						message.member.addRole(config.userrole).catch(error => console.log(error));
+						delete captchaInstance;
 					}).catch(() => {});
 			}
 		}
