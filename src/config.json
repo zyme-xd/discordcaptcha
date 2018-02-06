@@ -69,10 +69,5 @@
             "command": "unverify",
             "enabled": true
         }
-    },
-    "blockedIDs": {
-        "1": {
-            "blocked": "true"
-        }
     }
 }

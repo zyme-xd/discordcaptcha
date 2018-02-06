@@ -5,7 +5,8 @@
 module.exports = (message, contrib) => {
     try {
         if (contrib.includes(message.author.tag)) {
-            message.channel.bulkDelete(message.content.split(" ")[1]);
+            let amount = parseInt(message.content.split(" ")[1]);
+            message.channel.bulkDelete(++amount);
         } else {
             return message.channel.send("Missing Permissions");
         }

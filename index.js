@@ -34,6 +34,8 @@ const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
 const verifylogs = require("./src/logs.json");
+var sql = require("sqlite");
+sql.open('./src/db.sqlite');
 
 // Command Imports
 const config = require("./src/config.json");
@@ -67,18 +69,14 @@ client.on("ready", () => {
 	}
 });
 
-client.on("message", (message) => {
+client.on("message", async (message) => {
 	try{
-		if(config["blockedIDs"][message.author.id]){
-			if(config["blockedIDs"][message.author.id].blocked === "true"){
-				message.member.kick();
-			}
-		}
-		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
+        let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
+		if(blocked) message.member.kick();
 		if (message.channel.name === "verify") {
 			message.delete();
 			if (message.content === `${config.prefix}verify`) {
-				if (tempQueryFile["query"][message.author.id]) return message.reply("Already verified or in queue!");
+				if(await sql.get('select * from queries where id="' + message.author.id + '"') || message.member.roles.has(config.userrole)) return message.reply("Already verified or in queue!");
 				let captchaInstance = new Captcha(null, message.author);
 				let captcha = captchaInstance.generate();
 				message.author.send(new Discord.RichEmbed()
@@ -89,10 +87,8 @@ client.on("message", (message) => {
 					.setTimestamp()
 				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
 				message.author.send({ files: [new Discord.Attachment(`./captchas/${captcha}`, "captcha.png")] });
-				tempQueryFile.query[message.author.id] = {
-					verified: "false"
-				};
 				captchaInstance.log();
+              			sql.run('insert into queries values ("' + message.author.id + '")');
 				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
 					errors: ["time"]
@@ -105,18 +101,11 @@ client.on("message", (message) => {
 							}
 						});
 						config.logging ? client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.") : null;
-						if (tempQueryFile.query[message.author.id])
-							tempQueryFile.query[message.author.id].verified = "true";
+						sql.run('insert into logs values ("' + message.author.id + '", "' + Date.now() + '")');
+						sql.run('delete from queries where id="' + message.author.id + '"');
 						queue.pop();
-						if (verifylogs[message.author.id]) {
-							if (verifylogs[message.author.id].verifiedAt != false) return;
-							verifylogs[message.author.id].verifiedAt = Date.now();
-						} else {
-							console.log("This ain't looking good.");
-						}
 						message.member.addRole(config.userrole).catch(error => console.log(error));
-						fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-						fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
+						delete captchaInstance;
 					}).catch(() => {});
 			}
 		}

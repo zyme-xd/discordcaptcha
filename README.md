@@ -17,8 +17,8 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 * Snowflake: ID
 * Mention: A basic mention (looks like <@123456789>)
 **/
-!block <Snowflake | Mention> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
-!removeBlock <Snowflake | Mention> // Removes a User ID from the blacklist. User can write again without getting kicked.
+!block <Snowflake> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
+!removeBlock <Snowflake> // Removes a User ID from the blacklist. User can write again without getting kicked.
 !clear <Amount of messages> // Clears an amount of messages, up to 100
 !version // The current version and the latest version
 !create-role // Creates the verification role
@@ -41,6 +41,9 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 <b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
+## Dealing with SQL(ite)
+Blocked users, logs and queries are stored in a database which is located in `~/src/db.sqlite`. If you want to read data from it, i recommend <a href="http://sqlitebrowser.org/">SQLite DB Browser</a> (<a href="https://nightlies.sqlitebrowser.org/latest/">Nightly</a>).
+After the installation, you're able to open the database by clicking 'open database' in the program.
 
 ## Tips
 

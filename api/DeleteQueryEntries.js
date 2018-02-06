@@ -1,6 +1,6 @@
-/*
- * @param {module} fs - The npm module fs
-*/
-module.exports = function(fs){
-    try { return fs.writeFileSync("./src/Query.json", JSON.stringify({"query":{}})); } catch(e) { return e; }
+let sql = require("sqlite");
+sql.open('./src/db.sqlite');
+
+module.exports = async function() {
+    sql.run('delete from queries').catch(e => console.log("[DeleteQueryEntries] An error occured: " + e));
 }

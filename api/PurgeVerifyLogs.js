@@ -1,6 +1,6 @@
-/**
- * @param {module} fs  - The npm module fs
- */
-module.exports = fs => {
-    try { return fs.writeFileSync("./src/logs.json", JSON.stringify({})); } catch(e) { return e; }
-};
+let sql = require("sqlite");
+sql.open('./src/db.sqlite');
+
+module.exports = function() {
+    sql.run('delete from logs').catch(e => console.log("[PurgeVerifyLogs] An error occured: " + e));
+}
