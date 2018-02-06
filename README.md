@@ -20,8 +20,8 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 * Snowflake: ID
 * Mention: A basic mention (looks like <@123456789>)
 **/
-!block <Snowflake | Mention> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
-!removeBlock <Snowflake | Mention> // Removes a User ID from the blacklist. User can write again without getting kicked.
+!block <Snowflake> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
+!removeBlock <Snowflake> // Removes a User ID from the blacklist. User can write again without getting kicked.
 !clear <Amount of messages> // Clears an amount of messages, up to 100
 !version // The current version and the latest version
 !create-role // Creates the verification role
