@@ -44,6 +44,9 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 <b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
+## Dealing with SQL(ite)
+Blocked users, logs and queries are stored in a database which is located in `~/src/db.sqlite`. If you want to read data from it, i recommend <a href="http://sqlitebrowser.org/">SQLite DB Browser</a>.
+After the installation, you're able to open the database by clicking 'open database' in the program.
 
 ## Tips
 
