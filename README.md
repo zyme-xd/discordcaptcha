@@ -15,7 +15,6 @@ The config file is located in `~/src/`. Get your Token from <a href="https://dis
 ```js
 /**
 * Snowflake: ID
-* Mention: A basic mention (looks like <@123456789>)
 **/
 !block <Snowflake> // Blocks a User ID. If the User sends a message to the guild, he'll get kicked.
 !removeBlock <Snowflake> // Removes a User ID from the blacklist. User can write again without getting kicked.
