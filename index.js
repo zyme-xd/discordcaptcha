@@ -17,16 +17,6 @@ class Captcha {
 		this.captcha = temp[rand];
 		return this.captcha;
 	}
-	
-	log(){
-		let tempQueryFile = JSON.parse(fs.readFileSync("./src/Query.json", "utf8"));
-		verifylogs[this.author.id] = {
-			inQueue: Date.now(),
-			verifiedAt: false
-		};
-		fs.writeFile("./src/Query.json", JSON.stringify(tempQueryFile), callback_);
-		fs.writeFile("./src/logs.json", JSON.stringify(verifylogs), callback_);
-	}
 }
 // Module Imports and instances
 const Discord = require("discord.js");
@@ -87,7 +77,6 @@ client.on("message", async (message) => {
 					.setTimestamp()
 				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
 				message.author.send({ files: [new Discord.Attachment(`./captchas/${captcha}`, "captcha.png")] });
-				captchaInstance.log();
               			sql.run('insert into queries values ("' + message.author.id + '")');
 				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
