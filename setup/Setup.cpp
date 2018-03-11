@@ -16,16 +16,9 @@ struct command {
 namespace stp {
 	ofstream filestream;
 	unsigned int input;
-	string token,
-    clientid,
-    prefix,
-    chat,
-    userrole,
-    evalAllowed,
-    owner,
-    tag;
-bool logging;
-dstream stream;
+	string token, clientid, prefix, chat, userrole, evalAllowed, owner, tag;
+	bool logging;
+	dstream stream;
 };
 
 
