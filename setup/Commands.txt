@@ -1,0 +1,12 @@
+blockUser
+removeBlockFromUser
+banGuildMember
+clear
+version
+queries
+querydelete
+purgelogs
+logs
+captchas
+makerole
+unverify
