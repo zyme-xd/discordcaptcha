@@ -13,9 +13,10 @@ struct command {
     string name;
 };
 
-ofstream filestream;
-unsigned int input;
-string token,
+namespace stp {
+	ofstream filestream;
+	unsigned int input;
+	string token,
     clientid,
     prefix,
     chat,
@@ -25,15 +26,18 @@ string token,
     tag;
 bool logging;
 dstream stream;
+};
+
+
 void showMenu(unsigned int&);
 void setup();
 void getCommands(vector<command>&);
 
 int main(){
-    ::filestream.open("config.json");
-    showMenu(::input);
-    if(::input == 3) return 0;
-    switch(::input){
+    stp::filestream.open("config.json");
+    showMenu(stp::input);
+    if(stp::input == 3) return 0;
+    switch(stp::input){
         case 1: setup();
         break;
         case 2:
@@ -59,45 +63,45 @@ void setup(){
     getCommands(commands);
     cout << "$ Bot token: ";
     cin.ignore();
-    getline(cin, ::token);
+    getline(cin, stp::token);
     cout << "$ Client ID: ";
-    cin >> ::clientid;
+    cin >> stp::clientid;
     cout << "$ Prefix: ";
-    cin >> ::prefix;
+    cin >> stp::prefix;
     cout << "$ Main channel (will be used for verification messages): ";
-    cin >> ::chat;
+    cin >> stp::chat;
     cout << "$ Userrole ID (role for verified users): ";
-    cin >> ::userrole;
+    cin >> stp::userrole;
     cout << "$ Streaming Game Name (what the bot should play): ";
     cin.ignore();
-    getline(cin, ::stream.name);
+    getline(cin, stp::stream.name);
     cout << "$ Streaming Link (has to be a twitch url): ";
-    cin >> ::stream.url;
+    cin >> stp::stream.url;
     cout << "$ Allow 'eval' feature? (either true or false): ";
-    cin >> ::evalAllowed;
+    cin >> stp::evalAllowed;
     cout << "$ ID of owner (you): ";
-    cin >> ::owner;
+    cin >> stp::owner;
     cout << "$ Tag of owner (you): ";
     cin.ignore();
-    getline(cin, ::tag);
+    getline(cin, stp::tag);
     cout << "$ Log verifications? (either true or false): ";
-    cin >> ::logging;
-    ::filestream << "{\"token\": \"" << ::token << "\", "
-    << "\"clientid\": \"" << ::clientid << "\", "
-    << "\"prefix\": \"" << ::prefix << "\", "
-    << "\"chat\": \"" << ::chat << "\", "
-    << "\"userrole\": \"" << ::userrole << "\", "
-    << "\"streamingGame\": \"" << ::stream.name << "\", "
-    << "\"streamingLink\": \"" << ::stream.url << "\", "
-    << "\"evalAllowed\": \"" << ::evalAllowed << "\", "
-    << "\"ownerid\": \"" << ::owner << "\", "
-    << "\"logging\": \"" << (::logging ? "true" : "false") << "\", \"commands\": { ";
+    cin >> stp::logging;
+    stp::filestream << "{\"token\": \"" << stp::token << "\", "
+    << "\"clientid\": \"" << stp::clientid << "\", "
+    << "\"prefix\": \"" << stp::prefix << "\", "
+    << "\"chat\": \"" << stp::chat << "\", "
+    << "\"userrole\": \"" << stp::userrole << "\", "
+    << "\"streamingGame\": \"" << stp::stream.name << "\", "
+    << "\"streamingLink\": \"" << stp::stream.url << "\", "
+    << "\"evalAllowed\": \"" << stp::evalAllowed << "\", "
+    << "\"ownerid\": \"" << stp::owner << "\", "
+    << "\"logging\": \"" << (stp::logging ? "true" : "false") << "\", \"commands\": { ";
     for(size_t i = 0; i < commands.size(); i++){
-        ::filestream << "\"" << commands.at(i).name << "\": { \"contributors\": [\"" << ::tag <<"\"], \"enabled\": true }";
-        if((i + 1) != commands.size()) ::filestream << ",";
+        stp::filestream << "\"" << commands.at(i).name << "\": { \"contributors\": [\"" << stp::tag <<"\"], \"enabled\": true }";
+        if((i + 1) != commands.size()) stp::filestream << ",";
     }
-    ::filestream << "}}";
-    ::filestream.close();
+    stp::filestream << "}}";
+    stp::filestream.close();
 }
 
 void getCommands(vector<command> &commands){
