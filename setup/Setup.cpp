@@ -101,7 +101,9 @@ void getCommands(std::vector<command> &commands){
     if(commandfile.good()) {
         std::string temp;
         while(getline(commandfile, temp)){
-            commands.push_back({ temp });
+		command cmd;
+		cmd.name = temp;
+		commands.push_back(cmd);
         }
     }
 }
