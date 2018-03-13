@@ -9,6 +9,8 @@ To install all required NPM-Modules, run the install script in `~/setup/` (.sh o
 For now, make sure the bot is only in one guild.
 The config file is located in `~/src/`. Get your Token from <a href="https://discordapp.com/developers/applications/me">here</a>.
 
+## Config-file generator
+Newer versions of discordcaptcha have a config-file generator. It is written in C++ and needs to be compiled if you want to run it. If you don't have a compiler, i recommend the g++ gnu compiler. The file is located in `~/setup/Setup.cpp`.
 
 ## Additional commands
 
