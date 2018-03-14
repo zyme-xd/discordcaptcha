@@ -35,16 +35,11 @@ const callback_ = err => {
 
 
 let queue = [], latestVersion;
-
-try {
 	snekfetch.get("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
 		.then(r => {
 			JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
 			latestVersion = JSON.parse(r.body).version;
-		});
-} catch (e) {
-	console.log(e);
-}
+		}).catch(console.log);
 
 client.on("ready", () => {
 	try {
