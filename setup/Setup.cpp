@@ -20,7 +20,7 @@ namespace stp {
 };
 
 
-void showMenu(unsigned int&);
+void showMenu(const unsigned int&);
 void setup();
 void getCommands(std::vector<command>&);
 
@@ -38,7 +38,7 @@ int main(){
     return 0;
 }
 
-void showMenu(unsigned int &menu){
+void showMenu(const unsigned int &menu){
     std::cout << "###############################" << std::endl
          << "###   Discordcaptcha Setup  ###" << std::endl
          << "###############################" << std::endl
