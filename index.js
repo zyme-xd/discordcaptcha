@@ -35,21 +35,16 @@ const callback_ = err => {
 
 
 let queue = [], latestVersion;
-
-try {
 	snekfetch.get("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
 		.then(r => {
 			JSON.parse(r.body).version == config.version ? null : console.log("### A new version of discordcaptcha is available!  (Latest: " + JSON.parse(r.body).version + ")\n\n");
 			latestVersion = JSON.parse(r.body).version;
-		});
-} catch (e) {
-	console.log(e);
-}
+		}).catch(console.log);
 
 client.on("ready", () => {
 	try {
 		console.log("Logged in!");
-		client.user.setActivity(config.streamingGame, {url: config.streamingLink, type: "STREAMING"}).catch(console.log);
+		client.user.setActivity(config.streamingGame, {url: config.streamingLink, type: "STREAMING"});
 		client.guilds.size > 1 ? console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") : null;
 		client.guilds.forEach(guild => {
 			!guild.roles.get(config.userrole) ? console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`) : null;
