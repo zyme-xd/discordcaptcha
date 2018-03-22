@@ -4,11 +4,9 @@
  * @returns {promise} message - The "missing permissions" promise (will return if member has not enough permissions
 **/
 module.exports = (message, contrib) => {
-    try {
-    if (contrib.includes(message.author.tag)) {
-        message.guild.member(message.mentions.users.first()).ban();
-    }
-}catch(e){
-    console.log("[DISCORDCAPTCHA-ban] >> " + e);
-}
-};
+	if(!contrib || message.mentions.users.size === 0) return;
+	if(contrib.includes(message.author.tag)) {
+		message.mentions.members.first().ban().catch(console.log);
+		message.reply("banned " + message.mentions.users.first().tag).catch(console.log);
+	}
+};
