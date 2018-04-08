@@ -36,7 +36,7 @@ class Captcha {
 		let font = Jimp.FONT_SANS_32_BLACK;
 		let coordinates = [ Math.random() * 750, Math.random() * 750 ]; // x & y coordinates for text on image
 		image.resize(750, 750); // make bigger
-		image.print(font, coordinates[0], coordinates[1], this.captcha); // print captcha on image
+		image.print(font, coordinates[0], coordinates[1], captcha); // print captcha on image
 	}
 	
 	get captcha(){
