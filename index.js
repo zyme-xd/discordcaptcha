@@ -21,10 +21,22 @@ class Captcha {
      * @returns {string} Captcha value of class
      */
 	generate() {
+		// don't remove it yet, will do it later until makeImage is good
 		let temp = fs.readdirSync("./captchas", callback_);
 		let rand = Math.floor(Math.random() * temp.length);
 		this.captcha = temp[rand];
 		return this.captcha;
+	}
+	
+	/**
+     * @param {string} Text to be printed on 750x750 captcha; identified as captcha
+     */
+	async makeImage(captcha){
+		let image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
+		let font = Jimp.FONT_SANS_32_BLACK;
+		let coordinates = [ Math.random() * 750, Math.random() * 750 ]; // x & y coordinates for text on image
+		image.resize(750, 750); // make bigger
+		image.print(font, coordinates[0], coordinates[1], this.captcha); // print captcha on image
 	}
 	
 	get captcha(){
