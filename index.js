@@ -11,6 +11,7 @@ class Captcha {
 	/**
      * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
      * @param {object} author - The author object (Has to has an id property and should look like <@123456789>)
+     * @param {buffer} image buffer - Initialize object with an already existing image buffer
      */
 	constructor(captcha, author, buff) {
 		this._captcha = captcha;
