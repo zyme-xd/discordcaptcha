@@ -12,19 +12,19 @@ class Captcha {
      * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
      * @param {object} author - The author object (Has to has an id property and should look like <@123456789>)
      */
-	constructor(captcha, author) {
+	constructor(captcha, author, buff) {
 		this._captcha = captcha;
 		this._author = author;
+		this._imgbuff = buff || null;
+		this._imgready = false;
 	}
 
 	/**
      * @returns {string} Captcha value of class
      */
 	generate() {
-		// don't remove it yet, will do it later until makeImage is good
-		let temp = fs.readdirSync("./captchas", callback_);
-		let rand = Math.floor(Math.random() * temp.length);
-		this.captcha = temp[rand];
+		let rand = Math.random().toString(36).substr(2,6);
+		this.captcha = rand;
 		return this.captcha;
 	}
 	
@@ -33,10 +33,10 @@ class Captcha {
      */
 	async makeImage(captcha){
 		let image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
-		let font = Jimp.FONT_SANS_32_BLACK;
 		let coordinates = [ Math.random() * 750, Math.random() * 750 ]; // x & y coordinates for text on image
 		image.resize(750, 750); // make bigger
-		image.print(font, coordinates[0], coordinates[1], captcha); // print captcha on image
+		image.print(Jimp.FONT_SANS_32_BLACK, coordinates[0], coordinates[1], captcha); // print captcha on image
+		image.getBuffer(Jimp.MIME_PNG, (err, buff) => { this._imgbuff = buff; this._imgready = true; });
 	}
 	
 	get captcha(){
