@@ -1,3 +1,12 @@
+// Module Imports and instances
+const Discord = require("discord.js");
+const client = new Discord.Client();
+const fs = require("fs");
+const snekfetch = require("snekfetch");
+const jimp = require("jimp");
+var sql = require("sqlite");
+sql.open('./src/db.sqlite');
+
 class Captcha {
 	/**
      * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
@@ -26,14 +35,6 @@ class Captcha {
 		this._captcha = value;
 	}
 }
-// Module Imports and instances
-const Discord = require("discord.js");
-const client = new Discord.Client();
-const fs = require("fs");
-const snekfetch = require("snekfetch");
-const verifylogs = require("./src/logs.json");
-var sql = require("sqlite");
-sql.open('./src/db.sqlite');
 
 // Command Imports
 const config = require("./src/config.json");
