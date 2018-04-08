@@ -4,8 +4,8 @@ class Captcha {
      * @param {object} author - The author object (Has to has an id property and should look like <@123456789>)
      */
 	constructor(captcha, author) {
-		this.captcha = captcha;
-		this.author = author;
+		this._captcha = captcha;
+		this._author = author;
 	}
 
 	/**
@@ -16,6 +16,14 @@ class Captcha {
 		let rand = Math.floor(Math.random() * temp.length);
 		this.captcha = temp[rand];
 		return this.captcha;
+	}
+	
+	get captcha(){
+		return this._captcha;
+	}
+	
+	set captcha(value){
+		this._captcha = value;
 	}
 }
 // Module Imports and instances
