@@ -1,3 +1,9 @@
+### Warning!
+This branch is in development and should not be used yet, because it has alot of bugs and issues that will be fixed in time.
+Later, when everything is done, it'll be merged. For more information, view the project site of version 3.0.0.
+
+Click <a href="https://github.com/y21/discordcaptcha/projects/1">here</a> to view the project site of version 3.0.0.
+
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
