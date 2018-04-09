@@ -31,6 +31,12 @@ Newer versions of discordcaptcha have a config-file generator. It is written in 
 !create-role // Creates the verification role
 ```
 
+## Changing captcha type
+Discordcaptcha offers you two captcha types: first, images as captchas and second, normal text messages.
+It's up on you whether you want images or text. Notice, that images are **way** harder to bypass than normal text messages.<br/>
+The default type is `image`. To edit the type, you change the value of key `captchaType` in `~/src/config.json` to either `image`or `text`.<br/>
+
+
 ## Adding captchas
 You can add as many captchas as you want into the `~/captchas/` directory, but please keep in mind that:
 - Extension has to be .png
