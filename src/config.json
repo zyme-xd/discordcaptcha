@@ -10,7 +10,6 @@
     "evalAllowed": "true",
     "ownerid": "312715611413413889",
     "logging": true,
-    "captchaType": "image",
     "commands": {
         "blockUser": {
             "command": "block",
