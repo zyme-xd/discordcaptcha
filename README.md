@@ -30,6 +30,9 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 - Extension has to be .png
 - Filename **has** to be the same as the captcha.
 
+**Deprecation warning:** Custom captchas are **deprecated**, means that it will be removed in 3.0.0. 
+
+
 ## API related commands
 
 ```js
@@ -39,7 +42,7 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 !api logs // Get logs
 !api captchas // All captchas (limited to 2000 chars)
 ```
-<b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.
+<b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.<br/>
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
 ## Dealing with SQL(ite)
@@ -50,4 +53,4 @@ After the installation, you're able to open the database by clicking 'open datab
 
 • Look at the wiki for some fixes.<br/>
 • Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
-• Open a Pull Request/Issue
+• Open a pull request/issue
