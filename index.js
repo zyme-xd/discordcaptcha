@@ -76,7 +76,7 @@ client.on("message", async (message) => {
 				let captchaInstance = new Captcha(null, message.author);
 				let captcha = captchaInstance.generate();
 				let _image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
-				let _font = jimp.loadFont(jimp.FONT_SANS_16_BLACK);
+				let _font = await jimp.loadFont(jimp.FONT_SANS_16_BLACK);
 				let _coordinates = [ Math.random() * 750, Math.random() * 750 ]; // x & y coordinates for text on image
 				_image.resize(750, 750); // make bigger
 				_image.print(_font, _coordinates[0], _coordinates[1], captcha); // print captcha on image
