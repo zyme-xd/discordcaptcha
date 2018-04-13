@@ -6,7 +6,6 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 	config["commands"]["clear"].enabled ? clearCommand = require("../commands/clear.js") : clearCommand = false;
 	config["commands"]["version"].enabled ? versionCommand = true : versionCommand = false;
 	config["commands"]["makerole"].enabled ? createRole = require("../commands/makerole.js") : createRole = false;
-	config.logging ? verifylogs = require("../src/logs.json") : verifylogs = false;
 	const Handler = require("../api/Handler.js");
 
 	// Bot Commands
@@ -79,11 +78,6 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 			case config["commands"]["logs"].command:
 				if (config["commands"]["logs"].contributors.includes(message.author.tag) && config["commands"]["logs"].enabled) {
 					message.channel.send("```js\n// Logs\n\n" + require("util").inspect(await new Handler("GetLogs").request()) + "\n```");
-				}
-				break;
-			case config["commands"]["captchas"].command:
-				if (config["commands"]["captchas"].contributors.includes(message.author.tag) && config["commands"]["captchas"].enabled) {
-					message.channel.send("```js\n// Captchas\n\n" + require("util").inspect(new Handler("GetCaptchas").request()).substr(0, 1999) + "\n```");
 				}
 				break;
 			}
