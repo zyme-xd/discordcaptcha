@@ -73,23 +73,30 @@ client.on("message", async (message) => {
 			message.delete();
 			if (message.content === `${config.prefix}verify`) {
 				if(await sql.get('select * from queries where id="' + message.author.id + '"') || message.member.roles.has(config.userrole)) return message.reply("Already verified or in queue!");
-				let captchaInstance = new Captcha(null, message.author);
-				let captcha = captchaInstance.generate();
-				let _image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
-				let _font = await jimp.loadFont(jimp.FONT_SANS_16_BLACK);
-				let _coordinates = [ Math.random() * 750, Math.random() * 750 ]; // x & y coordinates for text on image
-				_image.resize(750, 750); // make bigger
-				_image.print(_font, _coordinates[0], _coordinates[1], captcha); // print captcha on image
-				message.author.send(new Discord.RichEmbed()
-					.setTitle("Verification")
-					.setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
-					.addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
-					.setColor("RANDOM")
-					.setTimestamp()
-				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
-              			_image.getBuffer(jimp.MIME_PNG, (err, buff) => { message.author.send( new Discord.Attachment(buff, "captcha.png") ); });
+                let captchaInstance = new Captcha(null, message.author);
+                let captcha = captchaInstance.generate();
+				if(config.captchaType == "image"){
+                    let _image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
+                    let _font = await jimp.loadFont(jimp.FONT_SANS_64_BLACK);
+                    let _coordinates = [ Math.random() * 400, Math.random() * 400 ]; // x & y coordinates for text on image
+                    _image.resize(750, 750); // make bigger
+                    _image.print(_font, _coordinates[0], _coordinates[1], captcha); // print captcha on image
+                    message.author.send(new Discord.RichEmbed()
+                        .setTitle("Verification")
+                        .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
+                        .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
+                        .setColor("RANDOM")
+                        .setTimestamp()
+                    ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
+                    _image.getBuffer(jimp.MIME_PNG, (err, buff) => { message.author.send( new Discord.Attachment(buff, "captcha.png") ); });
+                } else if(config.captchaType == "text") {
+                    message.author.send(new Discord.RichEmbed()
+                        .setDescription("Paste the code below in the verify channel to get verified.\n\n**Verification Bot made by y21#0909**")
+                    );
+                    message.author.send(`\`\`\`${config.prefix}verify ${captchaInstance.captcha}\`\`\``);
+                }
 				sql.run('insert into queries values ("' + message.author.id + '")');
-				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
+				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha && msg.author === message.author, {
 					max: 1,
 					errors: ["time"]
 				})
