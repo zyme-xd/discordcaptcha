@@ -87,7 +87,7 @@ client.on("message", async (message) => {
 					.setColor("RANDOM")
 					.setTimestamp()
 				).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
-              			_image.getBuffer(jimp.MIME_PNG, (err, buff) => { message.author.send( new Discord.Attachment(buff, "captcha.png"); ); });
+              			_image.getBuffer(jimp.MIME_PNG, (err, buff) => { message.author.send( new Discord.Attachment(buff, "captcha.png") ); });
 				sql.run('insert into queries values ("' + message.author.id + '")');
 				message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha.substr(0, captchaInstance.captcha.indexOf(".")) && msg.author === message.author, {
 					max: 1,
