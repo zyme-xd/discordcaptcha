@@ -58,7 +58,7 @@ client.on("ready", () => {
 		client.user.setActivity(config.streamingGame, {url: config.streamingLink, type: "STREAMING"});
 	 if(client.guilds.size > 1){ console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") }
 		client.guilds.forEach(guild => {
-			if(!guild.roles.get(config.userrole)) console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`) }
+			if(!guild.roles.get(config.userrole)) console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`);
 		});
 	} catch (e) {
 		console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
