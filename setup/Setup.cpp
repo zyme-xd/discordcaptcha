@@ -108,5 +108,6 @@ void getCommands(std::vector<command> &commands){
     } else {
 	std::cout << "\nError: Could not open Commands.txt. Does it exist? If not, download it from the github repository y21/discordcaptcha." << std::endl;
 	std::cout << "File can be found here: ~/Setup/Commands.txt";
+	abort();
     }
 }
