@@ -88,7 +88,7 @@ void setup(){
     << "\"ownerid\": \"" << stp::owner << "\", "
     << "\"logging\": \"" << (stp::logging ? "true" : "false") << "\", \"commands\": { ";
     for(size_t i = 0; i < commands.size(); i++){
-        stp::filestream << "\"" << commands.at(i).name << "\": { \"contributors\": [\"" << stp::tag <<"\"], \"enabled\": true }";
+        stp::filestream << "\"" << commands.at(i).name << "\": { \"command\": \"" << commands.at(i).name << "\"\"contributors\": [\"" << stp::tag <<"\"], \"enabled\": true }";
         if((i + 1) != commands.size()) stp::filestream << ",";
     }
     stp::filestream << "}}";
