@@ -37,11 +37,6 @@ It's up on you whether you want images or text. Notice, that images are **way** 
 The default type is `image`. To edit the type, you change the value of key `captchaType` in `~/src/config.json` to either `image`or `text`.<br/>
 
 
-## Adding captchas
-You can add as many captchas as you want into the `~/captchas/` directory, but please keep in mind that:
-- Extension has to be .png
-- Filename **has** to be the same as the captcha.
-
 ## API related commands
 > The command is - as mentioned above - changable. These are the default command names.
 Also commands can be turned off by changing `enabled` to `false`.
