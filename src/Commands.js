@@ -56,8 +56,7 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 
 	// API Commands
 	if (message.content.startsWith(config.prefix)) {
-		if (message.content.split(" ")[0] == config.prefix + "api") {
-			switch (message.content.split(" ")[1]) {
+			switch (message.content.split(" ")[0].substr(config.prefix.length)) {
 			case config["commands"]["queries"].command:
 				if (message.author.id === config.ownerid && config["commands"]["queries"].enabled) {
 					message.channel.send("```js\n// Query\n\n" + require("util").inspect(await new Handler("GetQueryEntries").request()) + "\n```");
@@ -81,6 +80,5 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 				}
 				break;
 			}
-		}
 	}
 };
