@@ -3,6 +3,6 @@ module.exports = class {
         this.type = type;
     }
     request(){
-        return require(`./${this.type}.js`)(require("fs"));
+        return require(`./${this.type}.js`)();
     }
 }
