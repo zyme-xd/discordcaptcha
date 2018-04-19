@@ -107,13 +107,14 @@ client.on("message", async (message) => {
 								description: "Successfully verified on `" + message.guild.name + "`"
 							}
 						});
-						config.logging ? client.channels.find("name", config.chat).send("<@" + message.author.id + "> was successfully verified.") : null;
-						sql.run('insert into logs values ("' + message.author.id + '", "' + Date.now() + '")');
-						sql.run('delete from queries where id="' + message.author.id + '"');
-						queue.pop();
-						message.member.addRole(config.userrole).catch(error => console.log(error));
-						delete captchaInstance;
-					}).catch(() => {});
+						let logChannel = client.channels.get(config.chat) || client.channels.find("name", config.chat);
+						if(logChannel&&logChannel.type==="text") logChannel.send(`${message.author.toString()} was successfully verified.`);
+                        if(config.logging) sql.run('insert into logs values ("' + message.author.id + '", "' + Date.now() + '")');
+                        sql.run('delete from queries where id="' + message.author.id + '"');
+                        queue.pop();
+                        message.member.addRole(config.userrole).catch(console.log);
+                        delete captchaInstance;
+					}).catch(console.log);
 			}
 		}
 
