@@ -7,6 +7,6 @@ sql.open('./src/db.sqlite');
  */
 
 module.exports = (message, config) => {
-	if(!message.member.hasRole(config.userrole)) return message.reply('you are not verified yet.');
+	if(!message.member.roles.has(config.userrole)) return message.reply('you are not verified yet.');
 	message.member.removeRole(config.userrole).catch(e => console.log(e)).then(()=> message.reply('unverified!'));
 };
