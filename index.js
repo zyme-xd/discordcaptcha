@@ -15,9 +15,6 @@ class Captcha {
      */
 	constructor(captcha, author, buff) {
 		this._captcha = captcha;
-		this._author = author;
-		this._imgbuff = buff || null;
-		this._imgready = false;
 	}
 
 	/**
