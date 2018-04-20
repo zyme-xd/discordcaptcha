@@ -14,7 +14,7 @@ struct command {
 namespace stp {
 	std::ofstream filestream;
 	unsigned int input;
-	std::string token, clientid, prefix, chat, userrole, evalAllowed, owner, tag;
+	std::string token, clientid, prefix, chat, userrole, evalAllowed, owner, tag, captchaType;
 	bool logging;
 	dstream stream;
 };
@@ -52,31 +52,34 @@ void showMenu(unsigned int &menu){
 void setup(){
     std::vector<command> commands;
     getCommands(commands);
-    std::cout << "$ Bot token: ";
+    std::cout << "Bot token: ";
     std::cin.ignore();
     getline(std::cin, stp::token);
-    std::cout << "$ Client ID: ";
+    std::cout << "Client ID: ";
     std::cin >> stp::clientid;
-    std::cout << "$ Prefix: ";
+    std::cout << "Prefix: ";
     std::cin >> stp::prefix;
-    std::cout << "$ Main channel (will be used for verification messages): ";
+    std::cout << "Main channel (will be used for verification messages): ";
     std::cin >> stp::chat;
-    std::cout << "$ Userrole ID (role for verified users): ";
+    std::cout << "Userrole ID (role for verified users): ";
     std::cin >> stp::userrole;
-    std::cout << "$ Streaming Game Name (what the bot should play): ";
+    std::cout << "Streaming Game Name (what the bot should play): ";
     std::cin.ignore();
     getline(std::cin, stp::stream.name);
-    std::cout << "$ Streaming Link (has to be a twitch url): ";
+    std::cout << "Streaming Link (has to be a twitch url): ";
     std::cin >> stp::stream.url;
-    std::cout << "$ Allow 'eval' feature? (either true or false): ";
+    std::cout << "Allow 'eval' feature? (either true or false): ";
     std::cin >> stp::evalAllowed;
-    std::cout << "$ ID of owner (you): ";
+    std::cout << "ID of owner (you): ";
     std::cin >> stp::owner;
-    std::cout << "$ Tag of owner (you): ";
+    std::cout << "Tag of owner (you): ";
     std::cin.ignore();
     getline(std::cin, stp::tag);
-    std::cout << "$ Log verifications? (either true or false): ";
+    std::cout << "Log verifications? (either true or false): ";
     std::cin >> stp::logging;
+    std::cout << "Captcha type (either text or image): ";
+    std::cin >> stp::captchaType;
+    if(stp::captchaType != "text" && stp::captchaType != "image") throw "CaptchaType has to be either 'text' or 'image'!";
     stp::filestream << "{\"token\": \"" << stp::token << "\", "
     << "\"clientid\": \"" << stp::clientid << "\", "
     << "\"prefix\": \"" << stp::prefix << "\", "
@@ -85,10 +88,11 @@ void setup(){
     << "\"streamingGame\": \"" << stp::stream.name << "\", "
     << "\"streamingLink\": \"" << stp::stream.url << "\", "
     << "\"evalAllowed\": \"" << stp::evalAllowed << "\", "
+    << "\"captchaType\": \"" << stp::captchaType << "\", "
     << "\"ownerid\": \"" << stp::owner << "\", "
     << "\"logging\": \"" << (stp::logging ? "true" : "false") << "\", \"commands\": { ";
     for(size_t i = 0; i < commands.size(); i++){
-        stp::filestream << "\"" << commands.at(i).name << "\": { \"command\": \"" << commands.at(i).name << "\"\"contributors\": [\"" << stp::tag <<"\"], \"enabled\": true }";
+        stp::filestream << "\"" << commands.at(i).name << "\": { \"contributors\": [\"" << stp::tag <<"\"], \"enabled\": true }";
         if((i + 1) != commands.size()) stp::filestream << ",";
     }
     stp::filestream << "}}";
@@ -106,8 +110,8 @@ void getCommands(std::vector<command> &commands){
 		commands.push_back(cmd);
         }
     } else {
-	std::cout << "\nError: Could not open Commands.txt. Does it exist? If not, download it from the github repository y21/discordcaptcha." << std::endl;
-	std::cout << "File can be found here: ~/Setup/Commands.txt";
-	abort();
+	    std::cout << "\nError: Could not open Commands.txt. Does it exist? If not, download it from the github repository y21/discordcaptcha." << std::endl;
+	    std::cout << "File can be found here: ~/Setup/Commands.txt";
+	    abort();
     }
 }
