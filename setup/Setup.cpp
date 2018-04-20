@@ -49,7 +49,8 @@ void showMenu(unsigned int &menu){
     std::cin >> menu;
 }
 
-void setup(){std::vector<command> commands;
+void setup(){
+    std::vector<command> commands;
     getCommands(commands);
     std::cout << "Bot token: ";
     std::cin.ignore();
