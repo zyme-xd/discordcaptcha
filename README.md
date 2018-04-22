@@ -1,6 +1,10 @@
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
+> Discordcaptcha 3.0.0 is coming!
+> Currently you can't really decide whether to use images or text as captcha type in a proper way. (text branch is deprecated)
+> Version 3.0.0 has much new features, which you can see on the project page.
+
 You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/discordcaptcha/">here</a>. <br />
 Feel free to join our <a href="discord.gg/955naZw">discord server</a> for live support.
 
