@@ -29,7 +29,7 @@ sql.open('./src/db.sqlite');
 // Command Imports
 const config = require("./src/config.json");
 const callback_ = err => {
-	err ? console.error(err) : null;
+	if(err) console.log(err);
 };
 
 
