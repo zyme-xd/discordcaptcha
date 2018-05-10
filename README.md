@@ -54,7 +54,7 @@ Also commands can be turned off by changing `enabled` to `false`.
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
 ## Dealing with SQL(ite)
-Blocked users, logs and queries are stored in a database which is located in `~/src/db.sqlite`. If you want to read data from it, i recommend <a href="http://sqlitebrowser.org/">SQLite DB Browser</a> (<a href="https://nightlies.sqlitebrowser.org/latest/">Nightly</a>).
+Blocked users, logs and queries are stored in a database which is located in `~/src/db.sqlite`. If you want to read data from it, I recommend <a href="http://sqlitebrowser.org/">SQLite DB Browser</a> (<a href="https://nightlies.sqlitebrowser.org/latest/">Nightly</a>).
 After the installation, you're able to open the database by clicking 'open database' in the program.
 
 ## Tips
