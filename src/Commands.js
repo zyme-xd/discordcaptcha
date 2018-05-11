@@ -2,10 +2,11 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 	var blockCommand, removeBlockCommand, banCommand, clearCommand, verifylogs, versionCommand, createRole;
 	config["commands"]["blockUser"].enabled ? blockCommand = require("../commands/block.js") : blockCommand = false;
 	config["commands"]["removeBlockFromUser"].enabled ? removeBlockCommand = require("../commands/removeBlock.js") : removeBlockCommand = false;
-	config["commands"]["banGuildMember"].enabled ? banCommand = require("../commands/ban.js") : banCommand = false;
+	config["commands"]["banGuildMember"].enabled ? banCommand = require("../commands/removeBlock.js") : banCommand = false;
 	config["commands"]["clear"].enabled ? clearCommand = require("../commands/clear.js") : clearCommand = false;
 	config["commands"]["version"].enabled ? versionCommand = true : versionCommand = false;
 	config["commands"]["makerole"].enabled ? createRole = require("../commands/makerole.js") : createRole = false;
+	config.logging ? verifylogs = require("../src/logs.json") : verifylogs = false;
 	const Handler = require("../api/Handler.js");
 
 	// Bot Commands
