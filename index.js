@@ -5,7 +5,7 @@ const fs = require("fs");
 const snekfetch = require("snekfetch");
 const jimp = require("jimp");
 const sql = require("sqlite");
-sql.open('./src/db.sqlite');
+sql.open("./src/db.sqlite");
 
 class Captcha {
 	/**
@@ -38,7 +38,7 @@ class Captcha {
 // Command Imports
 const config = require("./src/config.json");
 const callback_ = err => {
-	err ? console.error(err) : null;
+	if(err) console.log(err);
 };
 
 
@@ -114,14 +114,11 @@ client.on("message", async (message) => {
 					}).catch(console.log);
 			}
 		}
-
 		require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
 	}catch(e){
 		console.log(e);
 	}
 });
-process.on("unhandledRejection", (err) => {
-	console.log(err);
-});
+process.on("unhandledRejection", console.log);
 
 client.login(config.token);
