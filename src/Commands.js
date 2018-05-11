@@ -19,7 +19,7 @@ module.exports = async (message, config, Discord, fs, latestVersion) => {
 		if(command === "eval" && message.author.id === config.ownerid && config.evalAllowed) message.channel.send(":outbox_tray: Output: ```JavaScript\n" + eval(message.content.substr(6)) + "\n```");
 		if(command === config.commands.version.command) message.channel.send(new Discord.RichEmbed().setColor("RANDOM").setTitle("Version").setDescription(`Current DiscordCaptcha version: \`${config.version}\`\nLatest version: \`${latestVersion}\``).addField("Repository", "https://github.com/y21/discordcaptcha/").setTimestamp());
 		if(command === config.commands.makerole.command) require("./commands/makerole.js")(message, config.commands.makerole.contributors);
-		if(command === config.commands.unverify.command) require("../commands/unverify.js")(message, config);
+		if(command === config.commands.unverify.command) require("./commands/unverify.js")(message, config);
 
 		// Utility (aka API) commands
 		if(command === config.commands.queries.command && config.commands.queries.contributors.includes(message.author.tag)) message.channel.send("```js\n// Query\n\n" + require("util").inspect(await new Handler("GetQueryEntries").request()) + "\n```");
