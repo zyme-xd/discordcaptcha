@@ -23,13 +23,14 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
 const snekfetch = require("snekfetch");
+const verifylogs = require("./src/logs.json");
 var sql = require("sqlite");
 sql.open('./src/db.sqlite');
 
 // Command Imports
 const config = require("./src/config.json");
 const callback_ = err => {
-	if(err) console.log(err);
+	err ? console.error(err) : null;
 };
 
 
@@ -46,7 +47,7 @@ client.on("ready", () => {
 		client.user.setActivity(config.streamingGame, {url: config.streamingLink, type: "STREAMING"});
 	 if(client.guilds.size > 1){ console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.") }
 		client.guilds.forEach(guild => {
-			if(!guild.roles.get(config.userrole)) console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`)
+			if(!guild.roles.get(config.userrole)) console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`) }
 		});
 	} catch (e) {
 		console.log("[DISCORDCAPTCHA-readyEvent] >> " + e);
