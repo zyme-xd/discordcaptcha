@@ -2,7 +2,7 @@
     "token": "token",
     "clientid": "clientid",
     "prefix": "!",
-    "version": "2.5.0",
+    "version": "3.0.0",
     "chat": "main-chat",
     "userrole": "339841406409375754",
     "streamingGame": "DiscordCaptcha",
@@ -10,6 +10,7 @@
     "evalAllowed": "true",
     "ownerid": "312715611413413889",
     "logging": true,
+    "captchaType": "image",
     "commands": {
         "blockUser": {
             "command": "block",
