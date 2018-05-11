@@ -1,12 +1,7 @@
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
-> Discordcaptcha 3.0.0 is coming!
-> Currently you can't really decide whether to use images or text as captcha type in a proper way. (text branch is deprecated)
-> Version 3.0.0 has much new features, which you can see on the project page.
-
-You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/discordcaptcha/">here</a>. <br />
-Feel free to join our <a href="https://discord.gg/955naZw">discord server</a> for live support.
+You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/discordcaptcha/">here</a>.
 
 ## Setup procedure
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
@@ -35,9 +30,6 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 - Extension has to be .png
 - Filename **has** to be the same as the captcha.
 
-**Deprecation warning:** Custom captchas are **deprecated**, means that it will be removed in 3.0.0. 
-
-
 ## API related commands
 
 ```js
@@ -47,7 +39,7 @@ You can add as many captchas as you want into the `~/captchas/` directory, but p
 !api logs // Get logs
 !api captchas // All captchas (limited to 2000 chars)
 ```
-<b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.<br/>
+<b>Note: </b>If you want to use these commands, you have to put your tag into the `contributors` array.
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
 ## Dealing with SQL(ite)
@@ -58,4 +50,4 @@ After the installation, you're able to open the database by clicking 'open datab
 
 • Look at the wiki for some fixes.<br/>
 • Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
-• Open a pull request/issue
+• Open a Pull Request/Issue
