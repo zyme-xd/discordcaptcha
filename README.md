@@ -1,12 +1,12 @@
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based on Discord.js.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba341e35d2c84bc0a0adc6a2ae2f4e1c)](https://app.codacy.com/app/y21/discordcaptcha?utm_source=github.com&utm_medium=referral&utm_content=y21/discordcaptcha&utm_campaign=badger)
+
 You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/discordcaptcha/">here</a>.<br/>
 Feel free to join our <a href="https://discord.gg/955naZw">discord server</a> for live support.
 
 ## Setup procedure
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba341e35d2c84bc0a0adc6a2ae2f4e1c)](https://app.codacy.com/app/y21/discordcaptcha?utm_source=github.com&utm_medium=referral&utm_content=y21/discordcaptcha&utm_campaign=badger)
 
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
 To install all required NPM-Modules, run the install script in `~/setup/` (.sh or .bat file depends on your operating system) (or `npm install` <b>in bots' directory</b> if both don't work.) (Click <a href="https://discordjs.guide/#/preparations/?id=installing-nodejs">here</a> for a detailed installation tutorial on how to install nodejs)<br/><br/>
