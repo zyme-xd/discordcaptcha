@@ -1,5 +1,5 @@
 let sql = require("sqlite");
-sql.open('./src/db.sqlite');
+sql.open("./src/db.sqlite");
 
 /**
  * @param {object} message - The message object
@@ -7,6 +7,6 @@ sql.open('./src/db.sqlite');
  */
 
 module.exports = (message, config) => {
-	if(!message.member.roles.has(config.userrole)) return message.reply('you are not verified yet.');
-	message.member.removeRole(config.userrole).catch(e => console.log(e)).then(()=> message.reply('unverified!'));
+	if(!message.member.roles.has(config.userrole)) return message.reply("you are not verified yet.");
+	message.member.removeRole(config.userrole).catch(e => console.log(e)).then(() => message.reply("unverified!"));
 };
