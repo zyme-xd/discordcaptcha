@@ -5,4 +5,4 @@ module.exports = class {
     request(){
         return require(`./${this.type}.js`)();
     }
-}
+};
