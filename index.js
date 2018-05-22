@@ -62,6 +62,11 @@ client.on("ready", () => {
 	}
 });
 
+client.on("warn", console.warn);
+client.on("error", console.error);
+client.on("disconnect", () => console.log("Bot disconnected from WebSocket!"));
+client.on("reconnect", () => console.log("Reconnecting to WebSocket ..."));
+
 client.on("message", async (message) => {
 	try{
         let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
