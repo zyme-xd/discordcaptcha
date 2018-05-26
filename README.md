@@ -7,7 +7,6 @@ You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/disco
 Feel free to join our <a href="https://discord.gg/955naZw">discord server</a> for live support.
 
 ## Setup procedure
-
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
 To install all required NPM-Modules, run the install script in `~/setup/` (.sh or .bat file depends on your operating system) (or `npm install` <b>in bots' directory</b> if both don't work.) (Click <a href="https://discordjs.guide/#/preparations/?id=installing-nodejs">here</a> for a detailed installation tutorial on how to install nodejs)<br/><br/>
 For now, make sure the bot is only in one guild.
@@ -55,8 +54,12 @@ Also commands can be turned off by changing `enabled` to `false`.
 Blocked users, logs and queries are stored in a database which is located in `~/src/db.sqlite`. If you want to read data from it, I recommend <a href="http://sqlitebrowser.org/">SQLite DB Browser</a> (<a href="https://nightlies.sqlitebrowser.org/latest/">Nightly</a>).
 After the installation, you're able to open the database by clicking 'open database' in the program.
 
-## Tips
+### Using the minified file
+In case you don't want to edit the main code, you can delete the `index.js` file locally and rename `index.min.js` to `index.js`.
+An other option is to change the value of `main` key of the package.json file from `index.js` to `index.min.js`.
+What this does is letting you to type `node .` in the command prompt instead of `node <path>`
 
+## Tips
 • Look at the wiki for some fixes.<br/>
 • Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
 • Open a Pull Request/Issue
