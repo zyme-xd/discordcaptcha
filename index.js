@@ -72,7 +72,8 @@ client.on("message", async (message) => {
         let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
 		if(blocked) message.member.kick();
 		if (message.channel.name === "verify") {
-			message.delete();
+			if(message.author.id != client.user.id) message.delete();
+			else setTimeout(()=>message.delete(), 2500);
 			if (message.content === `${config.prefix}verify`) {
 				if(await sql.get('select * from queries where id="' + message.author.id + '"') || message.member.roles.has(config.userrole)) return message.reply("Already verified or in queue!");
                 let captchaInstance = new Captcha(null, message.author);
