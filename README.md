@@ -3,7 +3,7 @@ A Captcha verification bot based on Discord.js.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba341e35d2c84bc0a0adc6a2ae2f4e1c)](https://app.codacy.com/app/y21/discordcaptcha?utm_source=github.com&utm_medium=referral&utm_content=y21/discordcaptcha&utm_campaign=badger)
 
-You can find a detailed tutorial <a href="https://www.gitbook.com/book/y21/discordcaptcha/">here</a>.<br/>
+You can find a detailed tutorial <a href="https://y21.gitbooks.io/discordcaptcha/content/">here</a>.<br/>
 Feel free to join our <a href="https://discord.gg/955naZw">discord server</a> for live support.
 
 ## Setup procedure
