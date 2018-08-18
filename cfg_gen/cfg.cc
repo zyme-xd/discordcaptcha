@@ -138,11 +138,14 @@ int main()
                 std::cout << translations::en["C_STREAMURL"];
                 std::cin >> strurl;
 
-				stream->setGameName(strname);
-				stream->setStreamURL(strurl);
+		stream->setGameName(strname);
+		stream->setStreamURL(strurl);
 				
+		std::string* logging = new std::string;
                 std::cout << translations::en["C_EVALALWD"];
-                std::cin >> cfg_input::logChannel;
+                std::cin >> *logging;
+                cfg_input::eval = *logging == "y";
+                delete logging;
 
                 std::cout << translations::en["C_OWNER"];
                 std::cin >> cfg_input::logChannel;
