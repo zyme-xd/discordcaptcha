@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <fstream>
 #include "cfg.h"
 
 std::map<std::string, std::string> translations::en = {
@@ -60,10 +61,41 @@ std::string* cfg_util::dcommand::getExecutionName() const
     return this->execName;
 }
 
+void cfg_util::dcommand::setExecutionName(std::string& name)
+{
+	this->execName = &name;
+}
+
+std::vector<std::string>* cfg_util::dcommand::getContributors() const
+{
+	return this->contributors;
+}
+
+void cfg_util::dcommand::setContributors(std::vector<std::string>& contributors)
+{
+	this->contributors = &contributors;
+}
+
+std::string cfg_util::dcommand::addContributor(std::string new_contrib)
+{
+	(this->contributors)->push_back(new_contrib);
+}
+
+bool cfg_util::dcommand::isEnabled() const
+{
+	return this->enabled;
+}
+
+void cfg_util::dcommand::setStatus(bool& status)
+{
+	this->enabled = &status;
+}
+
 int main()
 {
     translations::LANG lang = translations::LANG::EN;
-    cfg_util::dstream* stream;
+    cfg_util::dstream* stream = new cfg_util::dstream;
+    std::ofstream file("config.json");
     if(lang == translations::LANG::EN)
     {
         std::cout << "-------------------------------" << std::endl
@@ -83,6 +115,7 @@ int main()
         case 1:
             if(lang == translations::LANG::EN)
             {
+                file.close();
                 std::cout << translations::en["C_BOT_TOKEN"];
                 std::cin >> cfg_input::token;
 
@@ -105,9 +138,9 @@ int main()
                 std::cout << translations::en["C_STREAMURL"];
                 std::cin >> strurl;
 
-                stream->setGameName(strname);
-
-
+				stream->setGameName(strname);
+				stream->setStreamURL(strurl);
+				
                 std::cout << translations::en["C_EVALALWD"];
                 std::cin >> cfg_input::logChannel;
 
@@ -122,13 +155,14 @@ int main()
 
                 std::cout << translations::en["C_CAPTCHATYPE"];
                 std::cin >> cfg_input::logChannel;
+                
+                file.close();
             }
             break;
         case 4:
-            std::terminate();
+            return 0;
             break;
     }
-    
     delete stream;
     return 0;
 }
