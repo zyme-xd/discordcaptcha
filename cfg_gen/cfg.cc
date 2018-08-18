@@ -193,9 +193,9 @@ int main()
 				<< "\t\"version\": \"" << cfg_input::version << "\"," << std::endl
 				<< "\t\"chat\": \"" << cfg_input::logChannel << "\"," << std::endl
 				<< "\t\"userrole\": \"" << cfg_input::verifiedRole << "\"," << std::endl
-				<< "\t\"streamingGame\": \"" << stream->getGameName() << "\"," << std::endl
-				<< "\t\"streamingLink\": \"" << stream->getStreamURL() << "\"," << std::endl
-				<< "\t\"evalAllowed\": \"" << cfg_input::eval << "\"," << std::endl
+				<< "\t\"streamingGame\": \"" << *stream->getGameName() << "\"," << std::endl
+				<< "\t\"streamingLink\": \"" << *stream->getStreamURL() << "\"," << std::endl
+				<< "\t\"evalAllowed\": \"" << (cfg_input::eval == true ? "true" : "false") << "\"," << std::endl
 				<< "\t\"captchaType\": \"" << (cfg_input::ctype == cfg_util::captchaType::IMAGE ? "image" : "text") << "\"," << std::endl
 				<< "\t\"commands\": {" << std::endl;
 					
@@ -205,20 +205,25 @@ int main()
 				int index = 0;
                 for(std::string& cmd : cfg_dcmd_dec::cmdnames)
                 {
-                	std::string* input = new std::string{""};
-                	std::cout << "Command '" << cmd << "' | Alias (leave blank if it should stay): ";
+                	std::string* input = new std::string;
+                	std::cout << "Command '" << cmd << "' | Alias (type NULL if it should stay): ";
                 	std::cin >> *input;
-                	cfg_dcmd_dec::execnames.push_back(*input == "" ? cmd : *input);
+                	cfg_dcmd_dec::execnames.push_back(*input == "NULL" ? cmd : *input);
                 	std::cout << "Command '" << cmd << "' | Automatically allow you to use this command? (Answer with y or n): ";
                 	std::cin.ignore();
 					getline(std::cin, *input);
                 	if (*input == "y") cfg_dcmd_dec::allowSelf.push_back(true);
+                	else cfg_dcmd_dec::allowSelf.push_back(false);
                 	std::cout << "Command '" << cmd << "' | Enable this command? (Answer with y or n): ";
                 	std::cin >> *input;
                 	cfg_dcmd_dec::cmdstatuses.push_back(*input == "y");
+                	std::cout << std::endl;
+                	
                 	file << "\t\t\"" << commands.at(index) << "\": {" << std::endl
                 	<< "\t\t\t\"command\": \"" << cfg_dcmd_dec::execnames.at(index) << "\"," << std::endl
-                	<< "\t\t\t\"contributors\": [ \"" << (cfg_dcmd_dec::allowSelf.at(index) ? cfg_input::ownerTag : "") << "\" ]" << std::endl;
+                	<< "\t\t\t\"contributors\": [ \"" << (cfg_dcmd_dec::allowSelf.at(index) ? cfg_input::ownerTag : "") << "\" ]," << std::endl
+                	<< "\t\t\t\"enabled\": " << (cfg_dcmd_dec::cmdstatuses.at(index) ? "true" : "false") << std::endl
+                	<< "\t\t},\n";
                 	
                 	delete input;
                 	index++;
