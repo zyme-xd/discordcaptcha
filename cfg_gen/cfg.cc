@@ -227,7 +227,9 @@ int main()
                 	
                 	delete input;
                 	index++;
-				}
+		}
+		file << "\t}" << std::endl
+		<< "}";
                 file.close();
             }
             break;
