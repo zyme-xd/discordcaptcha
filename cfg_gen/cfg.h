@@ -68,7 +68,7 @@ namespace cfg_dcmd_dec
 	std::vector<cfg_util::dcommand> dcmds;
     extern std::vector<std::string> cmdnames;
 	std::vector<std::string> execnames;
-	std::vector<std::vector<std::string>> cmdcontributors;
+	std::vector<bool> allowSelf;
 	std::vector<bool> cmdstatuses;
 }
 
