@@ -57,6 +57,8 @@ namespace cfg_input
     logToDB;
 
     cfg_util::captchaType ctype;
+
+    std::vector<cfg_util::dcommand> commands;
 }
 
 #endif
