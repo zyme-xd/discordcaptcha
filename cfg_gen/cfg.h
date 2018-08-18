@@ -44,12 +44,14 @@ namespace cfg_util
 
 namespace cfg_input
 {
+	extern const std::string version;
     std::string token,
     clientid,
     prefix,
     logChannel,
     verifiedRole,
-    owner;
+    owner,
+    ownerTag;
 
     cfg_util::dstream stream;
 
@@ -59,6 +61,15 @@ namespace cfg_input
     cfg_util::captchaType ctype;
 
     std::vector<cfg_util::dcommand> commands;
+}
+
+namespace cfg_dcmd_dec
+{
+	std::vector<cfg_util::dcommand> dcmds;
+    extern std::vector<std::string> cmdnames;
+	std::vector<std::string> execnames;
+	std::vector<std::vector<std::string>> cmdcontributors;
+	std::vector<bool> cmdstatuses;
 }
 
 #endif
