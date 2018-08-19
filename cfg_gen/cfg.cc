@@ -5,7 +5,7 @@
 #include <fstream>
 #include "cfg.h"
 
-const std::string cfg_input::version = "3.0.1";
+const std::string cfg_input::version = "3.0.2";
 std::vector<std::string> commands {
     "blockUser",
     "removeBlockFromUser",
