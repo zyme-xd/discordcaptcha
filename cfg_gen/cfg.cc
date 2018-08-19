@@ -40,7 +40,11 @@ std::map<std::string, std::string> translations::en = {
     { "C_CAPTCHATYPE", "Use text messages or images as captchas? Text messages are way less secure than images. Answer with IMAGES or TEXT: " },
     { "C_CMDALIAS", "Alias (type NULL if it should stay): " },
     { "C_CMDALLOWSELF", "Automatically allow you to use this command? (Answer with y or n): " },
-    { "C_CMDENABLE", "Enable this command? (Answer with y or n): " }
+    { "C_CMDENABLE", "Enable this command? (Answer with y or n): " },
+    { "COMPILEINFO", "This program (the config file generator) has been written in plain C++ and does not use any third libraries, therefore it can be compiled without any issues using GCC." },
+    { "DCAPTCHA_BUGS", "The source code can be found on DiscordCaptcha's official repository (https://github.com/y21/discordcaptcha). If there are any bugs, please make sure to open an issue or submit a pull request if you know how to fix that problem." },
+    { "DCAPTCHA_LIB", "The actual bot (DiscordCaptcha) is using JavaScript and uses the npm package \"Discord.js\" to interact with the Discord API."},
+    { "BACKTOMENU", "Hit ENTER to go back to the menu." }
 };
 
 std::vector<std::string> cfg_dcmd_dec::cmdnames = commands;
@@ -236,10 +240,10 @@ int main()
             break;
         case 2:
         	std::cout << std::endl
-        	<< "This program (the config file generator) has been written in plain C++ and does not use any third libraries, therefore it can be compiled without any issues using GCC." << std::endl
-			<< "The source code can be found on DiscordCaptcha's official repository (https://github.com/y21/discordcaptcha). If there are any bugs, please make sure to open an issue or submit a pull request if you know how to fix that problem." << std::endl
-			<< "The actual bot (DiscordCaptcha) is using JavaScript and uses the npm package \"Discord.js\" to interact with the Discord API." << std::endl
-			<< "Hit ENTER to go back to the menu.";
+        	<< translations::en["COMPILEINFO"] << std::endl
+			<< translations::en["DCAPTCHA_BUGS"] << std::endl
+			<< translations::en["DCAPTCHA_LIBS"] << std::endl
+			<< translations::en["BACKTOMENU"];
 			char a;
 			std::cin.ignore();
 			std::cin.get(a);
