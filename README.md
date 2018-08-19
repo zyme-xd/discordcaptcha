@@ -13,11 +13,7 @@ For now, make sure the bot is only in one guild.
 The config file is located in `~/src/`. Get your Token from <a href="https://discordapp.com/developers/applications/me">here</a>.
 
 ## Config-file generator
-> It is not recommended to use it for now due to some bugs. I am trying to fix them as soon as possible.
-
-Newer versions of discordcaptcha have a config-file generator. It is written in C++ and needs to be compiled if you want to run it. If you don't have a compiler, I recommend the g++ gnu compiler. The file is located in `~/setup/Setup.cpp`.
-If you are on windows and you can't compile it (~~lazyness?~~), I uploaded an executable file.
-> In order to use the config file generator, make sure to have the Commands.txt file in the same directory!
+Newer versions of DiscordCaptcha have a config-file generator. It is written in C++ and needs to be compiled if you want to run it. If you don't have a compiler, I recommend the GCC compiler. The file is located in `~/cfg_gen/`.
 
 ## Additional commands
 > Command names can be changed in the config file.
