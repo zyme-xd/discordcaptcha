@@ -44,7 +44,10 @@ std::map<std::string, std::string> translations::en = {
     { "COMPILEINFO", "This program (the config file generator) has been written in plain C++ and does not use any third libraries, therefore it can be compiled without any issues using GCC." },
     { "DCAPTCHA_BUGS", "The source code can be found on DiscordCaptcha's official repository (https://github.com/y21/discordcaptcha). If there are any bugs, please make sure to open an issue or submit a pull request if you know how to fix that problem." },
     { "DCAPTCHA_LIB", "The actual bot (DiscordCaptcha) is using JavaScript and uses the npm package \"Discord.js\" to interact with the Discord API."},
-    { "BACKTOMENU", "Hit ENTER to go back to the menu." }
+    { "BACKTOMENU", "Hit ENTER to go back to the menu." },
+    { "CFG_FINISHED", "A file named \"config.json\" has been created in this directory. Replace it with the one in the src directory which is located in DiscordCaptcha's home directory." },
+    { "EXITPRG", "Hit ENTER to exit this program." },
+    { "OFSTR_ERROR", "An error occured while trying to open/create a config.json file" }
 };
 
 std::vector<std::string> cfg_dcmd_dec::cmdnames = commands;
@@ -120,6 +123,13 @@ int main()
     translations::LANG lang = translations::LANG::EN;
     cfg_util::dstream* stream = new cfg_util::dstream;
     std::ofstream file("config.json");
+    if(!file)
+    {
+    	std::cout << translations::en["OFSTR_ERROR"];
+    	char a;
+    	std::cin.ignore();
+    	std::cin.get(a);
+	}
     if(lang == translations::LANG::EN)
     {
         std::cout << std::endl << "==== DiscordCaptcha Config File Setup v1.2 ====" << std::endl
@@ -236,6 +246,14 @@ int main()
             file << "\t}" << std::endl
                  << "}";
             file.close();
+            
+            std::cout << translations::en["CFG_FINISHED"] << std::endl
+            << translations::en["EXITPRG"];
+            
+            char a;
+            std::cin.ignore();
+            std::cin.get(a);
+            
         }
         break;
     case 2:
