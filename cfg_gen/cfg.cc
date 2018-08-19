@@ -23,7 +23,7 @@ std::vector<std::string> commands {
 
 std::map<std::string, std::string> translations::en = {
     { "MENU_RUN_CFG", "Run config file generator" },
-    { "MENU_CREDITS", "Credits" },
+    { "MENU_CREDITS", "Credits & Disclaimer" },
     { "MENU_CHANGE_LANG", "Change Language" },
     { "MENU_EXIT", "Exit program" },
     { "C_BOT_TOKEN", "Bot token (can be found on Discord's Developer page): " },
@@ -38,8 +38,9 @@ std::map<std::string, std::string> translations::en = {
     { "C_OWNERTAG", "The tag of your Discord account (e.g. User#1234): "},
     { "C_LOGTODB", "Log verifications to a dedicated database hosted locally? Answer with y or n: " },
     { "C_CAPTCHATYPE", "Use text messages or images as captchas? Text messages are way less secure than images. Answer with IMAGES or TEXT: " },
-    { "C_CMDSTATUS", "Enable or disable the following command (Answer with y or n): {CMD}: " },
-    { "C_AUTOADD", "Automatically allow you to execute all commands? (Answer with y or n): " }
+    { "C_CMDALIAS", "Alias (type NULL if it should stay): " },
+    { "C_CMDALLOWSELF", "Automatically allow you to use this command? (Answer with y or n): " },
+    { "C_CMDENABLE", "Enable this command? (Answer with y or n): " }
 };
 
 std::vector<std::string> cfg_dcmd_dec::cmdnames = commands;
@@ -117,7 +118,8 @@ int main()
     std::ofstream file("config.json");
     if(lang == translations::LANG::EN)
     {
-        std::cout << "-------------------------------" << std::endl
+        std::cout << std::endl << "==== DiscordCaptcha Config File Setup v1.2 ====" << std::endl
+		<< "-------------------------------" << std::endl
         << "1.) " << translations::en["MENU_RUN_CFG"] << std::endl
         << "2.) " << translations::en["MENU_CREDITS"] << std::endl
         << "3.) " << translations::en["MENU_EXIT"] << std::endl
@@ -205,15 +207,15 @@ int main()
                 for(std::string& cmd : cfg_dcmd_dec::cmdnames)
                 {
                 	std::string* input = new std::string;
-                	std::cout << "Command '" << cmd << "' | Alias (type NULL if it should stay): ";
+                	std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDALIAS"];
                 	std::cin >> *input;
                 	cfg_dcmd_dec::execnames.push_back(*input == "NULL" ? cmd : *input);
-                	std::cout << "Command '" << cmd << "' | Automatically allow you to use this command? (Answer with y or n): ";
+                	std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDALLOWSELF"];
                 	std::cin.ignore();
 					getline(std::cin, *input);
                 	if (*input == "y") cfg_dcmd_dec::allowSelf.push_back(true);
                 	else cfg_dcmd_dec::allowSelf.push_back(false);
-                	std::cout << "Command '" << cmd << "' | Enable this command? (Answer with y or n): ";
+                	std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDENABLE"];
                 	std::cin >> *input;
                 	cfg_dcmd_dec::cmdstatuses.push_back(*input == "y");
                 	std::cout << std::endl;
@@ -233,6 +235,20 @@ int main()
             }
             break;
         case 2:
+        	std::cout << std::endl
+        	<< "This program (the config file generator) has been written in plain C++ and does not use any third libraries, therefore it can be compiled without any issues using GCC." << std::endl
+			<< "The source code can be found on DiscordCaptcha's official repository (https://github.com/y21/discordcaptcha). If there are any bugs, please make sure to open an issue or submit a pull request if you know how to fix that problem." << std::endl
+			<< "The actual bot (DiscordCaptcha) is using JavaScript and uses the npm package \"Discord.js\" to interact with the Discord API." << std::endl
+			<< "Hit ENTER to go back to the menu.";
+			char a;
+			std::cin.ignore();
+			std::cin.get(a);
+        	#ifdef _WIN32
+        	std::system("cls");
+        	#elif __linux__
+        	std::system("clear");
+        	#endif
+        	main();
         	break;
         case 3:
             return 0;
