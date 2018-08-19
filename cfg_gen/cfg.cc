@@ -120,8 +120,7 @@ int main()
         std::cout << "-------------------------------" << std::endl
         << "1.) " << translations::en["MENU_RUN_CFG"] << std::endl
         << "2.) " << translations::en["MENU_CREDITS"] << std::endl
-        << "3.) " << translations::en["MENU_CHANGE_LANG"] << std::endl
-        << "4.) " << translations::en["MENU_EXIT"] << std::endl
+        << "3.) " << translations::en["MENU_EXIT"] << std::endl
         << "-------------------------------" << std::endl
         << "> ";
     }
@@ -227,15 +226,25 @@ int main()
                 	
                 	delete input;
                 	index++;
-		}
-		file << "\t}" << std::endl
-		<< "}";
+				}
+				file << "\t}" << std::endl
+				<< "}";
                 file.close();
             }
             break;
-        case 4:
+        case 2:
+        	break;
+        case 3:
             return 0;
             break;
+        default:
+        	#ifdef _WIN32
+        	std::system("cls");
+        	#elif __linux__
+        	std::system("clear");
+        	#endif
+        	main();
+        	break;
     }
     
     delete stream;
