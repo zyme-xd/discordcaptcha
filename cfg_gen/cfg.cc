@@ -238,7 +238,7 @@ int main()
                      << "\t\t\t\"command\": \"" << cfg_dcmd_dec::execnames.at(index) << "\"," << std::endl
                      << "\t\t\t\"contributors\": [ \"" << (cfg_dcmd_dec::allowSelf.at(index) ? cfg_input::ownerTag : "") << "\" ]," << std::endl
                      << "\t\t\t\"enabled\": " << (cfg_dcmd_dec::cmdstatuses.at(index) ? "true" : "false") << std::endl
-                     << "\t\t},\n";
+                     << "\t\t}" << (cmd != "unverify" ? "," : "") << "\n";
 
                 delete input;
                 index++;
