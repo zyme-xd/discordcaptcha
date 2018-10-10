@@ -75,6 +75,10 @@ client.on("error", console.error);
 client.on("disconnect", () => console.log("Bot disconnected from WebSocket!"));
 client.on("reconnect", () => console.log("Reconnecting to WebSocket ..."));
 
+client.on("guildMemberRemove", async member => {
+	sql.run("DELETE FROM queries WHERE id=" + member.id);		
+});
+
 client.on("message", async (message) => {
     try {
         let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
