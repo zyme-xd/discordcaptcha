@@ -3,7 +3,9 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <regex>
 #include "cfg.h"
+#include "langs.cc"
 
 const std::string cfg_input::version = "3.0.2";
 std::vector<std::string> commands {
@@ -19,35 +21,6 @@ std::vector<std::string> commands {
     "captchas",
     "makerole",
     "unverify"
-};
-
-std::map<std::string, std::string> translations::en = {
-    { "MENU_RUN_CFG", "Run config file generator" },
-    { "MENU_CREDITS", "Credits & Disclaimer" },
-    { "MENU_CHANGE_LANG", "Change Language" },
-    { "MENU_EXIT", "Exit program" },
-    { "C_BOT_TOKEN", "Bot token (can be found on Discord's Developer page): " },
-    { "C_CLIENT_ID", "Client ID: " },
-    { "C_PREFIX", "Prefix (what the bot reacts to, e.g. the exclamation mark in !verify): " },
-    { "C_LOGCHAT", "The channel name where verification logs should be sent to: " },
-    { "C_VERIFIEDROLE", "ID of the verified role: " },
-    { "C_STREAMNAME", "The streaming game name (playing status): " },
-    { "C_STREAMURL", "The URL of the stream (needs to be a valid twitch.tv one): " },
-    { "C_EVALALWD", "Allow JS evaluations? Answer with y or n. (ONLY enable if experienced with JavaScript): " },
-    { "C_OWNER", "The ID of your Discord account: " },
-    { "C_OWNERTAG", "The tag of your Discord account (e.g. User#1234): "},
-    { "C_LOGTODB", "Log verifications to a dedicated database hosted locally? Answer with y or n: " },
-    { "C_CAPTCHATYPE", "Use text messages or images as captchas? Text messages are way less secure than images. Answer with IMAGES or TEXT: " },
-    { "C_CMDALIAS", "Alias (type NULL if it should stay): " },
-    { "C_CMDALLOWSELF", "Automatically allow you to use this command? (Answer with y or n): " },
-    { "C_CMDENABLE", "Enable this command? (Answer with y or n): " },
-    { "COMPILEINFO", "This program (the config file generator) has been written in plain C++ and does not use any third libraries, therefore it can be compiled without any issues using GCC." },
-    { "DCAPTCHA_BUGS", "The source code can be found on DiscordCaptcha's official repository (https://github.com/y21/discordcaptcha). If there are any bugs, please make sure to open an issue or submit a pull request if you know how to fix that problem." },
-    { "DCAPTCHA_LIB", "The actual bot (DiscordCaptcha) is using JavaScript and uses the npm package \"Discord.js\" to interact with the Discord API."},
-    { "BACKTOMENU", "Hit ENTER to go back to the menu." },
-    { "CFG_FINISHED", "A file named \"config.json\" has been created in this directory. Replace it with the one in the src directory which is located in DiscordCaptcha's home directory." },
-    { "EXITPRG", "Hit ENTER to exit this program." },
-    { "OFSTR_ERROR", "An error occured while trying to open/create a config.json file" }
 };
 
 std::vector<std::string> cfg_dcmd_dec::cmdnames = commands;
@@ -120,26 +93,45 @@ void cfg_util::dcommand::setStatus(bool& status)
 
 int main()
 {
-    translations::LANG lang = translations::LANG::EN;
     cfg_util::dstream* stream = new cfg_util::dstream;
     std::ofstream file("config.json");
+
+	// Language(s) part
+	std::ifstream options("cfg_options.txt");
+	char langcode = 0;
+	if (options) {
+		std::string temp, content;
+		while(getline(options, temp)) {
+			content += temp + "\n";
+		}
+		std::smatch match;
+		std::string result;
+		std::regex lang_find_regex("LANG=(\\w+)");
+		if(std::regex_search(temp, match, lang_find_regex) && match.size() > 1) {
+			result = match.str(1);
+			if (result == "en") langcode = 0;
+			else if (result == "de") langcode = 1;
+			else langcode = 0;
+		}
+	}
+	options.close();
+	
+	
     if(!file)
     {
-    	std::cout << translations::en["OFSTR_ERROR"];
+    	std::cout << translations::getTranslation(&langcode, "OFSTR_ERROR");
     	char a;
     	std::cin.ignore();
     	std::cin.get(a);
 	}
-    if(lang == translations::LANG::EN)
-    {
-        std::cout << std::endl << "==== DiscordCaptcha Config File Setup v1.2 ====" << std::endl
-                  << "-------------------------------" << std::endl
-                  << "1.) " << translations::en["MENU_RUN_CFG"] << std::endl
-                  << "2.) " << translations::en["MENU_CREDITS"] << std::endl
-                  << "3.) " << translations::en["MENU_EXIT"] << std::endl
-                  << "-------------------------------" << std::endl
-                  << "> ";
-    }
+    std::cout << std::endl << "==== DiscordCaptcha Config File Setup v1.3 ====" << std::endl
+    << "-------------------------------" << std::endl
+    << "1.) " << translations::getTranslation(&langcode, "MENU_RUN_CFG") << std::endl
+    << "2.) " << translations::getTranslation(&langcode, "MENU_CREDITS") << std::endl
+    << "3.) " << translations::getTranslation(&langcode, "MENU_EXIT") << std::endl
+	<< "4.) " << translations::getTranslation(&langcode, "MENU_CHANGE_LANG") << std::endl
+    << "-------------------------------" << std::endl
+    << "> ";
     int input;
     std::cin >> input;
     std::cout << std::endl;
@@ -147,121 +139,119 @@ int main()
     switch(input)
     {
     case 1:
-        if(lang == translations::LANG::EN)
+	{
+        std::cout << translations::getTranslation(&langcode, "C_BOT_TOKEN");
+        std::cin.ignore();
+        getline(std::cin, cfg_input::token);
+
+        std::cout << translations::getTranslation(&langcode, "C_CLIENT_ID");
+        std::cin >> cfg_input::clientid;
+
+        std::cout << translations::getTranslation(&langcode, "C_PREFIX");
+        std::cin >> cfg_input::prefix;
+
+        std::cout << translations::getTranslation(&langcode, "C_LOGCHAT");
+        std::cin >> cfg_input::logChannel;
+
+        std::cout << translations::getTranslation(&langcode, "C_VERIFIEDROLE");
+        std::cin >> cfg_input::verifiedRole;
+
+        std::string strname, strurl;
+        std::cout << translations::getTranslation(&langcode, "C_STREAMNAME");
+        std::cin.ignore();
+        getline(std::cin, strname);
+
+        std::cout << translations::getTranslation(&langcode, "C_STREAMURL");
+        std::cin >> strurl;
+
+        stream->setGameName(strname);
+        stream->setStreamURL(strurl);
+
+        std::string* evalALWDs = new std::string;
+        std::cout << translations::getTranslation(&langcode, "C_EVALALWD");
+        std::cin >> *evalALWDs;
+        cfg_input::eval = *evalALWDs == "y";
+        delete evalALWDs;
+
+        std::cout << translations::getTranslation(&langcode, "C_OWNER");
+        std::cin >> cfg_input::owner;
+
+        std::cout << translations::getTranslation(&langcode, "C_OWNERTAG");
+        std::cin.ignore();
+        getline(std::cin, cfg_input::ownerTag);
+
+        std::string* logging = new std::string;
+        std::cout << translations::getTranslation(&langcode, "C_LOGTODB");
+        std::cin >> *logging;
+        cfg_input::logToDB = *logging == "y";
+        delete logging;
+
+        std::string* ctype = new std::string;
+        std::cout << translations::getTranslation(&langcode, "C_CAPTCHATYPE");
+        std::cin >> *ctype;
+        cfg_input::ctype = (*ctype == "IMAGES") ? cfg_util::captchaType::IMAGE : cfg_util::captchaType::TEXT;
+        delete ctype;
+
+        file << "{" << std::endl
+             << "\t\"token\": \"" << cfg_input::token << "\"," << std::endl
+             << "\t\"clientid\": \"" << cfg_input::clientid << "\"," << std::endl
+             << "\t\"prefix\": \"" << cfg_input::prefix << "\"," << std::endl
+             << "\t\"version\": \"" << cfg_input::version << "\"," << std::endl
+             << "\t\"chat\": \"" << cfg_input::logChannel << "\"," << std::endl
+             << "\t\"userrole\": \"" << cfg_input::verifiedRole << "\"," << std::endl
+             << "\t\"streamingGame\": \"" << *stream->getGameName() << "\"," << std::endl
+             << "\t\"streamingLink\": \"" << *stream->getStreamURL() << "\"," << std::endl
+             << "\t\"evalAllowed\": \"" << (cfg_input::eval == true ? "true" : "false") << "\"," << std::endl
+             << "\t\"captchaType\": \"" << (cfg_input::ctype == cfg_util::captchaType::IMAGE ? "image" : "text") << "\"," << std::endl
+             << "\t\"commands\": {" << std::endl;
+
+        std::cout << "------------------------------" << std::endl
+                  << "Commands" << std::endl
+                  << "------------------------------" << std::endl;
+        int index = 0;
+        for(std::string& cmd : cfg_dcmd_dec::cmdnames)
         {
-            std::cout << translations::en["C_BOT_TOKEN"];
+            std::string* input = new std::string;
+            std::cout << "Command '" << cmd << "' | " << translations::getTranslation(&langcode, "C_CMDALIAS");
+            std::cin >> *input;
+            cfg_dcmd_dec::execnames.push_back(*input == "NULL" ? cmd : *input);
+            std::cout << "Command '" << cmd << "' | " << translations::getTranslation(&langcode, "C_CMDALLOWSELF");
             std::cin.ignore();
-            getline(std::cin, cfg_input::token);
+            getline(std::cin, *input);
+            if (*input == "y") cfg_dcmd_dec::allowSelf.push_back(true);
+            else cfg_dcmd_dec::allowSelf.push_back(false);
+            std::cout << "Command '" << cmd << "' | " << translations::getTranslation(&langcode, "C_CMDENABLE");
+            std::cin >> *input;
+            cfg_dcmd_dec::cmdstatuses.push_back(*input == "y");
+            std::cout << std::endl;
 
-            std::cout << translations::en["C_CLIENT_ID"];
-            std::cin >> cfg_input::clientid;
+            file << "\t\t\"" << commands.at(index) << "\": {" << std::endl
+                 << "\t\t\t\"command\": \"" << cfg_dcmd_dec::execnames.at(index) << "\"," << std::endl
+                 << "\t\t\t\"contributors\": [ \"" << (cfg_dcmd_dec::allowSelf.at(index) ? cfg_input::ownerTag : "") << "\" ]," << std::endl
+                 << "\t\t\t\"enabled\": " << (cfg_dcmd_dec::cmdstatuses.at(index) ? "true" : "false") << std::endl
+                 << "\t\t}" << (cmd != "unverify" ? "," : "") << "\n";
 
-            std::cout << translations::en["C_PREFIX"];
-            std::cin >> cfg_input::prefix;
-
-            std::cout << translations::en["C_LOGCHAT"];
-            std::cin >> cfg_input::logChannel;
-
-            std::cout << translations::en["C_VERIFIEDROLE"];
-            std::cin >> cfg_input::verifiedRole;
-
-            std::string strname, strurl;
-            std::cout << translations::en["C_STREAMNAME"];
-            std::cin.ignore();
-            getline(std::cin, strname);
-
-            std::cout << translations::en["C_STREAMURL"];
-            std::cin >> strurl;
-
-            stream->setGameName(strname);
-            stream->setStreamURL(strurl);
-
-            std::string* evalALWDs = new std::string;
-            std::cout << translations::en["C_EVALALWD"];
-            std::cin >> *evalALWDs;
-            cfg_input::eval = *evalALWDs == "y";
-            delete evalALWDs;
-
-            std::cout << translations::en["C_OWNER"];
-            std::cin >> cfg_input::owner;
-
-            std::cout << translations::en["C_OWNERTAG"];
-            std::cin.ignore();
-            getline(std::cin, cfg_input::ownerTag);
-
-            std::string* logging = new std::string;
-            std::cout << translations::en["C_LOGTODB"];
-            std::cin >> *logging;
-            cfg_input::logToDB = *logging == "y";
-            delete logging;
-
-            std::string* ctype = new std::string;
-            std::cout << translations::en["C_CAPTCHATYPE"];
-            std::cin >> *ctype;
-            cfg_input::ctype = (*ctype == "IMAGES") ? cfg_util::captchaType::IMAGE : cfg_util::captchaType::TEXT;
-            delete ctype;
-
-            file << "{" << std::endl
-                 << "\t\"token\": \"" << cfg_input::token << "\"," << std::endl
-                 << "\t\"clientid\": \"" << cfg_input::clientid << "\"," << std::endl
-                 << "\t\"prefix\": \"" << cfg_input::prefix << "\"," << std::endl
-                 << "\t\"version\": \"" << cfg_input::version << "\"," << std::endl
-                 << "\t\"chat\": \"" << cfg_input::logChannel << "\"," << std::endl
-                 << "\t\"userrole\": \"" << cfg_input::verifiedRole << "\"," << std::endl
-                 << "\t\"streamingGame\": \"" << *stream->getGameName() << "\"," << std::endl
-                 << "\t\"streamingLink\": \"" << *stream->getStreamURL() << "\"," << std::endl
-                 << "\t\"evalAllowed\": \"" << (cfg_input::eval == true ? "true" : "false") << "\"," << std::endl
-                 << "\t\"captchaType\": \"" << (cfg_input::ctype == cfg_util::captchaType::IMAGE ? "image" : "text") << "\"," << std::endl
-                 << "\t\"commands\": {" << std::endl;
-
-            std::cout << "------------------------------" << std::endl
-                      << "Commands" << std::endl
-                      << "------------------------------" << std::endl;
-            int index = 0;
-            for(std::string& cmd : cfg_dcmd_dec::cmdnames)
-            {
-                std::string* input = new std::string;
-                std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDALIAS"];
-                std::cin >> *input;
-                cfg_dcmd_dec::execnames.push_back(*input == "NULL" ? cmd : *input);
-                std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDALLOWSELF"];
-                std::cin.ignore();
-                getline(std::cin, *input);
-                if (*input == "y") cfg_dcmd_dec::allowSelf.push_back(true);
-                else cfg_dcmd_dec::allowSelf.push_back(false);
-                std::cout << "Command '" << cmd << "' | " << translations::en["C_CMDENABLE"];
-                std::cin >> *input;
-                cfg_dcmd_dec::cmdstatuses.push_back(*input == "y");
-                std::cout << std::endl;
-
-                file << "\t\t\"" << commands.at(index) << "\": {" << std::endl
-                     << "\t\t\t\"command\": \"" << cfg_dcmd_dec::execnames.at(index) << "\"," << std::endl
-                     << "\t\t\t\"contributors\": [ \"" << (cfg_dcmd_dec::allowSelf.at(index) ? cfg_input::ownerTag : "") << "\" ]," << std::endl
-                     << "\t\t\t\"enabled\": " << (cfg_dcmd_dec::cmdstatuses.at(index) ? "true" : "false") << std::endl
-                     << "\t\t}" << (cmd != "unverify" ? "," : "") << "\n";
-
-                delete input;
-                index++;
-            }
-            file << "\t}" << std::endl
-                 << "}";
-            file.close();
-            
-            std::cout << translations::en["CFG_FINISHED"] << std::endl
-            << translations::en["EXITPRG"];
-            
-            char a;
-            std::cin.ignore();
-            std::cin.get(a);
-            
+            delete input;
+            index++;
         }
+        file << "\t}" << std::endl
+             << "}";
+        file.close();
+        
+        std::cout << translations::getTranslation(&langcode, "CFG_FINISHED") << std::endl
+				  << translations::getTranslation(&langcode, "EXITPRG");
+        
+        char a;
+        std::cin.ignore();
+        std::cin.get(a);
         break;
+	}
     case 2:
         std::cout << std::endl
-                  << translations::en["COMPILEINFO"] << std::endl
-                  << translations::en["DCAPTCHA_BUGS"] << std::endl
-                  << translations::en["DCAPTCHA_LIBS"] << std::endl
-                  << translations::en["BACKTOMENU"];
+                  << translations::getTranslation(&langcode, "COMPILEINFO") << std::endl
+                  << translations::getTranslation(&langcode, "DCAPTCHA_BUGS") << std::endl
+                  << translations::getTranslation(&langcode, "DCAPTCHA_LIBS") << std::endl
+                  << translations::getTranslation(&langcode, "BACKTOMENU");
         char a;
         std::cin.ignore();
         std::cin.get(a);
@@ -275,6 +265,43 @@ int main()
     case 3:
         return 0;
         break;
+	case 4:
+		{
+		std::ifstream *testfile = new std::ifstream {"cfg_options.txt"};
+		std::string _lang;
+		do {
+			std::cout << "Choose a language (de/en): ";
+			std::cin >> _lang;
+		} while(_lang == "");
+			
+		if (!(*testfile)) {
+			std::ofstream *optionfile = new std::ofstream {"cfg_options.txt"};
+			*optionfile << "LANG=" << _lang;
+			optionfile->close();
+			delete optionfile;
+		} else {
+			std::string filecontents, templine;
+			
+			while(getline(*testfile, templine)) {
+				filecontents += templine;
+			}
+			
+			std::ofstream *optionfile = new std::ofstream {"cfg_options.txt"};
+			if (filecontents.find("LANG=") != std::string::npos) {
+				std::regex rgx("LANG=\\w+");
+				std::string a = std::regex_replace(filecontents, rgx, "LANG=" + _lang);
+				*optionfile << a;
+			} else {
+				*optionfile << "LANG=" << _lang;
+			}
+			optionfile->close();
+			delete optionfile;
+		}
+		
+		testfile->close();
+		delete testfile;
+		break;
+		}
     default:
 #ifdef _WIN32
         std::system("cls");
