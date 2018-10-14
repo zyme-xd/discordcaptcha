@@ -140,12 +140,15 @@ int main()
     {
     case 1:
 	{
-        std::cout << translations::getTranslation(&langcode, "C_BOT_TOKEN");
-        std::cin.ignore();
-        getline(std::cin, cfg_input::token);
-
-        std::cout << translations::getTranslation(&langcode, "C_CLIENT_ID");
-        std::cin >> cfg_input::clientid;
+	    do {
+            std::cout << translations::getTranslation(&langcode, "C_BOT_TOKEN");
+            std::cin.ignore();
+            getline(std::cin, cfg_input::token);
+        } while(cfg_input::token.size() < 30);
+        do {
+            std::cout << translations::getTranslation(&langcode, "C_CLIENT_ID");
+            std::cin >> cfg_input::clientid;
+        } while(!std::regex_match(cfg_input::clientid, std::regex("^\\d{15,20}$")));
 
         std::cout << translations::getTranslation(&langcode, "C_PREFIX");
         std::cin >> cfg_input::prefix;
@@ -173,12 +176,16 @@ int main()
         cfg_input::eval = *evalALWDs == "y";
         delete evalALWDs;
 
-        std::cout << translations::getTranslation(&langcode, "C_OWNER");
-        std::cin >> cfg_input::owner;
+        do {
+            std::cout << translations::getTranslation(&langcode, "C_OWNER");
+            std::cin >> cfg_input::owner;
+        } while(!std::regex_match(cfg_input::owner, std::regex("^\\d{15,20}$")));
 
-        std::cout << translations::getTranslation(&langcode, "C_OWNERTAG");
-        std::cin.ignore();
-        getline(std::cin, cfg_input::ownerTag);
+        do {
+            std::cout << translations::getTranslation(&langcode, "C_OWNERTAG");
+            std::cin.ignore();
+            getline(std::cin, cfg_input::ownerTag);
+        } while(!std::regex_match(cfg_input::ownerTag, std::regex("^.{1,20}#\\d{4}$")));
 
         std::string* logging = new std::string;
         std::cout << translations::getTranslation(&langcode, "C_LOGTODB");
