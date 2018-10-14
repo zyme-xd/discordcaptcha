@@ -1,11 +1,6 @@
 #ifndef CFG__H
 #define CFG__H
 
-namespace translations
-{
-enum LANG { DE, EN };
-extern std::map<std::string, std::string> en;
-}
 
 namespace cfg_util
 {
