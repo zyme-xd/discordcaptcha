@@ -263,7 +263,9 @@ int main()
         main();
         break;
     case 3:
-        return 0;
+        file.close();
+        delete stream;
+        std::exit(0);
         break;
 	case 4:
 		{
