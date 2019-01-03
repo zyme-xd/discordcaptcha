@@ -54,10 +54,6 @@ fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.js
 client.on("ready", () => {
     try {
         console.log("Logged in!");
-        client.user.setActivity(config.streamingGame, {
-            url: config.streamingLink,
-            type: "STREAMING"
-        });
         if (client.guilds.size > 1) {
             console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.")
         }
