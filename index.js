@@ -13,8 +13,9 @@ const Handler = require("./src/Commandhandler");
 const commandhandler = new Handler(fs.readdirSync("./src/commands/").map(v => { return {
     name: v.substr(0, v.indexOf(".js")),
     alias: config.commands[v.substr(0, v.indexOf(".js"))].command,
+    enabled: config.commands[v.substr(0, v.indexOf(".js"))].enabled,
     run: require(`./src/commands/${v}`).run
-}}));
+}}), config, sql);
 
 class Captcha {
     /**
