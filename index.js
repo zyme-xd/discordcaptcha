@@ -122,7 +122,7 @@ client.on("message", async (message) => {
                                 description: "Successfully verified on `" + message.guild.name + "`"
                             }
                         });
-                        let logChannel = client.channels.get(config.chat) || client.channels.find("name", config.chat);
+                        let logChannel = client.channels.get(config.chat) || client.channels.find(v => v.name === config.chat);
                         if (logChannel && logChannel.type === "text") logChannel.send(`${message.author.toString()} was successfully verified.`);
                         if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").then(v => v.run([message.author.id, Date.now()]));
                         sql.prepare("DELETE FROM queries WHERE id = ?").then(v => v.run([message.author.id]));
