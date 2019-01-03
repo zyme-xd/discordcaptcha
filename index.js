@@ -69,19 +69,18 @@ client.on("error", console.error);
 client.on("disconnect", () => console.log("Bot disconnected from WebSocket!"));
 client.on("reconnect", () => console.log("Reconnecting to WebSocket ..."));
 
-client.on("guildMemberRemove", async member => {
+client.on("guildMemberRemove", member => {
     sql.prepare("DELETE FROM queries WHERE id = ?").run([member.id]);	
 });
 
 client.on("message", async (message) => {
     try {
-        let blocked = await sql.get('select * from blocked where id="' + message.author.id + '"');
-        if (blocked) message.member.kick();
+        if (await sql.prepare("SELECT * FROM blocked WHERE id = ?").get([message.author.id])) message.member.kick();
         if (message.channel.name === "verify") {
             if (message.author.id != client.user.id) message.delete();
             else setTimeout(() => message.delete(), 2500);
             if (message.content === `${config.prefix}verify`) {
-                if (await sql.get('select * from queries where id="' + message.author.id + '"') || message.member.roles.has(config.userrole)) return message.reply("Already verified or in queue!");
+                if (await sql.prepare("SELECT * FROM queries WHERE id = ?").get([message.author.id])) return message.reply("Already verified or in queue!");
                 let captchaInstance = new Captcha(null, message.author);
                 let captcha = captchaInstance.generate();
                 if (config.captchaType == "image") {
