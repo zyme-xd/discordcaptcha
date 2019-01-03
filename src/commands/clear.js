@@ -1,16 +1,9 @@
-/**
- * @param {Object} message - The message object
- * @param {array} contrib - Users that are allowed to use that command
-**/
-module.exports = (message, contrib) => {
-    try {
-        if (contrib.includes(message.author.tag)) {
-            let amount = parseInt(message.content.split(" ")[1]);
-            message.channel.bulkDelete(++amount);
-        } else {
-            return message.channel.send("Missing Permissions");
-        }
-    } catch (e) {
-        console.log("[DISCORDCAPTCHA-clearMessages] >> " + e);
+module.exports = class clearCommand {
+    static run(message) {
+        message.channel.bulkDelete(parseInt(message.args) + 1 || 11).then(v => {
+            message.reply(`Deleted ${v.size} messages.`).then(m => m.delete(2500));
+        }).catch(() => {
+            message.reply("An error occured while trying to bulk delete.");
+        });
     }
-};
+}

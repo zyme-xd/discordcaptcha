@@ -7,13 +7,11 @@
 #include "cfg.h"
 #include "langs.cc"
 
-const std::string cfg_input::version = "3.0.2";
 std::vector<std::string> commands {
     "blockUser",
     "removeBlockFromUser",
     "banGuildMember",
     "clear",
-    "version",
     "queries",
     "querydelete",
     "purgelogs",
@@ -25,25 +23,6 @@ std::vector<std::string> commands {
 
 std::vector<std::string> cfg_dcmd_dec::cmdnames = commands;
 
-std::string* cfg_util::dstream::getGameName() const
-{
-    return this->gameName;
-}
-
-void cfg_util::dstream::setGameName(std::string& name)
-{
-    this->gameName = &name;
-}
-
-std::string* cfg_util::dstream::getStreamURL() const
-{
-    return this->streamURL;
-}
-
-void cfg_util::dstream::setStreamURL(std::string& url)
-{
-    this->streamURL = &url;
-}
 
 std::string* cfg_util::dcommand::getCommandName() const
 {
@@ -93,7 +72,6 @@ void cfg_util::dcommand::setStatus(bool& status)
 
 int main()
 {
-    cfg_util::dstream* stream = new cfg_util::dstream;
     std::ofstream file("config.json");
 
 	// Language(s) part
@@ -159,17 +137,6 @@ int main()
         std::cout << translations::getTranslation(&langcode, "C_VERIFIEDROLE");
         std::cin >> cfg_input::verifiedRole;
 
-        std::string strname, strurl;
-        std::cout << translations::getTranslation(&langcode, "C_STREAMNAME");
-        std::cin.ignore();
-        getline(std::cin, strname);
-
-        std::cout << translations::getTranslation(&langcode, "C_STREAMURL");
-        std::cin >> strurl;
-
-        stream->setGameName(strname);
-        stream->setStreamURL(strurl);
-
         std::string* evalALWDs = new std::string;
         std::cout << translations::getTranslation(&langcode, "C_EVALALWD");
         std::cin >> *evalALWDs;
@@ -203,12 +170,9 @@ int main()
              << "\t\"token\": \"" << cfg_input::token << "\"," << std::endl
              << "\t\"clientid\": \"" << cfg_input::clientid << "\"," << std::endl
              << "\t\"prefix\": \"" << cfg_input::prefix << "\"," << std::endl
-             << "\t\"version\": \"" << cfg_input::version << "\"," << std::endl
              << "\t\"chat\": \"" << cfg_input::logChannel << "\"," << std::endl
              << "\t\"userrole\": \"" << cfg_input::verifiedRole << "\"," << std::endl
-             << "\t\"streamingGame\": \"" << *stream->getGameName() << "\"," << std::endl
-             << "\t\"streamingLink\": \"" << *stream->getStreamURL() << "\"," << std::endl
-             << "\t\"evalAllowed\": \"" << (cfg_input::eval == true ? "true" : "false") << "\"," << std::endl
+             << "\t\"evalAllowed\": " << (cfg_input::eval == true ? "true" : "false") << "," << std::endl
              << "\t\"captchaType\": \"" << (cfg_input::ctype == cfg_util::captchaType::IMAGE ? "image" : "text") << "\"," << std::endl
              << "\t\"commands\": {" << std::endl;
 
@@ -271,7 +235,6 @@ int main()
         break;
     case 3:
         file.close();
-        delete stream;
         std::exit(0);
         break;
 	case 4:
@@ -320,7 +283,5 @@ int main()
         main();
         break;
     }
-
-    delete stream;
     return 0;
 }
