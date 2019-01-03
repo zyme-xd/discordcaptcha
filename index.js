@@ -124,12 +124,12 @@ client.on("message", async (message) => {
                         if (config.logging) sql.run('insert into logs values ("' + message.author.id + '", "' + Date.now() + '")');
                         sql.run('delete from queries where id="' + message.author.id + '"');
                         queue.pop();
-                        message.member.addRole(config.userrole).catch(console.log);
+                        message.member.addRole(config.userrole).catch(()=>{});
                         delete captchaInstance;
                     }).catch(console.log);
             }
         }
-        require("./src/Commands.js")(message, config, Discord, fs, latestVersion); // Command Handler
+        require("./src/Commands.js")(message, config, Discord, fs); // Command Handler
     } catch (e) {
         console.log(e);
     }
