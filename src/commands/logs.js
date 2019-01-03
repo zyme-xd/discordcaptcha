@@ -9,6 +9,8 @@ module.exports = class logsCommand {
             }})), {
                 code: "js"
             });
-        })
+        }).catch(() => {
+            message.reply("An error occured while trying to query an SQL statement.");
+        });
     }
 }
