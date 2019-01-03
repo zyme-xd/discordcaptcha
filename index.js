@@ -127,7 +127,6 @@ client.on("message", async (message) => {
                         if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").then(v => v.run([message.author.id, Date.now()]));
                         sql.prepare("DELETE FROM queries WHERE id = ?").then(v => v.run([message.author.id]));
                         message.member.addRole(config.userrole).catch(()=>{});
-                        delete captchaInstance;
                     }).catch(console.log);
             }
         }
