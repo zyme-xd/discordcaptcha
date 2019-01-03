@@ -54,9 +54,7 @@ fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.js
 client.on("ready", () => {
     try {
         console.log("Logged in!");
-        if (client.guilds.size > 1) {
-            console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.")
-        }
+        if (client.guilds.size > 1) console.log("It looks like this bot is on more than one guild. It is recommended not to have this bot on more than one since it could do random stuff.")
         client.guilds.forEach(guild => {
             if (!guild.roles.get(config.userrole)) console.log(`${guild.name} has no userrole or the snowflake that was given in the config file is invalid.`);
         });
