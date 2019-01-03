@@ -6,12 +6,20 @@ const fetch = require("node-fetch");
 const jimp = require("jimp");
 const sql = require("sqlite");
 sql.open("./src/db.sqlite");
+const config = require("./src/config.json");
 const { version } = require("./package.json");
+const Handler = require("./src/Commandhandler");
+
+const commandhandler = new Handler(fs.readdirSync("./src/commands/").map(v => { return {
+    name: v.substr(0, v.indexOf(".js")),
+    alias: config.commands[v.substr(0, v.indexOf(".js"))].command,
+    run: require(`./src/commands/${v}`).run
+}}));
 
 class Captcha {
     /**
      * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
-     * @param {object} author - The author object (Has to has an id property and should look like <@123456789>)
+     * @param {object} author - The author object (needs an id property and should look like <@123456789>)
      * @param {buffer} image buffer - Initialize object with an already existing image buffer
      */
     constructor(captcha, author, buff) {
@@ -37,7 +45,6 @@ class Captcha {
 }
 
 // Command Imports
-const config = require("./src/config.json");
 fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
 .then(v => v.text())
 .then(v => {
@@ -123,7 +130,7 @@ client.on("message", async (message) => {
                     }).catch(console.log);
             }
         }
-        require("./src/Commands.js")(message, config, Discord, fs); // Command Handler
+        commandhandler.exec(message); // Commandhandler
     } catch (e) {
         console.log(e);
     }
