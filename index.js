@@ -78,7 +78,7 @@ client.on("message", async (message) => {
         if (await sql.prepare("SELECT * FROM blocked WHERE id = ?").get([message.author.id])) message.member.kick();
         if (message.channel.name === "verify") {
             if (message.author.id != client.user.id) message.delete();
-            else setTimeout(() => message.delete(), 2500);
+            else message.delete(2500);
             if (message.content === `${config.prefix}verify`) {
                 if (await sql.prepare("SELECT * FROM queries WHERE id = ?").get([message.author.id])) return message.reply("Already verified or in queue!");
                 let captchaInstance = new Captcha(null, message.author);
@@ -89,11 +89,11 @@ client.on("message", async (message) => {
                     image.print(await jimp.loadFont(jimp.FONT_SANS_64_BLACK), Math.random() * 400, Math.random() * 400, captcha); // print captcha on image
                     message.author.send(new Discord.RichEmbed()
                         .setTitle("Verification")
-                        .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
+                        .setDescription("This guild is protected by DiscordCaptcha, an open-source verification bot made by y21#0909.")
                         .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
                         .setColor("RANDOM")
                         .setTimestamp()
-                    ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
+                    ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on direct messages.") : null);
                     image.getBuffer(jimp.MIME_PNG, (err, buff) => {
                         message.author.send(new Discord.Attachment(buff, "captcha.png"));
                     });
@@ -101,7 +101,9 @@ client.on("message", async (message) => {
                     message.author.send(new Discord.RichEmbed()
                         .setDescription("Paste the code below in the verify channel to get verified.\n\n**Verification Bot made by y21#0909**")
                     );
-                    message.author.send(`\`\`\`${config.prefix}verify ${captchaInstance.captcha}\`\`\``);
+                    message.author.send(`${config.prefix}verify ${captchaInstance.captcha}`, {
+                        code: "js"
+                    });
                 }
                 sql.run('insert into queries values ("' + message.author.id + '")');
                 message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha && msg.author === message.author, {
