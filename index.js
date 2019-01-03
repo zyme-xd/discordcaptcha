@@ -84,11 +84,9 @@ client.on("message", async (message) => {
                 let captchaInstance = new Captcha(null, message.author);
                 let captcha = captchaInstance.generate();
                 if (config.captchaType == "image") {
-                    let _image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
-                    let _font = await jimp.loadFont(jimp.FONT_SANS_64_BLACK);
-                    let _coordinates = [Math.random() * 400, Math.random() * 400]; // x & y coordinates for text on image
-                    _image.resize(750, 750); // make bigger
-                    _image.print(_font, _coordinates[0], _coordinates[1], captcha); // print captcha on image
+                    let image = await jimp.read("https://i.imgur.com/mkoc2Fh.png");
+                    image.resize(750, 750); // make bigger
+                    image.print(await jimp.loadFont(jimp.FONT_SANS_64_BLACK), Math.random() * 400, Math.random() * 400, captcha); // print captcha on image
                     message.author.send(new Discord.RichEmbed()
                         .setTitle("Verification")
                         .setDescription("This guild is protected by discordcaptcha, an open-source verification bot made by y21#0909.")
@@ -96,7 +94,7 @@ client.on("message", async (message) => {
                         .setColor("RANDOM")
                         .setTimestamp()
                     ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on dms") : null);
-                    _image.getBuffer(jimp.MIME_PNG, (err, buff) => {
+                    image.getBuffer(jimp.MIME_PNG, (err, buff) => {
                         message.author.send(new Discord.Attachment(buff, "captcha.png"));
                     });
                 } else if (config.captchaType == "text") {
