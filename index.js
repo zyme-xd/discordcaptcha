@@ -73,6 +73,7 @@ client.on("message", async (message) => {
                         .setTitle("Verification")
                         .setDescription("This guild is protected by DiscordCaptcha, an open-source verification bot made by y21#0909.")
                         .addField("Instructions", `In a few seconds an image will be sent to you which includes a number. Please send ${config.prefix}verify <captcha> into the channel ${message.channel.name} (${message.channel})`)
+                        .addField("Attempts", "If verifying does not work, execute the unverify command and try to verify again.")
                         .setColor("RANDOM")
                         .setTimestamp()
                     ).catch(e => e.toString().includes("Cannot send messages to this user") ? message.reply("please turn on direct messages.") : null);
