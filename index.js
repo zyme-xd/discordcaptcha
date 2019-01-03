@@ -45,7 +45,6 @@ fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.js
 .then(v => v.text())
 .then(v => {
     v = JSON.parse(v);
-    console.log(v.version);
     if (v.version !== version) {
         console.log("A new version of discordcaptcha is available.");
     }
@@ -105,6 +104,7 @@ client.on("message", async (message) => {
                         code: "js"
                     });
                 }
+                sql.prepare("INSERT INTO queries VALUES (?)").run([message.author.id]);
                 sql.run('insert into queries values ("' + message.author.id + '")');
                 message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha && msg.author === message.author, {
                         max: 1,
@@ -119,8 +119,8 @@ client.on("message", async (message) => {
                         });
                         let logChannel = client.channels.get(config.chat) || client.channels.find("name", config.chat);
                         if (logChannel && logChannel.type === "text") logChannel.send(`${message.author.toString()} was successfully verified.`);
-                        if (config.logging) sql.run('insert into logs values ("' + message.author.id + '", "' + Date.now() + '")');
-                        sql.run('delete from queries where id="' + message.author.id + '"');
+                        if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").run([message.author.id, Date.now()]);
+                        sql.prepare("DELETE FROM queries WHERE id = ?").run([message.author.id]);
                         queue.pop();
                         message.member.addRole(config.userrole).catch(()=>{});
                         delete captchaInstance;
