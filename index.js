@@ -5,7 +5,12 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 const jimp = require("jimp");
 const sql = require("sqlite");
-sql.open("./src/db.sqlite");
+(async() => {
+    await sql.open("./src/db.sqlite");
+    await sql.run("CREATE TABLE IF NOT EXISTS `blocked` ( `id` TEXT )");
+    await sql.run("CREATE TABLE IF NOT EXISTS `logs` ( `id` TEXT, `timestamp` TEXT )");
+    await sql.run("CREATE TABLE IF NOT EXISTS `queries` ( `id` INTEGER )");
+})();
 const config = require("./src/config.json");
 const { version } = require("./package.json");
 const Handler = require("./src/Commandhandler");
