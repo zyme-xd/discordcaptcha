@@ -22,33 +22,6 @@ const commandhandler = new Handler(fs.readdirSync("./src/commands/").map(v => { 
     run: require(`./src/commands/${v}`).run
 }}), config, sql);
 
-class Captcha {
-    /**
-     * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
-     * @param {object} author - The author object (needs an id property and should look like <@123456789>)
-     * @param {buffer} image buffer - Initialize object with an already existing image buffer
-     */
-    constructor(captcha, author, buff) {
-        this._captcha = captcha;
-    }
-
-    /**
-     * @returns {string} Captcha value of class
-     */
-    generate() {
-        let rand = Math.random().toString(36).substr(2, 6);
-        this.captcha = rand;
-        return this.captcha;
-    }
-
-    get captcha() {
-        return this._captcha;
-    }
-
-    set captcha(value) {
-        this._captcha = value;
-    }
-}
 
 // Command Imports
 fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
@@ -142,3 +115,31 @@ client.on("message", async (message) => {
 process.on("unhandledRejection", console.log);
 
 client.login(config.token);
+
+class Captcha {
+    /**
+     * @param {string} captcha - The captcha (pass null and call generate method if it shall be random)
+     * @param {object} author - The author object (needs an id property and should look like <@123456789>)
+     * @param {buffer} image buffer - Initialize object with an already existing image buffer
+     */
+    constructor(captcha, author, buff) {
+        this._captcha = captcha;
+    }
+
+    /**
+     * @returns {string} Captcha value of class
+     */
+    generate() {
+        let rand = Math.random().toString(36).substr(2, 6);
+        this.captcha = rand;
+        return this.captcha;
+    }
+
+    get captcha() {
+        return this._captcha;
+    }
+
+    set captcha(value) {
+        this._captcha = value;
+    }
+}
