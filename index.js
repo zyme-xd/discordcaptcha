@@ -38,9 +38,6 @@ class Captcha {
 
 // Command Imports
 const config = require("./src/config.json");
-
-
-let queue = [];
 fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
 .then(v => v.text())
 .then(v => {
@@ -121,7 +118,6 @@ client.on("message", async (message) => {
                         if (logChannel && logChannel.type === "text") logChannel.send(`${message.author.toString()} was successfully verified.`);
                         if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").then(v => v.run([message.author.id, Date.now()]));
                         sql.prepare("DELETE FROM queries WHERE id = ?").then(v => v.run([message.author.id]));
-                        queue.pop();
                         message.member.addRole(config.userrole).catch(()=>{});
                         delete captchaInstance;
                     }).catch(console.log);
