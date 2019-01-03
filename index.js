@@ -110,7 +110,6 @@ client.on("message", async (message) => {
                     });
                 }
                 sql.prepare("INSERT INTO queries VALUES (?)").then(v => v.run([message.author.id]));
-                sql.run('insert into queries values ("' + message.author.id + '")');
                 message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha && msg.author === message.author, {
                         max: 1,
                         errors: ["time"]
