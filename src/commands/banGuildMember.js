@@ -1,5 +1,5 @@
 module.exports = class banGuildMember {
-    static async run(message) {
+    static run(message) {
         if (message.mentions.members.size > 0) {
             let bannedUsers = 0;
             message.reply((message.mentions.members.tap(v => v.ban().then(() => ++bannedUsers).catch(e => {
