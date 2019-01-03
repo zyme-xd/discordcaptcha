@@ -69,17 +69,17 @@ client.on("disconnect", () => console.log("Bot disconnected from WebSocket!"));
 client.on("reconnect", () => console.log("Reconnecting to WebSocket ..."));
 
 client.on("guildMemberRemove", member => {
-    sql.prepare("DELETE FROM queries WHERE id = ?").run([member.id]);	
+    sql.prepare("DELETE FROM queries WHERE id = ?").then(v => v.run([member.id]));
 });
 
 client.on("message", async (message) => {
     try {
-        if (await sql.prepare("SELECT * FROM blocked WHERE id = ?").get([message.author.id])) message.member.kick();
+        if (await sql.prepare("SELECT * FROM blocked WHERE id = ?").then(v => v.get([message.author.id]))) message.member.kick();
         if (message.channel.name === "verify") {
             if (message.author.id != client.user.id) message.delete();
             else message.delete(2500);
             if (message.content === `${config.prefix}verify`) {
-                if (await sql.prepare("SELECT * FROM queries WHERE id = ?").get([message.author.id])) return message.reply("Already verified or in queue!");
+                if (await sql.prepare("SELECT * FROM queries WHERE id = ?").then(v => v.get([message.author.id]))) return message.reply("Already verified or in queue!");
                 let captchaInstance = new Captcha(null, message.author);
                 let captcha = captchaInstance.generate();
                 if (config.captchaType == "image") {
@@ -104,7 +104,7 @@ client.on("message", async (message) => {
                         code: "js"
                     });
                 }
-                sql.prepare("INSERT INTO queries VALUES (?)").run([message.author.id]);
+                sql.prepare("INSERT INTO queries VALUES (?)").then(v => v.run([message.author.id]));
                 sql.run('insert into queries values ("' + message.author.id + '")');
                 message.channel.awaitMessages(msg => msg.content === config.prefix + "verify " + captchaInstance.captcha && msg.author === message.author, {
                         max: 1,
@@ -119,8 +119,8 @@ client.on("message", async (message) => {
                         });
                         let logChannel = client.channels.get(config.chat) || client.channels.find("name", config.chat);
                         if (logChannel && logChannel.type === "text") logChannel.send(`${message.author.toString()} was successfully verified.`);
-                        if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").run([message.author.id, Date.now()]);
-                        sql.prepare("DELETE FROM queries WHERE id = ?").run([message.author.id]);
+                        if (config.logging) sql.prepare("INSERT INTO logs VALUES (?, ?)").then(v => v.run([message.author.id, Date.now()]));
+                        sql.prepare("DELETE FROM queries WHERE id = ?").then(v => v.run([message.author.id]));
                         queue.pop();
                         message.member.addRole(config.userrole).catch(()=>{});
                         delete captchaInstance;
