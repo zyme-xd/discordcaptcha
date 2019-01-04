@@ -42,7 +42,7 @@ Also commands can be turned off by changing `enabled` to `false`.
 !makerole // Creates a 'verified' role
 !unverify // Lets the user unverify
 ```
-<b>Note: </b>By default the owner can execute every command but you can allow specific users to execute these as well. Just add their tag to the `contributors` array of each command:
+<b>Note: </b>By default the owner can execute every command but you can allow specific users to execute these as well. Just add their tag to the `contributors` array of each command:<br/>
 <img src="https://i.imgur.com/Pw4MnB0.png"></img>
 
 ## Dealing with SQL(ite)
