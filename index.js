@@ -24,7 +24,7 @@ const commandhandler = new Handler(fs.readdirSync("./src/commands/").map(v => { 
 
 
 // Command Imports
-fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/src/config.json")
+fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/package.json")
 .then(v => v.text())
 .then(v => {
     v = JSON.parse(v);
