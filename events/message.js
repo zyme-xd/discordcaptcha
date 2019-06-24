@@ -3,7 +3,13 @@ module.exports.run = function(message) {
     if (this.config.ignoreServers.includes((message.guild || { id: "0" }).id)) return;
 
     // Delete message if it was sent in verification channel
-    if (this.config.verificationChannels.includes(message.channel.id) || message.channel.name === "verify") message.delete().catch();
+    if (this.config.verificationChannels.includes(message.channel.id) || message.channel.name === "verify") {
+
+        // Wait 2.5 seconds if message was sent by the bot itself
+        if (message.author.id !== this.user.id) message.delete();
+        else message.delete(2500);
+
+    }
 
     // Check if message starts with prefix, is not sent by a bot and not in DMs
     if (!message.content.startsWith(this.config.prefix) || message.author.bot || !message.guild) return;
