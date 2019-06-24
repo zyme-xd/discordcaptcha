@@ -10,6 +10,14 @@ DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/d
 To install all required NPM-Modules, run `npm install`.<br/>
 Get your Bot Token from <a href="https://discordapp.com/developers/applications/me">this page</a>.
 
+## Verification procedure
+When joining, the user is supposed (if everything was set up correctly) to only be able to send messages in a verification channel.
+It is recommended to add a short message to the channel (topic, ...) so that new users know what to type next.<br/>
+After typing `!verify` (`!` represents the prefix, can be changed in the config file), the bot will send the user a direct message.
+In that message there is an image that shows 6 letters/numbers.<br/>
+The user is then supposed to send `!verify <captcha>` in the verification channel and will be assigned a role.
+That role should have send and view messages permissions for all other channels.
+
 ## Config File Explanation
 > A key refers to the name of the property: `"key": "value"`
 
