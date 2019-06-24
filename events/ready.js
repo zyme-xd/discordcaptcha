@@ -14,7 +14,7 @@ module.exports.run = async function() {
     }
 
     // Check version
-    await versionCheck();
+    if (!await versionCheck()) console.log("[WARN] Latest version is not identical to local version");
 
     // Init DB
     await this.db.open("./database.sqlite");
