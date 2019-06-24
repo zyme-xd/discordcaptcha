@@ -10,8 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.3",
-    "sqlite": "^3.0.0",
     "jimp": "^0.6.4",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "sqlite": "^3.0.0",
+    "sqlite3": "^4.0.9"
   }
 }
