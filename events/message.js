@@ -5,9 +5,9 @@ module.exports.run = function(message) {
     // Delete message if it was sent in verification channel
     if (this.config.verificationChannels.includes(message.channel.id) || message.channel.name === "verify") {
 
-        // Wait 2.5 seconds if message was sent by the bot itself
+        // Wait 5 seconds if message was sent by the bot itself
         if (message.author.id !== this.user.id) message.delete();
-        else message.delete(2500);
+        else message.delete(5000);
 
     }
 
