@@ -1,4 +1,6 @@
 module.exports.run = function(message) {
+    // Check if message starts with prefix, is not sent by a bot and not in DMs
+    if (message.content.startsWith(this.config.prefix) || !message.author.bot || message.guild) return;
 
     // Define required properties
     Object.defineProperties(message, {
