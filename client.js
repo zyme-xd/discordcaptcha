@@ -15,6 +15,9 @@ Object.defineProperties(client, {
     },
     config: {
         value: config
+    },
+    query: {
+        value: new Map()
     }
 });
 
