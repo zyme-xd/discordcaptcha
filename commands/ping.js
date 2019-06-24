@@ -1,5 +1,5 @@
 module.exports = function(message) {
-    message.reply(`pong! ${this.ping}`);
+    message.reply(`pong! \`${this.ping}ms\``);
 };
 
 module.exports.info = {
