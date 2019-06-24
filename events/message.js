@@ -6,8 +6,10 @@ module.exports.run = function(message) {
     if (message.channel.id === (this.config.servers[(message.guild || {id: "0"}).id] || {verificationChannel: "0"}).verificationChannel || message.channel.name === "verify") {
 
         // Wait 5 seconds if message was sent by the bot itself
-        if (message.author.id !== this.user.id) message.delete();
-        else message.delete(5000);
+        if (this.config.deleteMessages === true) {
+            if (message.author.id !== this.user.id) message.delete();
+            else message.delete(5000);
+        }
 
     }
 
