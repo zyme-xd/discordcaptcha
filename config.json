@@ -1,7 +1,7 @@
 {
   "token": "Bot Token",
   "prefix": "$",
-  "deleteMessages": false,
+  "deleteMessages": true,
   "presence": {
 
   },
