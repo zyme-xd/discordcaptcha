@@ -3,16 +3,12 @@
   "prefix": "$",
   "deleteMessages": false,
   "presence": {
-    "type": "watching",
-    "name": "people verify"
+
   },
 
 
   "servers": {
-    "339838921955475456": {
-      "verificationChannel": "592772759994630161",
-      "verifyRole": "339841406409375754"
-    }
+
   },
 
   "ignoreServers": [
