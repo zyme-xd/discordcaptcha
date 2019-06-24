@@ -1,4 +1,4 @@
-module.exports.run = function(message) {
+module.exports = function(message) {
 
     const guild = this.config.servers[message.guild.id];
     message.member.removeRole(guild.verifyRole).then(() => {
