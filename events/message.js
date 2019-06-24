@@ -35,6 +35,7 @@ module.exports.run = function(message) {
     if (command.enabled === false) return message.reply("⛔ | This command has been disabled.");
 
     // Check if author is allowed to execute command
+    if (!configCommand) return message.reply("⛔ | Command not set in config.json file!");
     if (configCommand.executors.length > 0 && !configCommand.executors.includes(message.author.id))
         return message.reply("⛔ | You are not allowed to execute this command.");
     if (configCommand.requiredPermissions.length > 0 && !configCommand.requiredPermissions.some(v => message.member.hasPermission(v.toUpperCase())))
