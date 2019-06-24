@@ -2,6 +2,7 @@
 A Captcha verification bot based off of Discord.js.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba341e35d2c84bc0a0adc6a2ae2f4e1c)](https://app.codacy.com/app/y21/discordcaptcha?utm_source=github.com&utm_medium=referral&utm_content=y21/discordcaptcha&utm_campaign=badger)
+<img src="https://travis-ci.org/y21/discordcaptcha.svg?branch=master"/>
 
 Feel free to join the <a href="https://discord.gg/955naZw">Discord server</a> if you need help with setting up DiscordCaptcha.
 
