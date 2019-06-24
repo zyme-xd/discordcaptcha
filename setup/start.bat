@@ -1,3 +1,0 @@
-cd ..
-node .
-pause>nul

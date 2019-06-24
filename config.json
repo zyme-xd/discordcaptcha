@@ -1,0 +1,40 @@
+{
+  "token": "Bot Token",
+  "prefix": "$",
+  "deleteMessages": true,
+  "presence": {
+
+  },
+
+
+  "servers": {
+
+  },
+
+  "ignoreServers": [
+
+  ],
+
+  "commands": {
+    "ping": {
+      "executors": [],
+      "requiredPermissions": [],
+      "enabled": true
+    },
+    "verify": {
+      "executors": [],
+      "requiredPermissions": [],
+      "enabled": true
+    },
+    "unverify": {
+      "executors": [],
+      "requiredPermissions": [],
+      "enabled": true
+    },
+    "version": {
+      "executors": [],
+      "requiredPermissions": [],
+      "enabled": true
+    }
+  }
+}
