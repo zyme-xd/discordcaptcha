@@ -5,5 +5,8 @@ module.exports = async () => {
     const request = await fetch("https://raw.githubusercontent.com/y21/discordcaptcha/master/package.json");
     const json = await request.json();
 
-    return pkg.version === json.version;
+    return {
+        sameVer: json.version === pkg.version,
+        originVer: json.version
+    };
 };
