@@ -3,7 +3,7 @@ module.exports.run = function(message) {
     if (this.config.ignoreServers.includes((message.guild || { id: "0" }).id)) return;
 
     // Delete message if it was sent in verification channel
-    if ((this.config.servers[(message.guild || {id:0}).id] || []).includes(message.channel.id) || message.channel.name === "verify") {
+    if (message.channel.id === (this.config.servers[(message.guild || {id: "0"}).id] || {verificationChannel: "0"}).verificationChannel || message.channel.name === "verify") {
 
         // Wait 5 seconds if message was sent by the bot itself
         if (message.author.id !== this.user.id) message.delete();
