@@ -1,6 +1,6 @@
 const { randomBytes } = require("crypto");
 const Jimp = require("jimp");
-const { Attachment, RichEmbed } = require("discord.js");
+const { RichEmbed } = require("discord.js");
 
 module.exports = async function(message) {
 
@@ -43,13 +43,6 @@ module.exports = async function(message) {
         }
 
     }
-
-
-
-
-
-
-
 };
 
 module.exports.info = {
