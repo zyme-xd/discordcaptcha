@@ -27,9 +27,9 @@ module.exports.run = function(message) {
         return message.reply("⛔ | You are not allowed to execute this command.");
 
     // Check args length
-    const requiredArgs = command.info.args.filter(v => v.required).length;
-    if (message.args.length !== requiredArgs)
-        return message.reply(`⛔ | Invalid arguments: ${requiredArgs.length} are needed but only ${message.command.length} were provided.`);
+    const requiredArgs = command.info.args.filter(v => v.required);
+    if (message.args.length !== requiredArgs.length)
+        return message.reply(`⛔ | Invalid arguments: ${requiredArgs.length} are needed but ${message.args.length} were provided.`);
 
     // Run command
     command.call(this, message);
