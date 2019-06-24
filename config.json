@@ -30,6 +30,11 @@
       "executors": [],
       "requiredPermissions": [],
       "enabled": true
+    },
+    "version": {
+      "executors": [],
+      "requiredPermissions": [],
+      "enabled": true
     }
   }
 }
