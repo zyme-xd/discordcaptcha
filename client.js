@@ -49,5 +49,6 @@ fs.readdir("./commands/", (err, data) => {
     }
 });
 
-
-client.login(config.token);
+if (config.token === "Bot Token") {
+    console.log("Looks like you forgot to put your token into the config.json file.");
+} else client.login(config.token);
