@@ -3,7 +3,7 @@ module.exports.run = function(message) {
     if (this.config.ignoreServers.includes((message.guild || { id: "0" }).id)) return;
 
     // Delete message if it was sent in verification channel
-    if (this.config.verificationChannels.includes(message.channel.id) || message.channel.name === "verify") {
+    if ((this.config.servers[(message.guild || {id:0}).id] || []).includes(message.channel.id) || message.channel.name === "verify") {
 
         // Wait 5 seconds if message was sent by the bot itself
         if (message.author.id !== this.user.id) message.delete();
@@ -40,7 +40,7 @@ module.exports.run = function(message) {
 
     // Check args length
     const requiredArgs = command.info.args.filter(v => v.required);
-    if (message.args.length !== requiredArgs.length)
+    if (message.args.length < requiredArgs.length)
         return message.reply(`⛔ | Invalid arguments: ${requiredArgs.length} are needed but ${message.args.length} were provided.`);
 
     // Run command
