@@ -12,8 +12,7 @@ module.exports = async function(message) {
 
         const captcha = randomBytes(32).toString("hex").substr(0, 6);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
-        const image = await Jimp.read("./assets/captcha_bg.png");
-        image.resize(800, 800);
+        const image = await new Jimp(800, 800, 0x000000);
         image.print(font, Math.floor(Math.random() * 600), Math.floor(Math.random() * 600), captcha);
         const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
         const embed = new RichEmbed()
