@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const sqlite = require("sqlite");
 const fs = require("fs");
 const config = require("./config.json");
 const commands = new Map();
@@ -7,9 +6,6 @@ const commands = new Map();
 const client = new Discord.Client({ disableEveryone: true });
 
 Object.defineProperties(client, {
-    db: {
-        value: sqlite
-    },
     commands: {
         value: commands
     },
