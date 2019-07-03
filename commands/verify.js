@@ -11,9 +11,16 @@ module.exports = async function(message) {
         // No arguments provided
 
         const captcha = randomBytes(32).toString("hex").substr(0, 6);
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
-        const image = await new Jimp(800, 800, 0x000000);
-        image.print(font, Math.floor(Math.random() * 600), Math.floor(Math.random() * 600), captcha);
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
+        const image = await Jimp.read("./assets/noise.jpg");
+
+        // Additional Jimp instance to rotate image for text
+        const textImage = await new Jimp(800, 800, 0x000000);
+        textImage.print(font, 0, 0, captcha);
+        textImage.rotate(Math.floor(Math.random() * 90));
+
+        image.composite(textImage, Math.floor(Math.random () * 600), Math.floor(Math.random () * 600));
+
         const buffer = await image.getBufferAsync(Jimp.MIME_JPEG);
         const embed = new RichEmbed()
             .setTitle("Verification")
