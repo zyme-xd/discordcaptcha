@@ -1,6 +1,6 @@
 {
   "name": "discordcaptcha-master",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Captcha Verification Bot based off of Discord.js",
   "main": "client.js",
   "scripts": {
