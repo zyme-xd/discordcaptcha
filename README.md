@@ -20,6 +20,7 @@ The user is then supposed to send `!verify <captcha>` in the verification channe
 That role should have send and view messages permissions for all other channels.
 
 ## Config File Explanation
+If you have trouble writing the config file, try [dccg](https://github.com/y21/dccg).
 > A key refers to the name of the property: `"key": "value"`
 
 ##### config#token
