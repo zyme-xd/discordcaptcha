@@ -47,7 +47,7 @@ This property contains all commands and can be used to toggle/limit certain comm
 _Example config.json_
 ```json
 {
-  "token": "NDY4Njc3NjM2NjEzMjEwMTEy.XREb8w.3ipIecMjBKxEkMdob19FwJg6jJs",
+  "token": "[TOKEN HERE]",
   "prefix": "$",
   "deleteMessages": true,
   "presence": {
@@ -84,4 +84,4 @@ _Example config.json_
 
 ## Tips
 • Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
-• Open a Pull Request/Issue
+• Open a Pull Request
