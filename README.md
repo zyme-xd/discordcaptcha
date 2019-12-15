@@ -35,7 +35,7 @@ The `deleteMessages` property holds a boolean. If it is set to `true`, it will d
 The `presence` property holds the presence (playing status) that will be displayed in your client under the username.
 
 ##### config#servers
-The `servers` property holds *all* servers it should react to. Each object is keyed by the server ID and holds an object that has a `verificationChannel` and a `verifyRole` property.
+The `servers` property holds *all* servers it should react to. Each object is keyed by the server ID and holds an object that has a `verificationChannel` and a `verificationRole` property.
 
 ##### config#ignoreServers
 This property can be used to ignore certain servers 
@@ -58,7 +58,7 @@ _Example config.json_
   "servers": {
     "339838921955475456": {
       "verificationChannel": "592772759994630161",
-      "verifyRole": "339841406409375754"
+      "verificationRole": "339841406409375754"
     }
   },
 
