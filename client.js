@@ -1,19 +1,18 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const config = require("./config.json");
+const validate = require("./validate");
 const commands = new Map();
 
 const client = new Discord.Client({ disableEveryone: true });
 
 Object.defineProperties(client, {
     commands: {
-        value: commands
-    },
-    config: {
-        value: config
+        value: commands,
+        enumerable: false
     },
     query: {
-        value: new Map()
+        value: new Map(),
+        enumerable: false
     }
 });
 
@@ -45,6 +44,14 @@ fs.readdir("./commands/", (err, data) => {
     }
 });
 
-if (config.token === "Bot Token") {
+validate().then(c => {
+    client.login(c.token).catch(console.error);
+    Object.defineProperty(client, "config", {
+        value: c,
+        enumerable: false
+    })
+}).catch(console.error);
+
+/*if (config.token === "Bot Token") {
     console.log("Looks like you forgot to put your token into the config.json file.");
-} else client.login(config.token);
+} else client.login(config.token);*/

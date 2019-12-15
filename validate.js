@@ -3,7 +3,8 @@
 
 const ERROR_CODES = {
     FILE_NOT_FOUND: "File was not found",
-    INVALID_KEY: "Invalid key provided ($)"
+    INVALID_KEY: "Invalid key provided, check if it exists in the config file and if its type is correct ($)",
+    DEFAULT_TOKEN: "Looks like you forgot to replace the token placeholder with your actual bot token"
 }
 
 const requiredKeys = {
@@ -16,19 +17,23 @@ const requiredKeys = {
     commands: "object"
 };
 
-module.exports = () => {
+module.exports = async () => {
     let config;
     try {
         config = require("./config");
     } catch(e) {
         throw new Error(ERROR_CODES.FILE_NOT_FOUND);
     }
-    for(const [key, val] in Object.entries(requiredKeys)) {
+    for(const [key, val] of Object.entries(requiredKeys)) {
         if (config[key] === undefined || typeof config[key] !== val) {
             throw new Error(
                 ERROR_CODES.INVALID_KEY.replace("$", key)
             );
         }
+    }
+
+    if (config.token === "Bot Token") {
+        throw new Error(DEFAULT_TOKEN);
     }
 
     return config;
