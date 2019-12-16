@@ -50,8 +50,9 @@ validate().then(c => {
         value: c,
         enumerable: false
     })
-}).catch(console.error);
-
-/*if (config.token === "Bot Token") {
-    console.log("Looks like you forgot to put your token into the config.json file.");
-} else client.login(config.token);*/
+}).catch(err => {
+    console.error(err);
+    console.log("\n[INFO] Looks like an error occurred while validating the config file.\n" +
+                "If you don't know what that means, feel free to contact the developer by joining the discord server in the README.md file.");
+    process.exit(1);
+});
