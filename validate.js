@@ -62,35 +62,26 @@ module.exports = async () => {
         console.info("[INFO] No servers specified");
     }
 
-    if (!Object.keys(config.servers).some(v => REGEXES.SNOWFLAKE.test(v))) {
+    if (Object.keys(config.servers).some(v => !REGEXES.SNOWFLAKE.test(v))) {
         throw new Error(
             ERROR_CODES.INVALID_ID.replace("$", "config.server.? (property key)")
         );
     }
 
-    if (!Object.values(config.servers).some(v => REGEXES.SNOWFLAKE.test(v.verificationRole) && REGEXES.SNOWFLAKE.test(v.verificationChannel))) {
+    if (Object.values(config.servers).some(v => !REGEXES.SNOWFLAKE.test(v.verificationRole) || !REGEXES.SNOWFLAKE.test(v.verificationChannel))) {
         throw new Error(
             ERROR_CODES.INVALID_ID.replace("$", "config.server.? (property value)")
         );
     }
 
-    if (!config.ignoreServers.some(v => REGEXES.SNOWFLAKE.test(v))) {
+    if (config.ignoreServers.some(v => !REGEXES.SNOWFLAKE.test(v))) {
         throw new Error(
             ERROR_CODES.INVALID_ID.replace("$", "config.ignoreServers")
         );
     }
 
-    if (!Object.keys(config.commands).some(v => !v.includes("/") && existsSync(`./commands/${v}.js`))) {
+    if (Object.keys(config.commands).some(v => v.includes("/") || !existsSync(`./commands/${v}.js`))) {
         throw new Error(ERROR_CODES.COMMAND_NOT_FOUND);
-    }
-
-    if (!Object.values(config.commands).some(v => {
-        return Array.isArray(v.executors) && 
-               v.executors.every(u => REGEXES.SNOWFLAKE.test(u)) &&
-               Array.isArray(v.requiredPermissions) &&
-               typeof v.enabled === "boolean"
-    })) {
-        throw new Error(ERROR_CODES.INVALID_COMMAND_ENTRY);
     }
 
     return config;
