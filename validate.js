@@ -54,7 +54,7 @@ module.exports = async () => {
 
     if (Object.keys(config.presence).length === 0) {
         console.info("[INFO] Presence disabled");
-    } else if (!Constants.ActivityTypes.includes(config.presence.type)) {
+    } else if (!config.type || !Constants.ActivityTypes.includes(config.presence.type.toUpperCase())) {
         throw new Error(ERROR_CODES.INVALID_PRESENCE_TYPE);
     }
 
