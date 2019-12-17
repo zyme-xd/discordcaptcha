@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const fs = require("fs");
+const { Client } = require("discord.js");
+const { readdir } = require("fs");
 const validate = require("./validate");
 const commands = new Map();
 
-const client = new Discord.Client({ disableEveryone: true });
+const client = new Client({ disableEveryone: true });
 
 Object.defineProperties(client, {
     commands: {
@@ -17,7 +17,7 @@ Object.defineProperties(client, {
 });
 
 // Init events
-fs.readdir("./events/", (err, data) => {
+readdir("./events/", (err, data) => {
     if (err) return console.error("Could not read `./events/` directory: " + err);
 
     for(const filename of data) {
@@ -31,7 +31,7 @@ fs.readdir("./events/", (err, data) => {
 });
 
 // Init commands
-fs.readdir("./commands/", (err, data) => {
+readdir("./commands/", (err, data) => {
     if (err) return console.error("Could not read `./commands/` directory: " + err);
 
     for(const filename of data) {
