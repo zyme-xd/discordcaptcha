@@ -13,7 +13,7 @@ module.exports.run = function(message) {
 
     }
 
-    // Check if message starts with prefix, is not sent by a bot and not in DMs
+    // Check if message starts with prefix and is not sent by a bot
     if (!message.content.startsWith(this.config.prefix) || message.author.bot) return;
 
     // Define required properties
