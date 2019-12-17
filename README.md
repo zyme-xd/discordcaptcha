@@ -7,19 +7,21 @@ A Captcha verification bot based off of Discord.js.
 
 ## Setup procedure
 DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
-To install all required NPM-Modules, run `npm install`.<br/>
+To install all required npm modules, run `npm install`.<br/>
 Get your Bot Token from <a href="https://discordapp.com/developers/applications/me">this page</a>.
 
 ## Verification procedure
-When joining, the user is supposed (if everything was set up correctly) to only be able to send messages in a verification channel.
-It is recommended to add a short message to the channel (topic, ...) so that new users know what to type next.<br/>
-After typing `!verify` (`!` represents the prefix, can be changed in the config file), the bot will send the user a direct message.
+When joining, the user is supposed to (if everything was set up correctly) only be able to send messages in a verification channel.
+It is recommended to add a short message to the channel (topic, ...) so that new users know what to do next.<br/>
+After typing `!verify` (`!` represents the prefix, can be changed in the config file), a captcha is sent to the user.
 In that message there is an image that shows 6 letters/numbers.<br/>
-The user is then supposed to send `!verify <captcha>` in the verification channel and will be assigned a role.
-That role should have send and view messages permissions for all other channels.
+The user is then supposed to send `!verify <captcha>` in the verification channel(\*) and will be assigned a role,
+which will grand the user permissions to send messages in other channels.
+> \* Captcha can also be sent in direct messages
 
 ## Config File Explanation
-If you have trouble writing the config file, try [dccg](https://github.com/y21/dccg).
+If you have trouble writing the config file, try [dccg](https://github.com/y21/dccg). It guides you through every property key.<br/>
+You can also take a look at the bottom of this page for an example config file
 > A key refers to the name of the property: `"key": "value"`
 
 ##### config#token
@@ -29,10 +31,16 @@ The `token` property holds your bots token. This is required for logging in. Do 
 The `prefix` property holds the prefix. This is the character (combination) the bot will respond to. Setting it to `$` will make the bot respond to `$verify`
 
 ##### config#deleteMessages
-The `deleteMessages` property holds a boolean. If it is set to `true`, it will delete all messages in the verification channel. It is recommended to leave it as `true`.
+The `deleteMessages` property holds a boolean. If it is set to `true`, it will delete all messages in the verification channel. It is recommended to leave it as `true` so that channel won't be flooded with spam.
 
 ##### config#presence
-The `presence` property holds the presence (playing status) that will be displayed in your client under the username.
+The `presence` property holds the presence (playing status) that will be displayed in your client under the username. An example for that would be:
+```json
+{
+  "name": "a game",
+  "type": "PLAYING"
+}
+```
 
 ##### config#servers
 The `servers` property holds *all* servers it should react to. Each object is keyed by the server ID and holds an object that has a `verificationChannel` and a `verificationRole` property.
@@ -41,7 +49,7 @@ The `servers` property holds *all* servers it should react to. Each object is ke
 This property can be used to ignore certain servers 
 
 ##### config#commands
-This property contains all commands and can be used to toggle/limit certain commands (to specific users)
+This property contains all commands and can be used to toggle/limit certain commands (to specific users or permissions)
 
 _Example config.json_
 ```json
@@ -63,12 +71,17 @@ _Example config.json_
   },
 
   "ignoreServers": [
-
+    "12345678"
   ],
 
   "commands": {
     "ping": {
       "executors": [],
+      "requiredPermissions": ["ADMINISTRATOR"],
+      "enabled": true
+    },
+    "version": {
+      "executors": ["1239174823474324"],
       "requiredPermissions": [],
       "enabled": true
     },
