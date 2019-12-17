@@ -4,7 +4,7 @@
   "description": "Captcha Verification Bot based off of Discord.js",
   "main": "client.js",
   "scripts": {
-    "test": "node client.js"
+    "test": "node client.js --safeexit"
   },
   "author": "y21",
   "license": "ISC",
