@@ -38,10 +38,11 @@ module.exports = async function(message) {
         const { captcha, guild: id } = this.query.get(message.author.id);
         const guild = this.guilds.get(id);
         let member = guild.members.get(message.author.id) || await guild.fetchMember(message.author.id);
+        if (!guild || !member) return console.error("Fatal error! guild or member is not a valid value");
 
         if (message.args[0] !== captcha) return message.reply("⛔ | Invalid captcha!");
         else {
-            member.addRole(this.config.servers[message.guild.id].verificationRole).then(() => {
+            member.addRole(this.config.servers[guild.id].verificationRole).then(() => {
                 message.reply("✅ | Successfully verified.");
             }).catch(console.error);
             this.query.delete(message.author.id);
