@@ -54,5 +54,6 @@ validate().then(c => {
     console.error(err);
     console.log("\n[INFO] Looks like an error occurred while validating the config file.\n" +
                 "If you don't know what that means, feel free to contact the developer by joining the discord server in the README.md file.");
-    process.exit(1);
+    if (!process.argv.includes("--safeexit")) process.exit(1);
+    else process.exit(0);
 });
