@@ -1,6 +1,6 @@
 const versionCheck = require("../utils/versionCheck");
 
-module.exports.run = async function() {
+module.exports.run = function() {
     console.log(`[LOG] Logged in (${this.guilds.size} servers - ${this.users.size} users)!`);
 
     for (const guild of this.guilds.values()) {
@@ -18,5 +18,7 @@ module.exports.run = async function() {
     }
 
     // Check version
-    if (!(await versionCheck()).sameVer) console.log("[WARN] Latest version is not identical to local version");
+    versionCheck().then(({ sameVer }) => {
+        if (!sameVer) console.log("[WARN] Latest version is not identical to local version");
+    });
 };
