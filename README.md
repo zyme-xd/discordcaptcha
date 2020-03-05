@@ -1,4 +1,4 @@
-### join our discord server for support: [discord.gg/beGETv6](discord.gg/beGETv6)<br/>
+### join our discord server for support: [https://discord.gg/beGETv6](https://discord.gg/beGETv6)<br/>
 <img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
 A Captcha verification bot based off of Discord.js.
 
