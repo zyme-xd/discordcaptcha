@@ -1,0 +1,15 @@
+{
+    "token": "",
+    "prefix": "!",
+    "noEOI": true,
+    "roleName": "verified",
+    "boundTo": "verification",
+    "messages": {
+        "alreadyRequestedVerificationCode": "You've already requested a verification code!",
+        "invalidCode": "Invalid verification code",
+        "roleNotFound": "No role named `verified` was found in this server!",
+        "alreadyVerified": "You're already verified!",
+        "successfullyVerified": "Successfully verified!",
+        "verifyError": "Could not add role: "
+    }
+}
