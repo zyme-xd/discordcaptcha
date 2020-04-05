@@ -11,5 +11,14 @@
         "alreadyVerified": "You're already verified!",
         "successfullyVerified": "Successfully verified!",
         "verifyError": "Could not add role: "
+    },
+    "timeouts": {
+        "alreadyRequestedVerificationCode": 7500,
+        "captcha": 60000,
+        "invalidCode": 7500,
+        "roleNotFound": 7500,
+        "alreadyVerified": 7500,
+        "successfullyVerified": 7500,
+        "verifyError": 7500
     }
 }
