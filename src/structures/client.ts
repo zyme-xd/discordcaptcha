@@ -13,6 +13,7 @@ export default class Client extends CommandClient {
     public messages: any;
     public roleName: string;
     public boundTo: string;
+    public timeouts: any;
 
     constructor(token: string, config: any, options: CommandClientOptions) {
         super(token, options);
@@ -21,6 +22,7 @@ export default class Client extends CommandClient {
         this.messages = config.messages;
         this.roleName = config.roleName;
         this.boundTo = config.boundTo;
+        this.timeouts = config.timeouts;
 
         validate(config).catch(console.error);
     }
