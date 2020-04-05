@@ -1,16 +1,24 @@
 {
-  "name": "discordcaptcha-master",
-  "version": "4.0.2",
-  "description": "Captcha Verification Bot based off of Discord.js",
-  "main": "client.js",
+  "name": "discordcaptcha",
+  "version": "5.0.0",
+  "description": "A verification bot",
+  "main": "src/run.js",
   "scripts": {
-    "test": "node client.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "y21",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y21/discordcaptcha.git"
+  },
+  "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/y21/discordcaptcha/issues"
+  },
+  "homepage": "https://github.com/y21/discordcaptcha#readme",
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "jimp": "^0.6.4",
-    "node-fetch": "^2.3.0"
+    "@types/node": "^13.11.0",
+    "detritus-client": "^0.10.1",
+    "jimp": "^0.10.0"
   }
 }

@@ -1,86 +1,55 @@
-### join our discord server for support: [https://discord.gg/beGETv6](https://discord.gg/beGETv6)<br/>
-<img src="https://image.ibb.co/gEN0oR/discord_banner.png"><br/>
-A Captcha verification bot based off of Discord.js.
+# discordcaptcha
+An easy-to-use verification bot for Discord
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba341e35d2c84bc0a0adc6a2ae2f4e1c)](https://app.codacy.com/app/y21/discordcaptcha?utm_source=github.com&utm_medium=referral&utm_content=y21/discordcaptcha&utm_campaign=badger)
-<img src="https://travis-ci.org/y21/discordcaptcha.svg?branch=master"/>
+### Requirements
+- Node.js v12+
+- TypeScript 3.8
 
-## Setup procedure
-DiscordCaptcha requires NodeJS 8.0+. Install it <a href="https://nodejs.org/en/download/package-manager/">here</a>.<br />
-To install all required NPM-Modules, run `npm install`.<br/>
-Get your Bot Token from <a href="https://discordapp.com/developers/applications/me">this page</a>.
+### Verification procedure
+When joining, the user is supposed (if everything was set up correctly) to only be able to send messages in a verification channel. It is recommended to add a short message to the channel (topic, ...) so that new users know what to do next.
+After typing !verify (! represents the prefix, can be changed in the config file), the bot will send an image containing a short verification code.
+The user is then supposed to send !verify <captcha> in the verification channel and will be assigned a role. That role should have send and view messages permissions in all other channels.
 
-## Verification procedure
-When joining, the user is supposed (if everything was set up correctly) to only be able to send messages in a verification channel.
-It is recommended to add a short message to the channel (topic, ...) so that new users know what to type next.<br/>
-After typing `!verify` (`!` represents the prefix, can be changed in the config file), the bot will send the user a direct message.
-In that message there is an image that shows 6 letters/numbers.<br/>
-The user is then supposed to send `!verify <captcha>` in the verification channel and will be assigned a role.
-That role should have send and view messages permissions for all other channels.
+### Setup
+- Make sure you're running the requirements mentioned above
+```sh
+$ node -v && tsc -v
+# Example output:
+# v13.12.0
+# Version 3.8.3
+```
+- Clone the repository
+```sh
+$ git clone https://github.com/y21/discordcaptcha
+```
+- Install all required dependencies and TypeScript
+> If you don't have superuser permissions, run `npm i typescript` (without the `-g` flag) and specify the path to the binary when transpiling (`./node_modules/typescript/bin/tsc`)
+```sh
+$ npm i && npm i typescript -g
+```
+- Transpile the source code
+```sh
+$ tsc
+```
+- Edit the `configs/config.json` file
+```sh
+$ vim configs/config.json
+```
+- Run the bot
+```sh
+$ node .
+Initialised 3 commands
+# [warn] Local version does not match origin version.
+# [info] Option `noEOI` is enabled, which blocks certain text recognition services. If you're seeing broken images, try disabling this option.
+# Validation completed! 1 potential warnings, 1 warnings, 0 errors
 
-## Config File Explanation
-If you have trouble writing the config file, try [dccg](https://github.com/y21/dccg).
-> A key refers to the name of the property: `"key": "value"`
-
-##### config#token
-The `token` property holds your bots token. This is required for logging in. Do note that giving your token to others is like giving your passwords to others, they can login into your bot and do whatever they want.
-
-##### config#prefix
-The `prefix` property holds the prefix. This is the character (combination) the bot will respond to. Setting it to `$` will make the bot respond to `$verify`
-
-##### config#deleteMessages
-The `deleteMessages` property holds a boolean. If it is set to `true`, it will delete all messages in the verification channel. It is recommended to leave it as `true`.
-
-##### config#presence
-The `presence` property holds the presence (playing status) that will be displayed in your client under the username.
-
-##### config#servers
-The `servers` property holds *all* servers it should react to. Each object is keyed by the server ID and holds an object that has a `verificationChannel` and a `verifyRole` property.
-
-##### config#ignoreServers
-This property can be used to ignore certain servers 
-
-##### config#commands
-This property contains all commands and can be used to toggle/limit certain commands (to specific users)
-
-_Example config.json_
-```json
-{
-  "token": "[TOKEN HERE]",
-  "prefix": "$",
-  "deleteMessages": true,
-  "presence": {
-    "type": "watching",
-    "name": "people verify"
-  },
-
-
-  "servers": {
-    "339838921955475456": {
-      "verificationChannel": "592772759994630161",
-      "verifyRole": "339841406409375754"
-    }
-  },
-
-  "ignoreServers": [
-
-  ],
-
-  "commands": {
-    "ping": {
-      "executors": [],
-      "requiredPermissions": [],
-      "enabled": true
-    },
-    "verify": {
-      "executors": [],
-      "requiredPermissions": [],
-      "enabled": true
-    }
-  }
-}
+# Bot started!
 ```
 
-## Tips
-• Contact me via discord. (y21#0909 | ID: 312715611413413889)<br/>
-• Open a Pull Request
+### FAQ
+- Q: What does `noEOI` do?
+    - A: `noEOI` (= No End of Image) will break the image by removing bytes from the buffer. This will break certain text recognition services such as Google's Vision API and will make it much harder for people to bypass this system. If you're experiencing problems, change this to `false`.
+- Q: What does `boundTo` mean? / The bot is not responding to the verify command!
+    - A: If you only want the bot to respond to the verify command in one channel, you may bind it to a specific channel by specifying the channel name. If you want it to function in any channel, use `null`. That being said, if you don't change this property, the bot will only respond to verification attempts in a channel named `verification`.
+- Q: Why does the role name have to be in lowercase letters?
+    - A: This warning can be ignored, as the validator will internally lowercase it for you. However, for conistency, I decided to warn users if they try to use uppercase letters in the role name.
