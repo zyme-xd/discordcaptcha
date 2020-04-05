@@ -49,7 +49,7 @@ Initialised 3 commands
 ### FAQ
 - Q: What does `noEOI` do?
     - A: `noEOI` (= No End of Image) will break the image by removing bytes from the buffer. This will break certain text recognition services such as Google's Vision API and will make it much harder for people to bypass this system. If you're experiencing problems, change this to `false`.
-- Q: What does `boundTo` mean?
-    - A: If you only want the bot to respond to the verify command in one channel, you may bind it to a specific channel by specifying the channel name. If you want it to function in any channel, use `null`.
+- Q: What does `boundTo` mean? / The bot is not responding to the verify command!
+    - A: If you only want the bot to respond to the verify command in one channel, you may bind it to a specific channel by specifying the channel name. If you want it to function in any channel, use `null`. That being said, if you don't change this property, the bot will only respond to verification attempts in a channel named `verification`.
 - Q: Why does the role name have to be in lowercase letters?
     - A: This warning can be ignored, as the validator will internally lowercase it for you. However, for conistency, I decided to warn users if they try to use uppercase letters in the role name.
