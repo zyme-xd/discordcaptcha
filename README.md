@@ -52,4 +52,4 @@ Initialised 3 commands
 - Q: What does `boundTo` mean? / The bot is not responding to the verify command!
     - A: If you only want the bot to respond to the verify command in one channel, you may bind it to a specific channel by specifying the channel name. If you want it to function in any channel, use `null`. That being said, if you don't change this property, the bot will only respond to verification attempts in a channel named `verification`.
 - Q: Why does the role name have to be in lowercase letters?
-    - A: This warning can be ignored, as the validator will internally lowercase it for you. However, for conistency, I decided to warn users if they try to use uppercase letters in the role name.
+    - A: This warning can be ignored, as the validator will internally lowercase it for you. However, for consistency, I decided to warn users if they try to use uppercase letters in the role name.
