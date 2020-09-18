@@ -1,7 +1,5 @@
 import { Context } from "detritus-client/lib/command";
 import Client from "../structures/client";
-import Jimp from "jimp";
-import { randomBytes } from "crypto";
 import { Role, ChannelGuildText } from "detritus-client/lib/structures";
 import { ShardClient } from "detritus-client";
 
@@ -25,25 +23,15 @@ export default {
         }
 
         const [, ...args] = ctx.content.split(" ");
-        const userID = BigInt(ctx.userId);
+        const userId = BigInt(ctx.userId);
 
         if (args.length === 0) {
-            if (client.queue.has(userID)) {
+            if (client.queue.has(userId)) {
                 return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.alreadyRequestedVerificationCode}`)
                     .then(v => setTimeout(() => v.delete(), client.timeouts.alreadyRequestedVerificationCode));
             }
 
-            const code = randomBytes(4).toString("hex");
-            client.queue.set(userID, code);
-
-            const image = new Jimp(200, 200, 0);
-            const font = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
-            image.print(font, 35, 35, code);
-            let buff = await image.getBufferAsync(Jimp.MIME_JPEG);
-
-            if (client.noEOI) {
-                buff = buff.slice(0, -(buff.length / 4));
-            }
+            const buff = await client.createCaptcha(userId);
 
             ctx.editOrReply({
                 content: `<@${ctx.userId}>`,
@@ -55,13 +43,13 @@ export default {
             return;
         }
 
-        const code = client.queue.get(userID);
+        const code = client.queue.get(userId);
         if (code === undefined || code !== args[0]) {
             return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.invalidCode}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.invalidCode));
         }
 
-        client.queue.delete(userID);
+        client.queue.delete(userId);
 
         const roles: Role[] = await client.rest.fetchGuildRoles(ctx.guildId);
         const verifiedRole: Role | undefined = roles.find(v => v.name.toLowerCase() === client.roleName);
