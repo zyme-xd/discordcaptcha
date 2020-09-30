@@ -10,6 +10,14 @@ When joining, the user is supposed (if everything was set up correctly) to only 
 After typing !verify (! represents the prefix, can be changed in the config file), the bot will send an image containing a short verification code.
 The user is then supposed to send !verify <captcha> in the verification channel and will be assigned a role. That role should have send and view messages permissions in all other channels.
 
+#### Note ([context](https://github.com/y21/discordcaptcha/issues/99))
+The package that's used to generate captcha images is known to be quite slow.
+If you want faster captcha generation, use the canvas branch.
+It uses [canvas](https://npmjs.com/canvas), which is much faster than Jimp. <br />
+Most of the time, you won't see a big difference between those two since the difference on average is about 40ms.
+Network time will probably at least be 3x the time it takes to generate these captchas using Jimp.
+
+
 ### Setup
 - Make sure you're running the requirements mentioned above
 ```sh
