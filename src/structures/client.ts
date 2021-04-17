@@ -1,6 +1,6 @@
 import { CommandClient, CommandClientOptions, Command, CommandClientAdd } from "detritus-client";
 import { readdirSync } from "fs";
-import { Context } from "detritus-client/lib/command/context";
+import { Context, EditOrReply } from "detritus-client/lib/command/context";
 import validate from "../utils/validator";
 import { createCanvas } from "canvas";
 import { randomBytes } from "crypto";
@@ -9,8 +9,13 @@ export type Command = CommandClientAdd & {
     run: (client: Client, ctx: Context) => any
 };
 
+interface QueueEntry {
+    code: string,
+    requestedAt: number
+}
+
 export default class Client extends CommandClient {
-    public queue: Map<BigInt, string>;
+    public queue: Map<BigInt, QueueEntry>;
     public noEOI: boolean;
     public messages: any;
     public roleName: string;
@@ -42,6 +47,21 @@ export default class Client extends CommandClient {
         return this.commands;
     }
 
+    public async temporaryEditOrReply(ctx: Context, text: string | EditOrReply, timeout: number | null) {
+        // Mention the user
+        if (typeof text === "object") {
+            text.content = `<@${ctx.userId}>`;
+        } else {
+            text = `<@${ctx.userId}> ${text}`;
+        }
+
+        const response = await ctx.editOrReply(text);
+
+        if (timeout !== null) {
+            setTimeout(() => response.delete(), timeout);
+        }
+    }
+
     public async createCaptcha(userId: string | BigInt) {
         const captcha = randomBytes(4).toString("hex");
 
@@ -52,15 +72,19 @@ export default class Client extends CommandClient {
         ctx.strokeText(captcha, 35, 35);
 
         return new Promise<Buffer>((resolve, reject) => {
-
             canvas.toBuffer((err, res) => {
                 if (err) reject(err);
                 else {
+                    const queueEntry: QueueEntry = {
+                        code: captcha,
+                        requestedAt: Date.now()
+                    };
+
                     this.queue.set(
                         typeof userId === "bigint"
                             ? userId
                             : BigInt(userId),
-                        captcha
+                        queueEntry
                     );
                     
                     if (this.noEOI) {

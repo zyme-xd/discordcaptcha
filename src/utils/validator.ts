@@ -44,10 +44,6 @@ export default async function(config: any) {
         errorCount++;
     }
 
-    if (Object.values(config.timeouts).some(v => typeof v !== "number" || isNaN(v))) {
-        console.error("[error] config.timeouts must only have values of type number");
-    }
-
     if (config.roleName.toLowerCase() !== config.roleName) {
         console.warn("[warn] roleName must not include uppercase letters");
         config.roleName = config.roleName.toLowerCase();
