@@ -6,6 +6,7 @@ const config = require("../configs/config");
         cache: false,
         prefix: config.prefix,
         gateway: {
+            intents: 1 << 9 /* GUILD_MESSAGES */,
             autoReconnect: true,
             compress: true
         }
