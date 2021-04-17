@@ -11,6 +11,7 @@ export default {
     run: async (client: Client, ctx: Context) => {
         const channels = (<ShardClient>client.client).channels;
         const channel: ChannelGuildText = channels.get(ctx.channelId) || await client.rest.fetchChannel(ctx.channelId);
+
         if (!channels.has(ctx.channelId)) {
             channels.set(ctx.channelId, channel);
         }
@@ -19,57 +20,63 @@ export default {
         if (client.boundTo !== null && channel.name !== client.boundTo) return;
 
         if (client.boundTo !== null) {
-            ctx.message.delete();
+            await ctx.message.delete();
         }
 
         const [, ...args] = ctx.content.split(" ");
         const userId = BigInt(ctx.userId);
 
         if (args.length === 0) {
-            if (client.queue.has(userId)) {
-                return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.alreadyRequestedVerificationCode}`)
-                    .then(v => setTimeout(() => v.delete(), client.timeouts.alreadyRequestedVerificationCode));
+            const maybeQueueEntry = client.queue.get(userId);
+
+            // If the user has already requested a captcha, we also want to check if it's still valid
+            // If it isn't, we can delete it from the queue and generate a new one.
+            if (maybeQueueEntry) {
+                if (Date.now() - maybeQueueEntry.requestedAt >= client.timeouts.captcha) {
+                    client.queue.delete(userId);
+                } else {
+                    return client.temporaryEditOrReply(
+                        ctx, 
+                        client.messages.alreadyRequestedVerificationCode, 
+                        client.timeouts.alreadyRequestedVerificationCode
+                    );
+                }
             }
 
             const buff = await client.createCaptcha(userId);
 
-            ctx.editOrReply({
-                content: `<@${ctx.userId}>`,
+            await client.temporaryEditOrReply(ctx, {
                 file: {
                     data: buff,
                     filename: "captcha.jpeg"
                 }
-            }).then(v => setTimeout(() => v.delete(), client.timeouts.captcha));
+            }, client.timeouts.captcha);
             return;
         }
 
         const code = client.queue.get(userId);
-        if (code === undefined || code !== args[0]) {
-            return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.invalidCode}`)
-                .then(v => setTimeout(() => v.delete(), client.timeouts.invalidCode));
+        if (code === undefined || code.code !== args[0]) {
+            return client.temporaryEditOrReply(ctx, client.messages.invalidCode, client.timeouts.invalidCode);
         }
 
+        // User provided a valid captcha, so we can remove the captcha from the queue now
         client.queue.delete(userId);
 
         const roles: Role[] = await client.rest.fetchGuildRoles(ctx.guildId);
         const verifiedRole: Role | undefined = roles.find(v => v.name.toLowerCase() === client.roleName);
         if (!verifiedRole) {
-            return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.roleNotFound}`)
-                .then(v => setTimeout(() => v.delete(), client.timeouts.roleNotFound));
+            return client.temporaryEditOrReply(ctx, client.messages.roleNotFound, client.timeouts.roleNotFound);
         }
 
         if (ctx.member.roles.has(verifiedRole.id)) {
-            return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.alreadyVerified}`)
-                .then(v => setTimeout(() => v.delete(), client.timeouts.alreadyVerified));
+            return client.temporaryEditOrReply(ctx, client.messages.alreadyVerified, client.timeouts.alreadyVerified);
         }
 
         try {
-            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, verifiedRole.id);
-            ctx.editOrReply(`<@${ctx.userId}> ${client.messages.successfullyVerified}`)
-                .then(v => setTimeout(() => v.delete(), client.timeouts.successfullyVerified));
+            await ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, verifiedRole.id);
+            return client.temporaryEditOrReply(ctx, client.messages.successfullyVerified, client.timeouts.successfullyVerified);
         } catch(e) {
-            ctx.editOrReply(`<@${ctx.userId}> ${client.messages.verifyError + e.message}`)
-                .then(v => setTimeout(() => v.delete(), client.timeouts.verifyError));
+            return client.temporaryEditOrReply(ctx, client.messages.verifyError + e.message, client.timeouts.verifyError);
         }
     }
 }
