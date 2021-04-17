@@ -1,5 +1,5 @@
 import { Context } from "detritus-client/lib/command";
-import Client from "../structures/client";
+import Client, { QueueEntry } from "../structures/client";
 import { Role, ChannelGuildText } from "detritus-client/lib/structures";
 import { ShardClient } from "detritus-client";
 
@@ -43,14 +43,31 @@ export default {
                 }
             }
 
-            const buff = await client.createCaptcha(userId);
+            const captcha = client.generateCaptcha();
 
-            await client.temporaryEditOrReply(ctx, {
+            const buff = await client.createCaptcha(userId, captcha);
+
+            const response = await client.temporaryEditOrReply(ctx, {
                 file: {
                     data: buff,
                     filename: "captcha.jpeg"
                 }
-            }, client.timeouts.captcha);
+            }, client.timeouts.captcha, () => {
+                // We only want to delete the message if it's still in the queue
+                // If it's no longer in the queue, it probably means that the user is already verified and the captcha message is gone
+                return client.queue.has(userId);
+            });
+            
+            const queueEntry: QueueEntry = {
+                code: captcha,
+                requestedAt: Date.now(),
+                messageId: BigInt(response.id)
+            };
+
+            client.queue.set(
+                userId,
+                queueEntry
+            );
             return;
         }
 
@@ -58,6 +75,8 @@ export default {
         if (code === undefined || code.code !== args[0]) {
             return client.temporaryEditOrReply(ctx, client.messages.invalidCode, client.timeouts.invalidCode);
         }
+
+        await client.rest.deleteMessage(ctx.channelId, String(code.messageId));
 
         // User provided a valid captcha, so we can remove the captcha from the queue now
         client.queue.delete(userId);

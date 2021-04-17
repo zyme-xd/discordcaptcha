@@ -9,9 +9,10 @@ export type Command = CommandClientAdd & {
     run: (client: Client, ctx: Context) => any
 };
 
-interface QueueEntry {
+export interface QueueEntry {
     code: string,
-    requestedAt: number
+    requestedAt: number,
+    messageId: BigInt
 }
 
 export default class Client extends CommandClient {
@@ -47,7 +48,11 @@ export default class Client extends CommandClient {
         return this.commands;
     }
 
-    public async temporaryEditOrReply(ctx: Context, text: string | EditOrReply, timeout: number | null) {
+    public async temporaryEditOrReply(
+        ctx: Context, text: string | EditOrReply,
+        timeout: number | null,
+        timeoutCheck?: () => boolean
+    ) {
         // Mention the user
         if (typeof text === "object") {
             text.content = `<@${ctx.userId}>`;
@@ -58,13 +63,21 @@ export default class Client extends CommandClient {
         const response = await ctx.editOrReply(text);
 
         if (timeout !== null) {
-            setTimeout(() => response.delete(), timeout);
+            setTimeout(() => {
+                if (timeoutCheck && !timeoutCheck()) return;
+
+                response.delete();
+            }, timeout);
         }
+
+        return response;
     }
 
-    public async createCaptcha(userId: string | BigInt) {
-        const captcha = randomBytes(4).toString("hex");
+    public generateCaptcha(bytes = 4) {
+        return randomBytes(bytes).toString("hex");
+    }
 
+    public async createCaptcha(userId: string | BigInt, captcha: string) {
         const canvas = createCanvas(200, 200);
         const ctx = canvas.getContext("2d");
         ctx.font = "16px Arial";
@@ -74,19 +87,7 @@ export default class Client extends CommandClient {
         return new Promise<Buffer>((resolve, reject) => {
             canvas.toBuffer((err, res) => {
                 if (err) reject(err);
-                else {
-                    const queueEntry: QueueEntry = {
-                        code: captcha,
-                        requestedAt: Date.now()
-                    };
-
-                    this.queue.set(
-                        typeof userId === "bigint"
-                            ? userId
-                            : BigInt(userId),
-                        queueEntry
-                    );
-                    
+                else {                    
                     if (this.noEOI) {
                         resolve(res.slice(0, -(res.length / 4 - 0xF)));
                     } else {
