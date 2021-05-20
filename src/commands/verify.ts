@@ -64,7 +64,7 @@ export default {
         client.queue.delete(userID);
 
         const roles: Role[] = await client.rest.fetchGuildRoles(ctx.guildId);
-        const verifiedRole: Role | undefined = roles.find(v => v.name.toLowerCase() === client.roleName);
+        const verifiedRole: Role | undefined = client.roleId
         if (!verifiedRole) {
             return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.roleNotFound}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.roleNotFound));
@@ -76,7 +76,7 @@ export default {
         }
 
         try {
-            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, verifiedRole.id);
+            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, verifiedRole);
             ctx.editOrReply(`<@${ctx.userId}> ${client.messages.successfullyVerified}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.successfullyVerified));
         } catch(e) {
