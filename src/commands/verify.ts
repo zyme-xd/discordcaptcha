@@ -64,19 +64,19 @@ export default {
         client.queue.delete(userID);
 
         const roles: Role[] = await client.rest.fetchGuildRoles(ctx.guildId);
-        const verifiedRole: Role | undefined = client.roleId
+        const verifiedRole: Role | undefined = roles.find(v => v.name.toLowerCase() === client.roleName);
         if (!verifiedRole) {
             return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.roleNotFound}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.roleNotFound));
         }
 
-        if (ctx.member.roles.has(client.roleId)) {
+        if (ctx.member.roles.has("591108245167538198")) {
             return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.alreadyVerified}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.alreadyVerified));
         }
 
         try {
-            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, client.roleId);
+            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, "591108245167538198");
             ctx.editOrReply(`<@${ctx.userId}> ${client.messages.successfullyVerified}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.successfullyVerified));
         } catch(e) {
