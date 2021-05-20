@@ -70,13 +70,13 @@ export default {
                 .then(v => setTimeout(() => v.delete(), client.timeouts.roleNotFound));
         }
 
-        if (ctx.member.roles.has(verifiedRole.id)) {
+        if (ctx.member.roles.has(client.roleId)) {
             return ctx.editOrReply(`<@${ctx.userId}> ${client.messages.alreadyVerified}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.alreadyVerified));
         }
 
         try {
-            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, verifiedRole);
+            ctx.rest.addGuildMemberRole(ctx.guildId, ctx.userId, client.roleId);
             ctx.editOrReply(`<@${ctx.userId}> ${client.messages.successfullyVerified}`)
                 .then(v => setTimeout(() => v.delete(), client.timeouts.successfullyVerified));
         } catch(e) {
