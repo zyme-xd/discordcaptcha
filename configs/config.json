@@ -4,7 +4,7 @@
     "noEOI": false,
     "roleName": "Office Workers",
     "boundTo": "new-users",
-    "roleId": "591108245167538198"
+    "roleId": "591108245167538198",
     "messages": {
         "alreadyRequestedVerificationCode": "You've already requested a verification code!",
         "invalidCode": "Invalid verification code",
