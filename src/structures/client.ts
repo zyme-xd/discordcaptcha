@@ -14,7 +14,7 @@ export default class Client extends CommandClient {
     public roleName: string;
     public boundTo: string;
     public timeouts: any;
-    public roleId: string;
+    public roleId: any;
 
     constructor(token: string, config: any, options: CommandClientOptions) {
         super(token, options);
